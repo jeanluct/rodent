@@ -249,7 +249,6 @@ public:
                                         ( _f.size() ),
       ETD1<T_Func, vecT, vecT_traits>	( _f,_c )
     {
-      reset();
     }
 
   void OneStep(const stepT h, vecT& y1) const
@@ -295,7 +294,6 @@ public:
                                                 ( _f.size() ),
       ETDRK2<T_Func, vecT, vecT_traits>		( _f,_c )
     {
-      reset();
     }
 
   void OneStep(const stepT h, vecT& y1)
@@ -341,7 +339,6 @@ public:
                                                 ( _f.size() ),
       ETDRK3<T_Func, vecT, vecT_traits>		( _f,_c )
     {
-      reset();
     }
 
   void OneStep(const stepT h, vecT& y1)
@@ -387,7 +384,6 @@ public:
                                                 ( _f.size() ),
       ETDRK4<T_Func, vecT, vecT_traits>		( _f,_c )
     {
-      reset();
     }
 
   void OneStep(const stepT h, vecT& y1)
@@ -451,7 +447,6 @@ public:
       yp_mid					( n ),
       yh					( n )
     {
-      reset();
     }
 
   void OneStep(const stepT h, vecT& y1)
@@ -525,7 +520,6 @@ public:
       yp_mid					( n ),
       yh					( n )
     {
-      reset();
     }
 
   void OneStep(const stepT h, vecT& y1)

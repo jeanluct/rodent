@@ -233,7 +233,6 @@ public:
                                                 ( _f.size() ),
       Euler<T_Func, vecT, vecT_traits>		( _f )
     {
-      reset();
     }
 
   // The constructor passes the number of variables according (_f.size())
@@ -283,7 +282,6 @@ public:
                                                 ( _f.size() ),
       Midpoint<T_Func, vecT, vecT_traits>	( _f )
     {
-      reset();
     }
 
   void OneStep(const stepT h, vecT& y1)
@@ -327,7 +325,6 @@ public:
                                         ( _f.size() ),
       RK4<T_Func, vecT, vecT_traits>	( _f )
     {
-      reset();
     }
 
   void OneStep(const stepT h, vecT& y1)
@@ -403,7 +400,6 @@ public:
       yp_mid					( n ),
       yh					( n )
     {
-      reset();
     }
 
   // The constructor passes the number of variables according (_f.size())
@@ -507,7 +503,6 @@ public:
       yp_mid					( n ),
       yh					( n )
     {
-      reset();
     }
 
   // The constructor passes the number of variables according (_f.size())
@@ -610,7 +605,6 @@ public:
       yp_mid				( n ),
       yh				( n )
     {
-      reset();
     }
 
   // The constructor passes the number of variables according (_f.size())
@@ -718,7 +712,7 @@ private:
   static const int order = 4;
 
 public:
-  // Constructor: absolute and relative errors are equal scalars.
+  // Constructor
   AdaptiveRKCashKarp(T_Func& _f)
     :
       AdaptiveSolver<AdaptiveRKCashKarp<T_Func,vecT,vecT_traits>, vecT,
@@ -748,7 +742,6 @@ public:
       dc4 (-277./14336.L),      dc5 (c5-0.25L),
       func(_f)
     {
-      reset();
     }
 
   // The constructor passes the number of variables according (_f.size())
@@ -927,8 +920,6 @@ public:
       func(_f)
     {
       idx = new int[n];
-
-      reset();
     }
 
   // The constructor passes the number of variables according (_f.size())

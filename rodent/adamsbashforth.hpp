@@ -54,7 +54,6 @@ public:
     int_startup			( _f ),
     func			( _f )
     {
-      reset();
     }
 
   T_Func& func;
@@ -146,7 +145,6 @@ public:
       int_startup		( _f ),
       func			( _f )
     {
-      reset();
     }
 
   T_Func& func;
@@ -247,7 +245,6 @@ public:
       int_startup		( _f ),
       func			( _f)
     {
-      reset();
     }
 
   T_Func& func;
@@ -359,7 +356,6 @@ public:
       int_startup		( _f ),
       func			( _f )
     {
-      reset();
     }
 
   T_Func& func;

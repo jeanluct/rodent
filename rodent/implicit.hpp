@@ -137,7 +137,6 @@ public:
                           vecT, vecT_traits>	( _f.size() ),
       ImplicitEuler<T_Func,vecT,vecT_traits>	( _f )
     {
-      reset();
     }
 
   // The constructor passes the number of variables according (_f.size())
@@ -221,7 +220,6 @@ public:
       yp_mid					( n ),
       yh					( n )
     {
-      reset();
     }
 
   // The constructor passes the number of variables according (_f.size())
