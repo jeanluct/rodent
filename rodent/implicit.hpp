@@ -112,17 +112,17 @@ class FixedImplicitEuler
                        vecT, vecT_traits>,
     public ImplicitEuler<T_Func,vecT,vecT_traits>
 {
+  typedef
+  FixedImplicitSolver<FixedImplicitEuler<T_Func,vecT,vecT_traits>,
+			    vecT, vecT_traits>
+  FISolver;
+
 protected:
-  using FixedImplicitSolver<FixedImplicitEuler<T_Func,vecT,vecT_traits>,
-			    vecT, vecT_traits>::x;
-  using FixedImplicitSolver<FixedImplicitEuler<T_Func,vecT,vecT_traits>,
-			    vecT, vecT_traits>::dx;
-  using FixedImplicitSolver<FixedImplicitEuler<T_Func,vecT,vecT_traits>,
-			    vecT, vecT_traits>::y;
-  using FixedImplicitSolver<FixedImplicitEuler<T_Func,vecT,vecT_traits>,
-			    vecT, vecT_traits>::yp;
-  using FixedImplicitSolver<FixedImplicitEuler<T_Func,vecT,vecT_traits>,
-			    vecT, vecT_traits>::n;
+  using FISolver::x;
+  using FISolver::dx;
+  using FISolver::y;
+  using FISolver::yp;
+  using FISolver::n;
 
 public:
   typedef typename vecT_traits::step_type	stepT;
@@ -183,19 +183,18 @@ class AdaptiveImplicitEuler
                           vecT, vecT_traits>,
     public ImplicitEuler<T_Func,vecT,vecT_traits>
 {
+  typedef
+  AdaptiveImplicitSolver<AdaptiveImplicitEuler<T_Func,vecT,vecT_traits>,
+			 vecT, vecT_traits>
+  AISolver;
+
 protected:
-  using AdaptiveImplicitSolver<AdaptiveImplicitEuler<T_Func,vecT,vecT_traits>,
-			       vecT, vecT_traits>::x;
-  using AdaptiveImplicitSolver<AdaptiveImplicitEuler<T_Func,vecT,vecT_traits>,
-			       vecT, vecT_traits>::dx;
-  using AdaptiveImplicitSolver<AdaptiveImplicitEuler<T_Func,vecT,vecT_traits>,
-			       vecT, vecT_traits>::y;
-  using AdaptiveImplicitSolver<AdaptiveImplicitEuler<T_Func,vecT,vecT_traits>,
-			       vecT, vecT_traits>::yp;
-  using AdaptiveImplicitSolver<AdaptiveImplicitEuler<T_Func,vecT,vecT_traits>,
-			       vecT, vecT_traits>::yerr;
-  using AdaptiveImplicitSolver<AdaptiveImplicitEuler<T_Func,vecT,vecT_traits>,
-			       vecT, vecT_traits>::n;
+  using AISolver::x;
+  using AISolver::dx;
+  using AISolver::y;
+  using AISolver::yp;
+  using AISolver::yerr;
+  using AISolver::n;
 
 public:
   typedef typename vecT_traits::mag_type	magT;
@@ -237,15 +236,16 @@ public:
 	ieuler_step(x, y, yp, h, yh, yp_mid);	// yp_mid = y1p_a
 
 	// Compute error and a 2nd order correction.
-	for (int i = 0; i < n; i++) {
-	  yerr[i] = y1[i] - yh[i];
-	  y1[i] += yerr[i];	// y1_c = 2 y1_b - y1_a
+	for (int i = 0; i < n; i++)
+	  {
+	    yerr[i] = y1[i] - yh[i];
+	    y1[i] += yerr[i];	// y1_c = 2 y1_b - y1_a
 
-	  // If we take that correction we have to recalculate y1p.
-	  // Happily, to the order of the method (2) we can deduce it
-	  // without the need for another function call.
-	  y1p[i] = 2.*y1p[i] - yp_mid[i];	// y1p_c = 2 y1p_b - y1p_a
-	}
+	    // If we take that correction we have to recalculate y1p.
+	    // Happily, to the order of the method (2) we can deduce it
+	    // without the need for another function call.
+	    y1p[i] = 2.*y1p[i] - yp_mid[i];	// y1p_c = 2 y1p_b - y1p_a
+	  }
       }
 #ifdef __EXCEPTIONS
       catch(jlt::too_many_steps& ex)

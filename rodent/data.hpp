@@ -59,11 +59,14 @@ public:
     {
       // With this constructor, the difference between x_min and x_max
       // sets the sign of dxsav.
-      if (x_max >= x_min) {
-	dxsav = jlt::Abs(dxsav);
-      } else {
-	dxsav = -jlt::Abs(dxsav);
-      }
+      if (x_max >= x_min)
+	{
+	  dxsav = jlt::Abs(dxsav);
+	}
+      else
+	{
+	  dxsav = -jlt::Abs(dxsav);
+	}
 
       // Save first point.
       y_data.insert(std::make_pair(x_min,
@@ -92,10 +95,11 @@ public:
 
       stepT xx = x_lastsav;
 
-      for (int i = 1; i <= n_sample; ++i) {
-	xx = x_lastsav + i*dxsav;
-	y_data.insert(std::make_pair(xx, vecT_traits::copy(data_func(xx))));
-      }
+      for (int i = 1; i <= n_sample; ++i)
+	{
+	  xx = x_lastsav + i*dxsav;
+	  y_data.insert(std::make_pair(xx, vecT_traits::copy(data_func(xx))));
+	}
       x_lastsav = xx;
     }
 
@@ -139,11 +143,12 @@ public:
 
       assert(n_sample >= 0);
 
-      for (int i = 1; i <= n_sample; i++) {
-	xx = x_lastsav + i*dxsav;
-	y_data.insert(make_pair(xx, vecT_traits::copy(data_func(xx))));
-	strm << xx << "\t" << y_data[xx] << std::endl;
-      }
+      for (int i = 1; i <= n_sample; i++)
+	{
+	  xx = x_lastsav + i*dxsav;
+	  y_data.insert(make_pair(xx, vecT_traits::copy(data_func(xx))));
+	  strm << xx << "\t" << y_data[xx] << std::endl;
+	}
       x_lastsav = xx;
     }
 

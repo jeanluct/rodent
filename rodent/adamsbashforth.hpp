@@ -24,17 +24,16 @@ class AdamsBashforth2
   : public FixedSolver<AdamsBashforth2<T_Func,vecT,vecT_traits>,
                        vecT, vecT_traits>
 {
+  typedef
+  FixedSolver<AdamsBashforth2<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
+  FSolver;
+
 protected:
-  using FixedSolver<AdamsBashforth2<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::x;
-  using FixedSolver<AdamsBashforth2<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::dx;
-  using FixedSolver<AdamsBashforth2<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::y;
-  using FixedSolver<AdamsBashforth2<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::yp;
-  using FixedSolver<AdamsBashforth2<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::n;
+  using FSolver::x;
+  using FSolver::dx;
+  using FSolver::y;
+  using FSolver::yp;
+  using FSolver::n;
 
 public:
   typedef typename vecT_traits::step_type	stepT;
@@ -64,12 +63,13 @@ public:
 
   void OneStep(const stepT h, vecT& y1)
     {
-      for (int i = 0; i < n; ++i) {
-	y1[i] = y[i] + 0.5L*h*(3*yp[i] - ypm1[i]);
+      for (int i = 0; i < n; ++i)
+	{
+	  y1[i] = y[i] + 0.5L*h*(3*yp[i] - ypm1[i]);
 
-	// Cycle the data from previous steps.
-	ypm1[i] = yp[i];
-      }
+	  // Cycle the data from previous steps.
+	  ypm1[i] = yp[i];
+	}
     }
 
   void reset()
@@ -102,17 +102,16 @@ class AdamsBashforth3
   : public FixedSolver<AdamsBashforth3<T_Func,vecT,vecT_traits>,
                        vecT, vecT_traits>
 {
+  typedef
+  FixedSolver<AdamsBashforth3<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
+  FSolver;
+
 protected:
-  using FixedSolver<AdamsBashforth3<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::x;
-  using FixedSolver<AdamsBashforth3<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::dx;
-  using FixedSolver<AdamsBashforth3<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::y;
-  using FixedSolver<AdamsBashforth3<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::yp;
-  using FixedSolver<AdamsBashforth3<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::n;
+  using FSolver::x;
+  using FSolver::dx;
+  using FSolver::y;
+  using FSolver::yp;
+  using FSolver::n;
 
 public:
   typedef typename vecT_traits::step_type	stepT;
@@ -143,13 +142,14 @@ public:
 
   void OneStep(const stepT h, vecT& y1)
     {
-      for (int i = 0; i < n; ++i) {
-	y1[i] = y[i] + (1.L/12.L)*h*(23*yp[i] - 16*ypm1[i] + 5*ypm2[i]);
+      for (int i = 0; i < n; ++i)
+	{
+	  y1[i] = y[i] + (1.L/12.L)*h*(23*yp[i] - 16*ypm1[i] + 5*ypm2[i]);
 
-	// Cycle the data from previous steps.
-	ypm2[i] = ypm1[i];
-	ypm1[i] = yp[i];
-      }
+	  // Cycle the data from previous steps.
+	  ypm2[i] = ypm1[i];
+	  ypm1[i] = yp[i];
+	}
     }
 
   void reset()
@@ -186,17 +186,16 @@ class AdamsBashforth4
   : public FixedSolver<AdamsBashforth4<T_Func,vecT,vecT_traits>,
                        vecT, vecT_traits>
 {
+  typedef
+  FixedSolver<AdamsBashforth4<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
+  FSolver;
+
 protected:
-  using FixedSolver<AdamsBashforth4<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::x;
-  using FixedSolver<AdamsBashforth4<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::dx;
-  using FixedSolver<AdamsBashforth4<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::y;
-  using FixedSolver<AdamsBashforth4<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::yp;
-  using FixedSolver<AdamsBashforth4<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::n;
+  using FSolver::x;
+  using FSolver::dx;
+  using FSolver::y;
+  using FSolver::yp;
+  using FSolver::n;
 
 public:
   typedef typename vecT_traits::step_type	stepT;
@@ -228,15 +227,16 @@ public:
 
   void OneStep(const stepT h, vecT& y1)
     {
-      for (int i = 0; i < n; ++i) {
-	y1[i] = y[i] + (1.L/24.L)*h*(55*yp[i] - 59*ypm1[i] + 37*ypm2[i]
-				     - 9*ypm3[i]);
+      for (int i = 0; i < n; ++i)
+	{
+	  y1[i] = y[i] + (1.L/24.L)*h*(55*yp[i] - 59*ypm1[i] + 37*ypm2[i]
+				       - 9*ypm3[i]);
 
-	// Cycle the data from previous steps.
-	ypm3[i] = ypm2[i];
-	ypm2[i] = ypm1[i];
-	ypm1[i] = yp[i];
-      }
+	  // Cycle the data from previous steps.
+	  ypm3[i] = ypm2[i];
+	  ypm2[i] = ypm1[i];
+	  ypm1[i] = yp[i];
+	}
     }
 
   void reset()
@@ -277,17 +277,16 @@ class AdamsBashforth5
   : public FixedSolver<AdamsBashforth5<T_Func,vecT,vecT_traits>,
                        vecT, vecT_traits>
 {
+  typedef
+  FixedSolver<AdamsBashforth5<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
+  FSolver;
+
 protected:
-  using FixedSolver<AdamsBashforth5<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::x;
-  using FixedSolver<AdamsBashforth5<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::dx;
-  using FixedSolver<AdamsBashforth5<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::y;
-  using FixedSolver<AdamsBashforth5<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::yp;
-  using FixedSolver<AdamsBashforth5<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::n;
+  using FSolver::x;
+  using FSolver::dx;
+  using FSolver::y;
+  using FSolver::yp;
+  using FSolver::n;
 
 public:
   typedef typename vecT_traits::step_type	stepT;
@@ -322,16 +321,20 @@ public:
 
   void OneStep(const stepT h, vecT& y1)
     {
-      for (int i = 0; i < n; ++i) {
-	y1[i] = y[i] + (1.L/720.L)*h*(1901*yp[i] - 2774*ypm1[i] + 2616*ypm2[i]
-				      - 1274*ypm3[i] + 251*ypm4[i]);
+      for (int i = 0; i < n; ++i)
+	{
+	  y1[i] = y[i] + (1.L/720.L)*h*(  1901 * yp[i]
+					- 2774 * ypm1[i]
+					+ 2616 * ypm2[i]
+					- 1274 * ypm3[i]
+					+  251 * ypm4[i]);
 
-	// Cycle the data from previous steps.
-	ypm4[i] = ypm3[i];
-	ypm3[i] = ypm2[i];
-	ypm2[i] = ypm1[i];
-	ypm1[i] = yp[i];
-      }
+	  // Cycle the data from previous steps.
+	  ypm4[i] = ypm3[i];
+	  ypm3[i] = ypm2[i];
+	  ypm2[i] = ypm1[i];
+	  ypm1[i] = yp[i];
+	}
     }
 
   void reset()

@@ -31,9 +31,10 @@ protected:
   void euler_step(const step_type x0, const vecT& y0, const vecT& yp0,
 		  const step_type h, vecT& y1) const
     {
-      for (int i = 0; i < func.size(); i++) {
-	y1[i] = y0[i] + h*yp0[i];
-      }
+      for (int i = 0; i < func.size(); i++)
+	{
+	  y1[i] = y0[i] + h*yp0[i];
+	}
     }
 }; // class Euler
 
@@ -60,11 +61,13 @@ protected:
     {
       step_type h_2 = 0.5L*h, x_2 = x0 + h_2;
 
-      for (int i = 0; i < func.size(); i++) { y_2[i] = y0[i] + h_2*yp0[i]; }
+      for (int i = 0; i < func.size(); i++)
+	y_2[i] = y0[i] + h_2*yp0[i];
 
       func(x_2, y_2, yp_2);
 
-      for (int i = 0; i < func.size(); i++) { y1[i] = y0[i] + h*yp_2[i]; }
+      for (int i = 0; i < func.size(); i++)
+	y1[i] = y0[i] + h*yp_2[i];
     }
 }; // class Midpoint
 
@@ -92,24 +95,28 @@ protected:
     {
       step_type h_2 = 0.5L*h, h_6 = h/6.L, x_2 = x0 + h_2;
 
-      for (int i = 0; i < func.size(); i++) { y_2[i] = y0[i] + h_2*yp0[i]; }
+      for (int i = 0; i < func.size(); i++)
+	y_2[i] = y0[i] + h_2*yp0[i];
 
       func(x_2, y_2, yp_2);
 
-      for (int i = 0; i < func.size(); i++) { y_2[i] = y0[i] + h_2*yp_2[i]; }
+      for (int i = 0; i < func.size(); i++)
+	y_2[i] = y0[i] + h_2*yp_2[i];
 
       func(x_2, y_2, yp1);
 
-      for (int i = 0; i < func.size(); i++) {
-	y_2[i] = y0[i] + h*yp1[i];
-	yp1[i] += yp_2[i];
-      }
+      for (int i = 0; i < func.size(); i++)
+	{
+	  y_2[i] = y0[i] + h*yp1[i];
+	  yp1[i] += yp_2[i];
+	}
 
       func(x0 + h, y_2, yp_2);
 
-      for (int i = 0; i < func.size(); i++) {
-	y1[i] = y0[i] + h_6*(yp0[i] + yp_2[i] + 2.*yp1[i]);
-      }
+      for (int i = 0; i < func.size(); i++)
+	{
+	  y1[i] = y0[i] + h_6*(yp0[i] + yp_2[i] + 2.*yp1[i]);
+	}
     }
 }; // class RK4
 
@@ -125,17 +132,16 @@ class FixedEuler
   : public FixedSolver<FixedEuler<T_Func,vecT,vecT_traits>, vecT, vecT_traits>,
     public Euler<T_Func, vecT, vecT_traits>
 {
+  typedef
+  FixedSolver<FixedEuler<T_Func,vecT,vecT_traits>,vecT,vecT_traits>
+  FSolver;
+
 protected:
-  using FixedSolver<FixedEuler<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::x;
-  using FixedSolver<FixedEuler<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::dx;
-  using FixedSolver<FixedEuler<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::y;
-  using FixedSolver<FixedEuler<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::yp;
-  using FixedSolver<FixedEuler<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::n;
+  using FSolver::x;
+  using FSolver::dx;
+  using FSolver::y;
+  using FSolver::yp;
+  using FSolver::n;
 
 public:
   typedef typename vecT_traits::step_type	stepT;
@@ -174,17 +180,16 @@ class FixedMidpoint
                        vecT, vecT_traits>,
     public Midpoint<T_Func, vecT, vecT_traits>
 {
+  typedef
+  FixedSolver<FixedMidpoint<T_Func,vecT,vecT_traits>,vecT, vecT_traits>
+  FSolver;
+
 protected:
-  using FixedSolver<FixedMidpoint<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::x;
-  using FixedSolver<FixedMidpoint<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::dx;
-  using FixedSolver<FixedMidpoint<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::y;
-  using FixedSolver<FixedMidpoint<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::yp;
-  using FixedSolver<FixedMidpoint<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::n;
+  using FSolver::x;
+  using FSolver::dx;
+  using FSolver::y;
+  using FSolver::yp;
+  using FSolver::n;
 
 public:
   typedef typename vecT_traits::step_type	stepT;
@@ -217,17 +222,16 @@ class FixedRK4
   : public FixedSolver<FixedRK4<T_Func,vecT,vecT_traits>, vecT, vecT_traits>,
     public RK4<T_Func, vecT, vecT_traits>
 {
+  typedef
+  FixedSolver<FixedRK4<T_Func,vecT,vecT_traits>,vecT, vecT_traits>
+  FSolver;
+
 protected:
-  using FixedSolver<FixedRK4<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::x;
-  using FixedSolver<FixedRK4<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::dx;
-  using FixedSolver<FixedRK4<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::y;
-  using FixedSolver<FixedRK4<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::yp;
-  using FixedSolver<FixedRK4<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::n;
+  using FSolver::x;
+  using FSolver::dx;
+  using FSolver::y;
+  using FSolver::yp;
+  using FSolver::n;
 
 public:
   typedef typename vecT_traits::step_type	stepT;
@@ -273,19 +277,17 @@ class AdaptiveEuler
                           vecT_traits>,
     public Euler<T_Func, vecT, vecT_traits>
 {
+  typedef
+  AdaptiveSolver<AdaptiveEuler<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
+  ASolver;
+
 protected:
-  using AdaptiveSolver<AdaptiveEuler<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::x;
-  using AdaptiveSolver<AdaptiveEuler<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::dx;
-  using AdaptiveSolver<AdaptiveEuler<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::y;
-  using AdaptiveSolver<AdaptiveEuler<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::yp;
-  using AdaptiveSolver<AdaptiveEuler<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::yerr;
-  using AdaptiveSolver<AdaptiveEuler<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::n;
+  using ASolver::x;
+  using ASolver::dx;
+  using ASolver::y;
+  using ASolver::yp;
+  using ASolver::yerr;
+  using ASolver::n;
 
 public:
   typedef typename vecT_traits::mag_type	magT;
@@ -329,10 +331,11 @@ public:
       euler_step(x, y, yp, h, yh);
 
       // Compute error and a 2nd order correction.
-      for (int i = 0; i < n; i++) {
-	yerr[i] = y1[i] - yh[i];
-	y1[i] += corr * yerr[i];
-      }
+      for (int i = 0; i < n; i++)
+	{
+	  yerr[i] = y1[i] - yh[i];
+	  y1[i] += corr * yerr[i];
+	}
     }
 
   void reset()
@@ -359,19 +362,17 @@ class AdaptiveMidpoint
                           vecT_traits>,
     public Midpoint<T_Func, vecT, vecT_traits>
 {
+  typedef
+  AdaptiveSolver<AdaptiveMidpoint<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
+  ASolver;
+
 protected:
-  using AdaptiveSolver<AdaptiveMidpoint<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::x;
-  using AdaptiveSolver<AdaptiveMidpoint<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::dx;
-  using AdaptiveSolver<AdaptiveMidpoint<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::y;
-  using AdaptiveSolver<AdaptiveMidpoint<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::yp;
-  using AdaptiveSolver<AdaptiveMidpoint<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::yerr;
-  using AdaptiveSolver<AdaptiveMidpoint<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::n;
+  using ASolver::x;
+  using ASolver::dx;
+  using ASolver::y;
+  using ASolver::yp;
+  using ASolver::yerr;
+  using ASolver::n;
 
 public:
   typedef typename vecT_traits::mag_type	magT;
@@ -416,10 +417,11 @@ public:
       midpoint_step(x, y, yp, h, yh);
 
       // Compute error and a 3rd order correction.
-      for (int i = 0; i < n; i++) {
-	yerr[i] = y1[i] - yh[i];
-	y1[i] += corr * yerr[i];
-      }
+      for (int i = 0; i < n; i++)
+	{
+	  yerr[i] = y1[i] - yh[i];
+	  y1[i] += corr * yerr[i];
+	}
     }
 
   void reset()
@@ -446,19 +448,17 @@ class AdaptiveRK4
                           vecT_traits>,
     public RK4<T_Func, vecT, vecT_traits>
 {
+  typedef
+  AdaptiveSolver<AdaptiveRK4<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
+  ASolver;
+
 protected:
-  using AdaptiveSolver<AdaptiveRK4<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::x;
-  using AdaptiveSolver<AdaptiveRK4<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::dx;
-  using AdaptiveSolver<AdaptiveRK4<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::y;
-  using AdaptiveSolver<AdaptiveRK4<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::yp;
-  using AdaptiveSolver<AdaptiveRK4<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::yerr;
-  using AdaptiveSolver<AdaptiveRK4<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::n;
+  using ASolver::x;
+  using ASolver::dx;
+  using ASolver::y;
+  using ASolver::yp;
+  using ASolver::yerr;
+  using ASolver::n;
 
 public:
   typedef typename vecT_traits::mag_type	magT;
@@ -502,10 +502,11 @@ public:
       rk4_step(x, y, yp, h, yh);
 
       // Compute error and a 5th order correction.
-      for (int i = 0; i < n; i++) {
-	yerr[i] = y1[i] - yh[i];
-	y1[i] += corr * yerr[i];
-      }
+      for (int i = 0; i < n; i++)
+	{
+	  yerr[i] = y1[i] - yh[i];
+	  y1[i] += corr * yerr[i];
+	}
     }
 
   void reset()
@@ -532,19 +533,18 @@ class AdaptiveRKCashKarp
   : public AdaptiveSolver<AdaptiveRKCashKarp<T_Func,vecT,vecT_traits>, vecT,
                           vecT_traits>
 {
+  typedef
+  AdaptiveSolver<AdaptiveRKCashKarp<T_Func,vecT,vecT_traits>,
+		 vecT, vecT_traits>
+  ASolver;
+
 protected:
-  using AdaptiveSolver<AdaptiveRKCashKarp<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::x;
-  using AdaptiveSolver<AdaptiveRKCashKarp<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::dx;
-  using AdaptiveSolver<AdaptiveRKCashKarp<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::y;
-  using AdaptiveSolver<AdaptiveRKCashKarp<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::yp;
-  using AdaptiveSolver<AdaptiveRKCashKarp<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::yerr;
-  using AdaptiveSolver<AdaptiveRKCashKarp<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::n;
+  using ASolver::x;
+  using ASolver::dx;
+  using ASolver::y;
+  using ASolver::yp;
+  using ASolver::yerr;
+  using ASolver::n;
 
 public:
   typedef typename vecT_traits::mag_type	magT;
@@ -688,19 +688,17 @@ class AdaptiveGRK
   : public AdaptiveSolver<AdaptiveGRK<T_Func,vecT,vecT_traits>, vecT,
                           vecT_traits>
 {
+  typedef
+  AdaptiveSolver<AdaptiveGRK<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
+  ASolver;
+
 protected:
-  using AdaptiveSolver<AdaptiveGRK<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::x;
-  using AdaptiveSolver<AdaptiveGRK<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::dx;
-  using AdaptiveSolver<AdaptiveGRK<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::y;
-  using AdaptiveSolver<AdaptiveGRK<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::yp;
-  using AdaptiveSolver<AdaptiveGRK<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::yerr;
-  using AdaptiveSolver<AdaptiveGRK<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::n;
+  using ASolver::x;
+  using ASolver::dx;
+  using ASolver::y;
+  using ASolver::yp;
+  using ASolver::yerr;
+  using ASolver::n;
 
 public:
   typedef typename vecT_traits::value_type	T;
@@ -800,13 +798,15 @@ public:
       // Find fs1
       // Jacobian of right-hand side function (scaled by h):
       func.Jacobian(x, y, yp, h, Jac);
-      for (int i = 0, j = 0; i < n; ++i, ++j) {
-	A(i,j) = -g*Jac(i,j);
-      }
-      for (int i = 0; i < n; ++i) {
-	A(i,i) += 1.;
-	fs1[i] = yp[i];
-      }
+      for (int i = 0, j = 0; i < n; ++i, ++j)
+	{
+	  A(i,j) = -g*Jac(i,j);
+	}
+      for (int i = 0; i < n; ++i)
+	{
+	  A(i,i) += 1.;
+	  fs1[i] = yp[i];
+	}
 
       // LU-decompose the matrix.
       jlt::LUdecomp<T,matrixT>(A, idx, &perm);
@@ -823,10 +823,11 @@ public:
       // Solve the equation A.(fs2 + g21 fs1) = b.
       jlt::LUbacksub<T,matrixT>(A, idx, &fs2[0]);
 
-      for (int i = 0; i < n; ++i) {
-	fs2[i] -= g21*fs1[i];
-	yy2[i] = y[i] + h*(b31*fs1[i] + b32*fs2[i]);
-      }
+      for (int i = 0; i < n; ++i)
+	{
+	  fs2[i] -= g21*fs1[i];
+	  yy2[i] = y[i] + h*(b31*fs1[i] + b32*fs2[i]);
+	}
 
       func(x, yy2, yy2p);
 
@@ -837,22 +838,25 @@ public:
 
       for (int i = 0; i < n; ++i) fs3[i] -= (g31*fs1[i] + g32*fs2[i]);
 
-      for (int i = 0; i < n; ++i) {
-	fs4[i] = yy2p[i] + g41*fs1[i] + g42*fs2[i] + g43*fs3[i];
-      }
+      for (int i = 0; i < n; ++i)
+	{
+	  fs4[i] = yy2p[i] + g41*fs1[i] + g42*fs2[i] + g43*fs3[i];
+	}
 
       // Solve the equation A.(fs4 + g41 fs1 + g42 fs2 + g43 fs3) = b.
       jlt::LUbacksub<T,matrixT>(A, idx, &fs4[0]);
 
-      for (int i = 0; i < n; ++i) {
-	fs4[i] -= (g41*fs1[i] + g42*fs2[i] + g43*fs3[i]);
-      }
+      for (int i = 0; i < n; ++i)
+	{
+	  fs4[i] -= (g41*fs1[i] + g42*fs2[i] + g43*fs3[i]);
+	}
 
-      for (int i = 0; i < n; ++i) {
-	y1[i] = y[i] + h*(c1*fs1[i] + c2*fs2[i] + c3*fs3[i] + c4*fs4[i]);
-	yy1[i] = y[i] + h*(ch1*fs1[i] + ch2*fs2[i] + ch3*fs3[i]);
-	yerr[i] = y1[i] - yy1[i];
-      }
+      for (int i = 0; i < n; ++i)
+	{
+	  y1[i] = y[i] + h*(c1*fs1[i] + c2*fs2[i] + c3*fs3[i] + c4*fs4[i]);
+	  yy1[i] = y[i] + h*(ch1*fs1[i] + ch2*fs2[i] + ch3*fs3[i]);
+	  yerr[i] = y1[i] - yy1[i];
+	}
       return;
     }
 

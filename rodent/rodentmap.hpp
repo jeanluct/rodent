@@ -14,6 +14,8 @@
 // Provide functionality for maps that mimics rodent for ODE's.
 //
 
+/* Needs updating: many changes to rodent interface are not reflected here. */
+
 namespace rodent {
 
 template<class T_Map, class vecT, class vecT_traits = vec_traits<vecT> >

@@ -34,11 +34,12 @@ protected:
   void etd1_step(const step_type x0, const vecT& y0, const vecT& yp0,
 		 const step_type h, vecT& y1) const
     {
-      for (int i = 0; i < func.size(); ++i) {
-	// Should ensure h*c is not too small.
-	T expc = Exp(h*c[i]);
-	y1[i] = y0[i] * expc + yp0[i] * (expc - 1)/c[i];
-      }
+      for (int i = 0; i < func.size(); ++i)
+	{
+	  // Should ensure h*c is not too small.
+	  T expc = Exp(h*c[i]);
+	  y1[i] = y0[i] * expc + yp0[i] * (expc - 1)/c[i];
+	}
     }
 
 }; // class ETD1
@@ -74,19 +75,20 @@ protected:
       double xh = x0 + h;
 
       // Take an etd1 step.
-      for (int i = 0; i < func.size(); ++i) {
-	// Should ensure h*c is not too small.
-	expc[i] = Exp(h*c[i]);
-	a[i] = y0[i] * expc[i] + yp0[i] * (expc[i] - 1)/c[i];
-      }
+      for (int i = 0; i < func.size(); ++i)
+	{
+	  // Should ensure h*c is not too small.
+	  expc[i] = Exp(h*c[i]);
+	  a[i] = y0[i] * expc[i] + yp0[i] * (expc[i] - 1)/c[i];
+	}
 
       // Evaluate derivative at that point.
       func(xh, a, ap);
 
-      for (int i = 0; i < func.size(); ++i) {
-	y1[i] = a[i] + (ap[i] - yp0[i])*(expc[i] - 1 - h*c[i])/(h*c[i]*c[i]);
-      }
-
+      for (int i = 0; i < func.size(); ++i)
+	{
+	  y1[i] = a[i] + (ap[i] - yp0[i])*(expc[i] - 1 - h*c[i])/(h*c[i]*c[i]);
+	}
     }
 
 }; // class ETDRK2
@@ -123,29 +125,31 @@ protected:
     {
       step_type h_2 = 0.5L*h, x_2 = x0 + h_2, xh = x0 + h;
 
-      for (int i = 0; i < func.size(); ++i) {
-	// Should ensure h_2*c is not too small.
-	expc2[i] = Exp(h_2*c[i]);
-	a[i] = y0[i] * expc2[i] + yp0[i] * (expc2[i] - 1)/c[i];
-      }
+      for (int i = 0; i < func.size(); ++i)
+	{
+	  // Should ensure h_2*c is not too small.
+	  expc2[i] = Exp(h_2*c[i]);
+	  a[i] = y0[i] * expc2[i] + yp0[i] * (expc2[i] - 1)/c[i];
+	}
 
       func(x_2, a, ap);
 
-      for (int i = 0; i < func.size(); ++i) {
-	expc[i] = expc2[i]*expc2[i];
-	b[i] = y0[i] * expc[i] + (2*ap[i] - yp0[i]) * (expc[i] - 1)/c[i];
-      }
+      for (int i = 0; i < func.size(); ++i)
+	{
+	  expc[i] = expc2[i]*expc2[i];
+	  b[i] = y0[i] * expc[i] + (2*ap[i] - yp0[i]) * (expc[i] - 1)/c[i];
+	}
 
       func(xh, b, bp);
 
-      for (int i = 0; i < func.size(); ++i) {
-	y1[i] = y0[i] * expc[i] +
-	  (yp0[i] * (-4 - h*c[i] + expc[i]*(4 - 3*h*c[i] + h*h*c[i]*c[i]))
-	   + 4*ap[i] * (2 + h*c[i] + expc[i]*(-2 + h*c[i]))
-	   + bp[i] * (-4 - 3*h*c[i] - h*h*c[i]*c[i] + expc[i]*(4 - h*c[i])))
-	  /(h*h*c[i]*c[i]*c[i]);
-      }
-
+      for (int i = 0; i < func.size(); ++i)
+	{
+	  y1[i] = y0[i] * expc[i] +
+	    (yp0[i] * (-4 - h*c[i] + expc[i]*(4 - 3*h*c[i] + h*h*c[i]*c[i]))
+	     + 4*ap[i] * (2 + h*c[i] + expc[i]*(-2 + h*c[i]))
+	     + bp[i] * (-4 - 3*h*c[i] - h*h*c[i]*c[i] + expc[i]*(4 - h*c[i])))
+	    /(h*h*c[i]*c[i]*c[i]);
+	}
     }
 
 }; // class ETDRK3
@@ -183,35 +187,38 @@ protected:
     {
       step_type h_2 = 0.5L*h, x_2 = x0 + h_2, xh = x0 + h;
 
-      for (int i = 0; i < func.size(); ++i) {
-	// Should ensure h_2*c is not too small.
-	expc2[i] = jlt::Exp(h_2*c[i]);
-	a[i] = y0[i] * expc2[i] + yp0[i] * (expc2[i] - 1)/c[i];
-      }
+      for (int i = 0; i < func.size(); ++i)
+	{
+	  // Should ensure h_2*c is not too small.
+	  expc2[i] = jlt::Exp(h_2*c[i]);
+	  a[i] = y0[i] * expc2[i] + yp0[i] * (expc2[i] - 1)/c[i];
+	}
 
       func(x_2, a, ap);
 
-      for (int i = 0; i < func.size(); ++i) {
-	b[i] = y0[i] * expc2[i] + ap[i] * (expc2[i] - 1)/c[i];
-      }
+      for (int i = 0; i < func.size(); ++i)
+	{
+	  b[i] = y0[i] * expc2[i] + ap[i] * (expc2[i] - 1)/c[i];
+	}
 
       func(x_2, b, bp);
 
-      for (int i = 0; i < func.size(); ++i) {
-	d[i] = a[i] * expc2[i] + (2*bp[i] - yp0[i]) * (expc2[i] - 1)/c[i];
-      }
+      for (int i = 0; i < func.size(); ++i)
+	{
+	  d[i] = a[i] * expc2[i] + (2*bp[i] - yp0[i]) * (expc2[i] - 1)/c[i];
+	}
 
       func(xh, d, dp);
 
-      for (int i = 0; i < func.size(); ++i) {
-	expc[i] = expc2[i]*expc2[i];
-	y1[i] = y0[i] * expc[i] +
-	  (yp0[i] * (-4 - h*c[i] + expc[i]*(4 - 3*h*c[i] + h*h*c[i]*c[i]))
-	   + 2*(ap[i] + bp[i])*(2 + h*c[i] + expc[i]*(-2 + h*c[i]))
-	   + dp[i]*(-4 - 3*h*c[i] - h*h*c[i]*c[i] + expc[i]*(4 - h*c[i])))
-	  /(h*h*c[i]*c[i]*c[i]);
-      }
-
+      for (int i = 0; i < func.size(); ++i)
+	{
+	  expc[i] = expc2[i]*expc2[i];
+	  y1[i] = y0[i] * expc[i] +
+	    (yp0[i] * (-4 - h*c[i] + expc[i]*(4 - 3*h*c[i] + h*h*c[i]*c[i]))
+	     + 2*(ap[i] + bp[i])*(2 + h*c[i] + expc[i]*(-2 + h*c[i]))
+	     + dp[i]*(-4 - 3*h*c[i] - h*h*c[i]*c[i] + expc[i]*(4 - h*c[i])))
+	    /(h*h*c[i]*c[i]*c[i]);
+	}
     }
 
 }; // class ETDRK4
@@ -228,17 +235,16 @@ class FixedETD1
   : public FixedSolver<FixedETD1<T_Func,vecT,vecT_traits>, vecT, vecT_traits>,
     public ETD1<T_Func, vecT, vecT_traits>
 {
+  typedef
+  FixedSolver<FixedETD1<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
+  FSolver;
+
 protected:
-  using FixedSolver<FixedETD1<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::x;
-  using FixedSolver<FixedETD1<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::dx;
-  using FixedSolver<FixedETD1<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::y;
-  using FixedSolver<FixedETD1<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::yp;
-  using FixedSolver<FixedETD1<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::n;
+  using FSolver::x;
+  using FSolver::dx;
+  using FSolver::y;
+  using FSolver::yp;
+  using FSolver::n;
 
 public:
   typedef typename vecT_traits::step_type	stepT;
@@ -273,17 +279,16 @@ class FixedETDRK2
 		       vecT, vecT_traits>,
     public ETDRK2<T_Func, vecT, vecT_traits>
 {
+  typedef
+  FixedSolver<FixedETDRK2<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
+  FSolver;
+
 protected:
-  using FixedSolver<FixedETDRK2<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::x;
-  using FixedSolver<FixedETDRK2<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::dx;
-  using FixedSolver<FixedETDRK2<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::y;
-  using FixedSolver<FixedETDRK2<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::yp;
-  using FixedSolver<FixedETDRK2<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::n;
+  using FSolver::x;
+  using FSolver::dx;
+  using FSolver::y;
+  using FSolver::yp;
+  using FSolver::n;
 
 public:
   typedef typename vecT_traits::step_type	stepT;
@@ -318,17 +323,16 @@ class FixedETDRK3
 		       vecT, vecT_traits>,
     public ETDRK3<T_Func, vecT, vecT_traits>
 {
+  typedef
+  FixedSolver<FixedETDRK3<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
+  FSolver;
+
 protected:
-  using FixedSolver<FixedETDRK3<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::x;
-  using FixedSolver<FixedETDRK3<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::dx;
-  using FixedSolver<FixedETDRK3<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::y;
-  using FixedSolver<FixedETDRK3<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::yp;
-  using FixedSolver<FixedETDRK3<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::n;
+  using FSolver::x;
+  using FSolver::dx;
+  using FSolver::y;
+  using FSolver::yp;
+  using FSolver::n;
 
 public:
   typedef typename vecT_traits::step_type	stepT;
@@ -363,17 +367,16 @@ class FixedETDRK4
 		       vecT, vecT_traits>,
     public ETDRK4<T_Func, vecT, vecT_traits>
 {
+  typedef
+  FixedSolver<FixedETDRK4<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
+  FSolver;
+
 protected:
-  using FixedSolver<FixedETDRK4<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::x;
-  using FixedSolver<FixedETDRK4<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::dx;
-  using FixedSolver<FixedETDRK4<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::y;
-  using FixedSolver<FixedETDRK4<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::yp;
-  using FixedSolver<FixedETDRK4<T_Func,vecT,vecT_traits>,
-		    vecT, vecT_traits>::n;
+  using FSolver::x;
+  using FSolver::dx;
+  using FSolver::y;
+  using FSolver::yp;
+  using FSolver::n;
 
 public:
   typedef typename vecT_traits::step_type	stepT;
@@ -411,19 +414,17 @@ class AdaptiveETDRK3
                           vecT_traits>,
     public ETDRK3<T_Func, vecT, vecT_traits>
 {
+  typedef
+  AdaptiveSolver<AdaptiveETDRK3<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
+  ASolver;
+
 protected:
-  using AdaptiveSolver<AdaptiveETDRK3<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::x;
-  using AdaptiveSolver<AdaptiveETDRK3<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::dx;
-  using AdaptiveSolver<AdaptiveETDRK3<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::y;
-  using AdaptiveSolver<AdaptiveETDRK3<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::yp;
-  using AdaptiveSolver<AdaptiveETDRK3<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::yerr;
-  using AdaptiveSolver<AdaptiveETDRK3<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::n;
+  using ASolver::x;
+  using ASolver::dx;
+  using ASolver::y;
+  using ASolver::yp;
+  using ASolver::yerr;
+  using ASolver::n;
 
 public:
   typedef typename vecT_traits::mag_type	magT;
@@ -463,10 +464,11 @@ public:
       etdrk3_step(x, y, yp, h, yh);
 
       // Compute error and a 5th order correction.
-      for (int i = 0; i < n; i++) {
-	yerr[i] = y1[i] - yh[i];
-	y1[i] += corr * yerr[i];
-      }
+      for (int i = 0; i < n; i++)
+	{
+	  yerr[i] = y1[i] - yh[i];
+	  y1[i] += corr * yerr[i];
+	}
     }
 
   void reset()
@@ -485,19 +487,17 @@ class AdaptiveETDRK4
                           vecT_traits>,
     public ETDRK4<T_Func, vecT, vecT_traits>
 {
+  typedef
+  AdaptiveSolver<AdaptiveETDRK4<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
+  ASolver;
+
 protected:
-  using AdaptiveSolver<AdaptiveETDRK4<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::x;
-  using AdaptiveSolver<AdaptiveETDRK4<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::dx;
-  using AdaptiveSolver<AdaptiveETDRK4<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::y;
-  using AdaptiveSolver<AdaptiveETDRK4<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::yp;
-  using AdaptiveSolver<AdaptiveETDRK4<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::yerr;
-  using AdaptiveSolver<AdaptiveETDRK4<T_Func,vecT,vecT_traits>,
-		       vecT, vecT_traits>::n;
+  using ASolver::x;
+  using ASolver::dx;
+  using ASolver::y;
+  using ASolver::yp;
+  using ASolver::yerr;
+  using ASolver::n;
 
 public:
   typedef typename vecT_traits::mag_type	magT;
@@ -536,10 +536,11 @@ public:
       etdrk4_step(x, y, yp, h, yh);
 
       // Compute error and a 5th order correction.
-      for (int i = 0; i < n; i++) {
-	yerr[i] = y1[i] - yh[i];
-	y1[i] += corr * yerr[i];
-      }
+      for (int i = 0; i < n; i++)
+	{
+	  yerr[i] = y1[i] - yh[i];
+	  y1[i] += corr * yerr[i];
+	}
     }
 
   void reset()

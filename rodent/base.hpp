@@ -1,16 +1,18 @@
 #ifndef RODENT_BASE_HPP
 #define RODENT_BASE_HPP
 
-// Default vector type is std vector class.
-#include <vector>
-typedef std::vector<double> rodent_vec;
-
 #include <iostream>
+#include <vector>
 #include <jlt/exceptions.hpp>
 #include <jlt/stlio.hpp>
 
 
 namespace rodent {
+
+
+// Default vector type is std::vector class.
+typedef std::vector<double> rodent_vec;
+
 
 template<class T_Control, class vecT, class vecT_traits>
 class SolverBase
@@ -103,6 +105,7 @@ public:
     {
       x = x0;
       for (int i = 0; i < n; ++i) y[i] = y0[i];
+
       // Update derivative vector yp at x.
       Control().reset();
 
@@ -115,6 +118,7 @@ public:
     {
       x = x0;
       for (int i = 0; i < n; ++i) y[i] = y0[i];
+
       // Derivative vector yp at x.
       yp = yp0;
 
@@ -198,9 +202,10 @@ public:
     {
       integrateTo(x1, y1);
  
-      for (int i = 0; i < n; ++i) {
-	y1p[i] = yp[i];
-      }
+      for (int i = 0; i < n; ++i)
+	{
+	  y1p[i] = yp[i];
+	}
 
       return x;
     }
@@ -259,11 +264,12 @@ template<class T_Control, class vecT, class vecT_traits>
 typename SolverBase<T_Control,vecT,vecT_traits>::stepT
 SolverBase<T_Control,vecT,vecT_traits>::integrateTo(const stepT x1, vecT& y1)
 {
-  if (x == x1) {
-    // Already there, do nothing, but copy current state to y1.
-    for (int i = 0; i < n; ++i) y1[i] = y[i];
-    return x;
-  }
+  if (x == x1)
+    {
+      // Already there, do nothing, but copy current state to y1.
+      for (int i = 0; i < n; ++i) y1[i] = y[i];
+      return x;
+    }
 
   // Make sure we are going in the right direction: reverse the
   // sign of dx if needed, but keep the same magnitude.
@@ -275,40 +281,43 @@ SolverBase<T_Control,vecT,vecT_traits>::integrateTo(const stepT x1, vecT& y1)
   n_good_steps = n_bad_steps = 0;
 #endif
 
-  for (unsigned long int nstp = 1; nstp <= max_steps; ++nstp) {
-    bool lastStep = false;
+  for (unsigned long int nstp = 1; nstp <= max_steps; ++nstp)
+    {
+      bool lastStep = false;
 
-    // Check to make sure that we don't overshoot x1.
-    if ((dx > 0 && x + dx >= x1) || (dx < 0 && x + dx <= x1)) {
-      // Save size of last step, in case we are really close to goal.
-      // This makes it easier to restart the integration.
-      dxold = dx;
-      dx = x1 - x;
-      lastStep = true;
-    }
+      // Check to make sure that we don't overshoot x1.
+      if ((dx > 0 && x + dx >= x1) || (dx < 0 && x + dx <= x1))
+	{
+	  // Save size of last step, in case we are really close to goal.
+	  // This makes it easier to restart the integration.
+	  dxold = dx;
+	  dx = x1 - x;
+	  lastStep = true;
+	}
 
-    lastStep &= Control().Step(y1);
+      lastStep &= Control().Step(y1);
 
-    // The logical AND ensures that if the last step fails,
-    // then it isn't the last one anymore.
+      // The logical AND ensures that if the last step fails,
+      // then it isn't the last one anymore.
 
-    // Next step starts at y1.
-    for (int i = 0; i < n; ++i) y[i] = y1[i];
+      // Next step starts at y1.
+      for (int i = 0; i < n; ++i) y[i] = y1[i];
 
-    if (lastStep) {
+      if (lastStep)
+	{
 #ifdef RODENT_DEBUG
-      std::cerr << "rodent::integrateTo   Steps--  good = "
-		<< n_good_steps;
-      std::cerr << "   bad = " << n_bad_steps;
-      std::cerr << "   x = " << x << endl;
-      std::cerr << "   y = " << y << endl;
-      std::cerr << "  yp = " << yp << endl;
-      std::cerr << "   dx = " << dx << endl;
+	  std::cerr << "rodent::integrateTo   Steps--  good = "
+		    << n_good_steps;
+	  std::cerr << "   bad = " << n_bad_steps;
+	  std::cerr << "   x = " << x << endl;
+	  std::cerr << "   y = " << y << endl;
+	  std::cerr << "  yp = " << yp << endl;
+	  std::cerr << "  dx = " << dx << endl;
 #endif
-      dx = dxold;	// There might be a bit of an error here...
-      return x;
+	  dx = dxold;	// There might be a bit of an error here...
+	  return x;
+	}
     }
-  }
   _THROW(jlt::too_many_steps
 	 ("Too many steps taken in integrateTo ", max_steps));
 
@@ -326,10 +335,11 @@ SolverBase<T_Control,vecT,vecT_traits>::takeStep(vecT& y1, vecT& y1p)
 
   Control().Step(y1);
 
-  for (int i = 0; i < n; ++i) {
-    y[i] = y1[i];
-    y1p[i] = yp[i];
-  }
+  for (int i = 0; i < n; ++i)
+    {
+      y[i] = y1[i];
+      y1p[i] = yp[i];
+    }
 
 #ifdef RODENT_DEBUG
   std::cerr << "rodent::takeStep   Steps--  good = " << n_good_steps;
@@ -350,9 +360,10 @@ SolverBase<T_Control,vecT,vecT_traits>::takeStep(vecT& y1)
 
   Control().Step(y1);
 
-  for (int i = 0; i < n; ++i) {
-    y[i] = y1[i];
-  }
+  for (int i = 0; i < n; ++i)
+    {
+      y[i] = y1[i];
+    }
 
 #ifdef RODENT_DEBUG
   std::cerr << "rodent::takeStep   Steps--  good = " << n_good_steps;

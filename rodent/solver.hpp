@@ -26,24 +26,21 @@ class FixedSolver
 private:
   T_Method& Method() { return static_cast<T_Method&>(*this); }
 
+  typedef
+  SolverBase<FixedSolver<T_Method,vecT,vecT_traits>, vecT, vecT_traits>
+  SBase;
+
 public:
   typedef typename vecT_traits::step_type	stepT;
 
 protected:
-  using
-  SolverBase<FixedSolver<T_Method,vecT,vecT_traits>,vecT,vecT_traits>::x;
-  using
-  SolverBase<FixedSolver<T_Method,vecT,vecT_traits>,vecT,vecT_traits>::dx;
-  using
-  SolverBase<FixedSolver<T_Method,vecT,vecT_traits>,vecT,vecT_traits>::dx_min;
-  using
-  SolverBase<FixedSolver<T_Method,vecT,vecT_traits>,vecT,vecT_traits>::dx_max;
-  using
-  SolverBase<FixedSolver<T_Method,vecT,vecT_traits>,vecT,vecT_traits>::y;
-  using
-  SolverBase<FixedSolver<T_Method,vecT,vecT_traits>,vecT,vecT_traits>::yp;
-  using
-  SolverBase<FixedSolver<T_Method,vecT,vecT_traits>,vecT,vecT_traits>::n;
+  using SBase::x;
+  using SBase::dx;
+  using SBase::dx_min;
+  using SBase::dx_max;
+  using SBase::y;
+  using SBase::yp;
+  using SBase::n;
 
 public:
   FixedSolver(const int _n)
@@ -89,21 +86,18 @@ class AdaptiveSolver
 private:
   T_Method& Method() { return static_cast<T_Method&>(*this); }
 
+  typedef
+  SolverBase<AdaptiveSolver<T_Method,vecT,vecT_traits>, vecT, vecT_traits>
+  SBase;
+
 protected:
-  using SolverBase<AdaptiveSolver<T_Method,vecT,vecT_traits>,
-		   vecT,vecT_traits>::x;
-  using SolverBase<AdaptiveSolver<T_Method,vecT,vecT_traits>,
-		   vecT,vecT_traits>::dx;
-  using SolverBase<AdaptiveSolver<T_Method,vecT,vecT_traits>,
-		   vecT,vecT_traits>::dx_min;
-  using SolverBase<AdaptiveSolver<T_Method,vecT,vecT_traits>,
-		   vecT,vecT_traits>::dx_max;
-  using SolverBase<AdaptiveSolver<T_Method,vecT,vecT_traits>,
-		   vecT,vecT_traits>::y;
-  using SolverBase<AdaptiveSolver<T_Method,vecT,vecT_traits>,
-		   vecT,vecT_traits>::yp;
-  using SolverBase<AdaptiveSolver<T_Method,vecT,vecT_traits>,
-		   vecT,vecT_traits>::n;
+  using SBase::x;
+  using SBase::dx;
+  using SBase::dx_min;
+  using SBase::dx_max;
+  using SBase::y;
+  using SBase::yp;
+  using SBase::n;
 
 public:
   typedef typename vecT_traits::mag_type	magT;
@@ -328,21 +322,18 @@ class FixedImplicitSolver
 private:
   T_Method& Method() { return static_cast<T_Method&>(*this); }
 
+  typedef
+  SolverBase<FixedImplicitSolver<T_Method,vecT,vecT_traits>, vecT, vecT_traits>
+  SBase;
+
 protected:
-  using SolverBase<FixedImplicitSolver<T_Method,vecT,vecT_traits>,
-		   vecT,vecT_traits>::x;
-  using SolverBase<FixedImplicitSolver<T_Method,vecT,vecT_traits>,
-		   vecT,vecT_traits>::dx;
-  using SolverBase<FixedImplicitSolver<T_Method,vecT,vecT_traits>,
-		   vecT,vecT_traits>::dx_min;
-  using SolverBase<FixedImplicitSolver<T_Method,vecT,vecT_traits>,
-		   vecT,vecT_traits>::dx_max;
-  using SolverBase<FixedImplicitSolver<T_Method,vecT,vecT_traits>,
-		   vecT,vecT_traits>::y;
-  using SolverBase<FixedImplicitSolver<T_Method,vecT,vecT_traits>,
-		   vecT,vecT_traits>::yp;
-  using SolverBase<FixedImplicitSolver<T_Method,vecT,vecT_traits>,
-		   vecT,vecT_traits>::n;
+  using SBase::x;
+  using SBase::dx;
+  using SBase::dx_min;
+  using SBase::dx_max;
+  using SBase::y;
+  using SBase::yp;
+  using SBase::n;
 
 public:
   typedef typename vecT_traits::step_type	stepT;
@@ -396,21 +387,19 @@ class AdaptiveImplicitSolver
 private:
   T_Method& Method() { return static_cast<T_Method&>(*this); }
 
+  typedef
+  SolverBase<AdaptiveImplicitSolver<T_Method,vecT,vecT_traits>,
+	     vecT, vecT_traits>
+  SBase;
+
 protected:
-  using SolverBase<AdaptiveImplicitSolver<T_Method,vecT,vecT_traits>,
-		   vecT,vecT_traits>::x;
-  using SolverBase<AdaptiveImplicitSolver<T_Method,vecT,vecT_traits>,
-		   vecT,vecT_traits>::dx;
-  using SolverBase<AdaptiveImplicitSolver<T_Method,vecT,vecT_traits>,
-		   vecT,vecT_traits>::dx_min;
-  using SolverBase<AdaptiveImplicitSolver<T_Method,vecT,vecT_traits>,
-		   vecT,vecT_traits>::dx_max;
-  using SolverBase<AdaptiveImplicitSolver<T_Method,vecT,vecT_traits>,
-		   vecT,vecT_traits>::y;
-  using SolverBase<AdaptiveImplicitSolver<T_Method,vecT,vecT_traits>,
-		   vecT,vecT_traits>::yp;
-  using SolverBase<AdaptiveImplicitSolver<T_Method,vecT,vecT_traits>,
-		   vecT,vecT_traits>::n;
+  using SBase::x;
+  using SBase::dx;
+  using SBase::dx_min;
+  using SBase::dx_max;
+  using SBase::y;
+  using SBase::yp;
+  using SBase::n;
 
 public:
   typedef typename vecT_traits::mag_type	magT;
@@ -505,6 +494,9 @@ public:
       stepT h = dx;
       bool result = true;
 
+      /*
+	Think about the error computation more carefully. Compare to CVODE.
+      */
       // for (int i = 0; i < n; i++)
       // yscal[i] = vecT_traits::mag(y[i]) + vecT_traits::mag(yp[i]*dx) + err;
       for (int i = 0; i < n; i++)
