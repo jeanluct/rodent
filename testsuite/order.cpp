@@ -73,40 +73,26 @@ int main()
 
 #if defined(ORDER_AB)
   // Adams-Bashforth methods
-  AdamsBashforth2<ExpM<Real>,std::vector<Real> >
-    expm_ab2(expm, 0., y);
-  AdamsBashforth3<ExpM<Real>,std::vector<Real> >
-    expm_ab3(expm, 0., y);
-  AdamsBashforth4<ExpM<Real>,std::vector<Real> >
-    expm_ab4(expm, 0., y);
-  AdamsBashforth5<ExpM<Real>,std::vector<Real> >
-    expm_ab5(expm, 0., y);
+  AdamsBashforth2<ExpM<Real>,std::vector<Real> > expm_ab2(expm);
+  AdamsBashforth3<ExpM<Real>,std::vector<Real> > expm_ab3(expm);
+  AdamsBashforth4<ExpM<Real>,std::vector<Real> > expm_ab4(expm);
+  AdamsBashforth5<ExpM<Real>,std::vector<Real> > expm_ab5(expm);
 
 #elif defined(ORDER_FRK)
   // Fixed Runge-Kutta methods
-  FixedEuler<ExpM<Real>,std::vector<Real> >
-    expm_feul(expm, 0., y);
-  FixedImplicitEuler<ExpM<Real>,std::vector<Real> >
-    expm_fieul(expm, 0., y);
-  FixedMidpoint<ExpM<Real>,std::vector<Real> >
-    expm_fmid(expm, 0., y);
-  FixedRK4<ExpM<Real>,std::vector<Real> >
-    expm_frk4(expm, 0., y);
+  FixedEuler<ExpM<Real>,std::vector<Real> >		expm_feul(expm);
+  FixedImplicitEuler<ExpM<Real>,std::vector<Real> >	expm_fieul(expm);
+  FixedMidpoint<ExpM<Real>,std::vector<Real> >		expm_fmid(expm);
+  FixedRK4<ExpM<Real>,std::vector<Real> >		expm_frk4(expm);
 
 #elif defined(ORDER_ARK)
   // Adaptive Runge-Kutta methods
-  AdaptiveEuler<ExpM<Real>,std::vector<Real> >
-    expm_aeul(expm, 0., y);
-  AdaptiveImplicitEuler<ExpM<Real>,std::vector<Real> >
-    expm_aieul(expm, 0., y);
-  AdaptiveMidpoint<ExpM<Real>,std::vector<Real> >
-    expm_amid(expm, 0., y);
-  AdaptiveGRK<ExpM<Real>,std::vector<Real> >
-    expm_agrk(expm, 0., y);
-  AdaptiveRK4<ExpM<Real>,std::vector<Real> >
-    expm_ark4(expm, 0., y);
-  AdaptiveRKCashKarp<ExpM<Real>,std::vector<Real> >
-    expm_rkck(expm, 0., y);
+  AdaptiveEuler<ExpM<Real>,std::vector<Real> > 		expm_aeul(expm);
+  AdaptiveImplicitEuler<ExpM<Real>,std::vector<Real> >	expm_aieul(expm);
+  AdaptiveMidpoint<ExpM<Real>,std::vector<Real> >	expm_amid(expm);
+  AdaptiveGRK<ExpM<Real>,std::vector<Real> >		expm_agrk(expm);
+  AdaptiveRK4<ExpM<Real>,std::vector<Real> >		expm_ark4(expm);
+  AdaptiveRKCashKarp<ExpM<Real>,std::vector<Real> >	expm_rkck(expm);
 #endif
 
   cout.setf(std::ios::scientific);
@@ -123,48 +109,48 @@ int main()
     cout << jlt::Log10(h);
 
 #ifdef ORDER_AB
-    expm_ab2.Restart(0.,y,h);
+    expm_ab2.stepSize(h).setState(0.,y);
     printErrorOn(cout,expm_ab2(h)[0] - y0ex,h,2);
 
-    expm_ab3.Restart(0.,y,h);
+    expm_ab3.stepSize(h).setState(0.,y);
     printErrorOn(cout,expm_ab3(h)[0] - y0ex,h,3);
 
-    expm_ab4.Restart(0.,y,h);
+    expm_ab4.stepSize(h).setState(0.,y);
     printErrorOn(cout,expm_ab4(h)[0] - y0ex,h,4);
 
-    expm_ab5.Restart(0.,y,h);
+    expm_ab5.stepSize(h).setState(0.,y);
     printErrorOn(cout,expm_ab5(h)[0] - y0ex,h,5);
 
 #elif defined(ORDER_FRK)
-    expm_feul.Restart(0.,y,h);
+    expm_feul.stepSize(h).setState(0.,y);
     printErrorOn(cout,expm_feul(h)[0] - y0ex,h,1);
 
-    expm_fieul.Restart(0.,y,h);
+    expm_fieul.stepSize(h).setState(0.,y);
     printErrorOn(cout,expm_fieul(h)[0] - y0ex,h,1);
 
-    expm_fmid.Restart(0.,y,h);
+    expm_fmid.stepSize(h).setState(0.,y);
     printErrorOn(cout,expm_fmid(h)[0] - y0ex,h,3);
 
-    expm_frk4.Restart(0.,y,h);
+    expm_frk4.stepSize(h).setState(0.,y);
     printErrorOn(cout,expm_frk4(h)[0] - y0ex,h,4);
 
 #elif defined(ORDER_ARK)
-    expm_aeul.Restart(0.,y,h);
+    expm_aeul.stepSize(h).setState(0.,y);
     printErrorOn(cout,expm_aeul(h)[0] - y0ex,h,2);
 
-    expm_aieul.Restart(0.,y,h);
+    expm_aieul.stepSize(h).setState(0.,y);
     printErrorOn(cout,expm_aieul(h)[0] - y0ex,h,2);
 
-    expm_amid.Restart(0.,y,h);
+    expm_amid.stepSize(h).setState(0.,y);
     printErrorOn(cout,expm_amid(h)[0] - y0ex,h,4);
 
-    expm_agrk.Restart(0.,y,h);
+    expm_agrk.stepSize(h).setState(0.,y);
     printErrorOn(cout,expm_agrk(h)[0] - y0ex,h,4);
 
-    expm_ark4.Restart(0.,y,h);
+    expm_ark4.stepSize(h).setState(0.,y);
     printErrorOn(cout,expm_ark4(h)[0] - y0ex,h,5);
 
-    expm_rkck.Restart(0.,y,h);
+    expm_rkck.stepSize(h).setState(0.,y);
     printErrorOn(cout,expm_rkck(h)[0] - y0ex,h,5);
 #endif
 

@@ -227,10 +227,10 @@ protected:
 public:
   typedef typename vecT_traits::step_type	stepT;
 
-  FixedEuler(T_Func& _f, const stepT x0, const vecT& y0)
+  FixedEuler(T_Func& _f)
     :
       FixedSolver<FixedEuler<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
-                                                ( _f.size(), x0, y0 ),
+                                                ( _f.size() ),
       Euler<T_Func, vecT, vecT_traits>		( _f )
     {
       reset();
@@ -277,10 +277,10 @@ protected:
 public:
   typedef typename vecT_traits::step_type	stepT;
 
-  FixedMidpoint(T_Func& _f, const stepT x0, const vecT& y0)
+  FixedMidpoint(T_Func& _f)
     :
       FixedSolver<FixedMidpoint<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
-                                                ( _f.size(), x0, y0 ),
+                                                ( _f.size() ),
       Midpoint<T_Func, vecT, vecT_traits>	( _f )
     {
       reset();
@@ -321,10 +321,10 @@ protected:
 public:
   typedef typename vecT_traits::step_type	stepT;
 
-  FixedRK4(T_Func& _f, const stepT x0, const vecT& y0)
+  FixedRK4(T_Func& _f)
     :
       FixedSolver<FixedRK4<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
-                                        ( _f.size(), x0, y0 ),
+                                        ( _f.size() ),
       RK4<T_Func, vecT, vecT_traits>	( _f )
     {
       reset();
@@ -394,10 +394,10 @@ private:
   static const int order = 1;
 
 public:
-  AdaptiveEuler(T_Func& _f, const stepT x0, const vecT& y0)
+  AdaptiveEuler(T_Func& _f)
     :
       AdaptiveSolver<AdaptiveEuler<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
-                                                ( _f.size(), x0, y0, order ),
+                                                ( _f.size(), order ),
       Euler<T_Func, vecT, vecT_traits>		( _f ), 
       y_mid					( n ),
       yp_mid					( n ),
@@ -497,11 +497,11 @@ private:
   static const int order = 2;
 
 public:
-  AdaptiveMidpoint(T_Func& _f, const stepT x0, const vecT& y0)
+  AdaptiveMidpoint(T_Func& _f)
     :
       AdaptiveSolver<AdaptiveMidpoint<T_Func,vecT,vecT_traits>,
                      vecT, vecT_traits>
-                                                ( _f.size(), x0, y0, order ),
+                                                ( _f.size(), order ),
       Midpoint<T_Func, vecT, vecT_traits>	( _f ),
       y_mid					( n ),
       yp_mid					( n ),
@@ -601,10 +601,10 @@ private:
   static const int order = 4;
 
 public:
-  AdaptiveRK4(T_Func& _f, const stepT x0, const vecT& y0)
+  AdaptiveRK4(T_Func& _f)
     :
       AdaptiveSolver<AdaptiveRK4<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
-                                        ( _f.size(), x0, y0, order ),
+                                        ( _f.size(), order ),
       RK4<T_Func, vecT, vecT_traits>	( _f ),
       y_mid				( n ),
       yp_mid				( n ),
@@ -719,11 +719,11 @@ private:
 
 public:
   // Constructor: absolute and relative errors are equal scalars.
-  AdaptiveRKCashKarp(T_Func& _f, const stepT x0, const vecT& y0)
+  AdaptiveRKCashKarp(T_Func& _f)
     :
       AdaptiveSolver<AdaptiveRKCashKarp<T_Func,vecT,vecT_traits>, vecT,
                      vecT_traits>
-                                ( _f.size(), x0, y0, order ),
+                                ( _f.size(), order ),
       ak1			( n ),
       ak2			( n ),
       ak3			( n ),
@@ -870,10 +870,10 @@ private:
   static const int order = 3;
 
 public:
-  AdaptiveGRK(T_Func& _f, const stepT x0, const vecT& y0)
+  AdaptiveGRK(T_Func& _f)
     :
       AdaptiveSolver<AdaptiveGRK<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
-                                ( _f.size(), x0, y0, order ),
+                                ( _f.size(), order ),
       Jac			( n,n ),
       A				( n,n ),
       fs1			( n ),

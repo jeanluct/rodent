@@ -32,8 +32,10 @@ int main()
   // Initial condition
   y[0] = dcomplex(0.,1.);
 
-  AdaptiveRK4<CExp,std::vector<dcomplex> > expi_rk(expi, 0.0, y);
-  expi_rk.tolerance(1.0e-10);
+  AdaptiveRK4<CExp,std::vector<dcomplex> > expi_rk(expi);
+  expi_rk
+    .tolerance(1.0e-10)
+    .setState(0.0,y);
 
   DataPoints<AdaptiveRK4<CExp,std::vector<dcomplex> >,std::vector<dcomplex> >
     expi_data(expi_rk,0.0,t,dtsav);

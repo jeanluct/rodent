@@ -46,13 +46,13 @@ private:
   FixedMidpoint<T_Func,vecT,vecT_traits> int_startup;
 
 public:
-  AdamsBashforth2(T_Func& _f, const stepT x0, const vecT& y0)
+  AdamsBashforth2(T_Func& _f)
     :
     FixedSolver<AdamsBashforth2<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
-                                ( _f.size(), x0, y0 ),
+                                ( _f.size() ),
     ypm1			( _f.size() ),
-    int_startup			( _f,x0,y0 ),
-    func			( _f)
+    int_startup			( _f ),
+    func			( _f )
     {
       reset();
     }
@@ -96,7 +96,7 @@ public:
       // explicit one-step method.
 
       // Restart the startup integrator.
-      int_startup.Restart(x, y, dx);
+      int_startup.stepSize(dx).setState(x, y);
 
       // Step n-1
       int_startup(x-dx,ym1);
@@ -137,13 +137,13 @@ private:
   FixedRK4<T_Func,vecT,vecT_traits> int_startup;
 
 public:
-  AdamsBashforth3(T_Func& _f, const stepT x0, const vecT& y0)
+  AdamsBashforth3(T_Func& _f)
     :
       FixedSolver<AdamsBashforth3<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
-                                ( _f.size(), x0, y0 ),
+                                ( _f.size() ),
       ypm1			( _f.size() ),
       ypm2			( _f.size() ),
-      int_startup		( _f,x0,y0 ),
+      int_startup		( _f ),
       func			( _f )
     {
       reset();
@@ -192,7 +192,7 @@ public:
       // explicit one-step method.
 
       // Restart the startup integrator.
-      int_startup.Restart(x, y, dx);
+      int_startup.stepSize(dx).setState(x, y);
 
       // Step n-1
       int_startup(x-dx,ym1);
@@ -237,14 +237,14 @@ private:
   FixedRK4<T_Func,vecT,vecT_traits> int_startup;
 
 public:
-  AdamsBashforth4(T_Func& _f, const stepT x0, const vecT& y0)
+  AdamsBashforth4(T_Func& _f )
     :
       FixedSolver<AdamsBashforth4<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
-                                ( _f.size(), x0, y0 ),
+                                ( _f.size() ),
       ypm1			( _f.size() ),
       ypm2			( _f.size() ),
       ypm3			( _f.size() ),
-      int_startup		( _f,x0,y0 ),
+      int_startup		( _f ),
       func			( _f)
     {
       reset();
@@ -297,7 +297,7 @@ public:
       // explicit one-step method.
 
       // Restart the startup integrator.
-      int_startup.Restart(x, y, dx);
+      int_startup.stepSize(dx).setState(x, y);
 
       // Step n-1
       int_startup(x-dx,ym1);
@@ -348,15 +348,15 @@ private:
   AdaptiveRKCashKarp<T_Func,vecT,vecT_traits> int_startup;
 
 public:
-  AdamsBashforth5(T_Func& _f, const stepT x0, const vecT& y0)
+  AdamsBashforth5(T_Func& _f)
     :
       FixedSolver<AdamsBashforth5<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
-                                ( _f.size(), x0, y0 ),
+                                ( _f.size() ),
       ypm1			( _f.size() ),
       ypm2			( _f.size() ),
       ypm3			( _f.size() ),
       ypm4			( _f.size() ),
-      int_startup		( _f,x0,y0 ),
+      int_startup		( _f ),
       func			( _f )
     {
       reset();
@@ -412,7 +412,7 @@ public:
       // explicit one-step method.
 
       // Restart the startup integrator.
-      int_startup.Restart(x, y, dx);
+      int_startup.stepSize(dx).setState(x, y);
 
       // Step n-1
       int_startup(x-dx,ym1);

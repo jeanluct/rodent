@@ -1,11 +1,6 @@
 #ifndef RODENT_BASE_HPP
 #define RODENT_BASE_HPP
 
-//#ifdef RODENT_DEBUG
-//#  define MAT_CHECK_BOUNDS
-//#  define VEC_CHECK_BOUNDS
-//#endif
-
 // Default vector type is std vector class.
 #include <vector>
 typedef std::vector<double> rodent_vec;
@@ -47,8 +42,7 @@ protected:
 
   stepT	x;				// Current independent coordinate.
   stepT	dx;				// Current step size.
-  stepT dx_init;			// Initial step size.
-  magT dx_min;				// Minimum step size.
+  magT	dx_min;				// Minimum step size.
   vecT 	y;				// State vector at x.
   vecT 	yp;				// Derivative vector at x.
 
@@ -65,14 +59,13 @@ private:
 public:
 
   // Constructor: Initialize internal state and save first data point.
-  SolverBase(const int _n, const stepT x0, const vecT& y0)
+  SolverBase(const int _n)
     :
       n				( _n ),
-      x				( x0 ),
+      x				( 0 ),
       dx			( 0.01 ),
-      dx_init			( dx ),
       dx_min			( 0 ),
-      y				( vecT_traits::copy(y0) ),
+      y				( _n ),
       yp			( _n ),
       max_steps			( 10000000 )
     {
@@ -80,34 +73,19 @@ public:
 
 
   //
-  // Named Parameters
+  // Methods for Setting Parameters
   //
-  // http://www.parashift.com/c++-faq-lite/ctors.html#faq-10.17
 
   T_Control& stepSize(const stepT _dx)
     {
       dx = _dx;
-      dx_init = dx;		// I think this is the thing to do...
-
-      /*
-      // Check if step size is already too small.
-      if (vecT_traits::absval(dx) < dx_min) {
-#ifdef __EXCEPTIONS
-	_THROW(jlt::stepsize_too_small<magT>
-	       ("Initial stepsize too small in rodent::Base.",dx));
-#else
-	std::cerr << "Initial stepsize too small in rodent::Base.\n";
-	std::exit(1);
-#endif
-      }
-      */
 
       return Control();
     }
 
   T_Control& minStepSize(const stepT _dx_min)
     {
-      dx_min = absval(_dx_min);
+      dx_min = vecT_traits::absval(_dx_min);
       return Control();
     }
 
@@ -117,27 +95,11 @@ public:
       return Control();
     }
 
-  //
-  // Query Parameters
-  //
-
 
   // Re-initialize the integrator, recalculating the derivative yp.
-  T_Control& Restart(const stepT x0, const vecT& y0, const stepT dx0)
+  T_Control& setState(const stepT x0, const vecT& y0)
     {
-      // Check if step size is already too small.
-      if (vecT_traits::absval(dx0) < dx_min) {
-#ifdef __EXCEPTIONS
-	_THROW(jlt::stepsize_too_small<magT>
-	       ("New stepsize too small in rodent::Restart.",dx0));
-#else
-	std::cerr << "New stepsize too small in rodent::Restart.\n";
-	std::exit(1);
-#endif
-      }
-
       x = x0;
-      dx = dx0;
 #ifndef RODENT_ITERATOR_LOOPS
       for (int i = 0; i < n; ++i) y[i] = y0[i];
 #else
@@ -149,29 +111,11 @@ public:
       return Control();
     }
 
-  // Re-initialize the integrator, recalculating the derivative yp.
-  // Set step size to same as initially.
-  T_Control& Restart(const stepT x0, const vecT& y0)
-    {
-      return Restart(x0,y0,dx_init);
-    }
 
   // Re-initialize the integrator, explicitly providing the derivative yp.
-  T_Control& Restart(const stepT x0, const vecT& y0, const stepT dx0,
-	       const vecT& yp0)
+  T_Control& setState(const stepT x0, const vecT& y0, const vecT& yp0)
     {
-      if (vecT_traits::absval(dx0) < dx_min) {
-#ifdef __EXCEPTIONS
-	_THROW(jlt::stepsize_too_small<magT>
-	       ("New stepsize too small in rodent::Restart.",dx0));
-#else
-	std::cerr << "New stepsize too small in rodent::Restart.\n";
-	std::exit(1);
-#endif
-      }
-
       x = x0;
-      dx = dx0;
 #ifndef RODENT_ITERATOR_LOOPS
       for (int i = 0; i < n; ++i) y[i] = y0[i];
 #else
@@ -183,212 +127,43 @@ public:
       return Control();
     }
 
-  // Re-initialize the integrator, explicitly providing the derivative yp.
-  // Set step size to same as initially.
-  T_Control& Restart(const stepT x0, const vecT& y0, const vecT& yp0)
-    {
-      return Restart(x0,y0,dx_init,yp0);
-    }
 
-  stepT IntegrateTo(const stepT x1, vecT& y1)
-    {
-      if (x == x1) {
-	// Already there, do nothing, but copy current state to y1.
-#ifndef RODENT_ITERATOR_LOOPS
-	for (int i = 0; i < n; ++i) y1[i] = y[i];
-#else
-	y1 = y;
-#endif
-	return x;
-      }
-
-      // Make sure we are going in the right direction: reverse the
-      // sign of dx if needed, but keep the same magnitude.
-      if (dx*(x1 - x) < 0) dx = -dx;
-
-      stepT dxold = dx;
-
-#ifdef RODENT_DEBUG
-      n_good_steps = n_bad_steps = 0;
-#endif
-
-      for (unsigned long int nstp = 1; nstp <= max_steps; ++nstp) {
-	bool lastStep = false;
-
-	// Check to make sure that we don't overshoot x1.
-	if ((dx > 0 && x + dx >= x1) || (dx < 0 && x + dx <= x1)) {
-	  // Save size of last step, in case we are really close to goal.
-	  // This makes it easier to restart the integration.
-	  dxold = dx;
-	  dx = x1 - x;
-	  lastStep = true;
-	}
-
-	lastStep &= Control().Step(y1);
-
-	// The logical AND ensures that if the last step fails,
-	// then it isn't the last one anymore.
-
-	// Next step starts at y1.
-#ifndef RODENT_ITERATOR_LOOPS
-	for (int i = 0; i < n; ++i) y[i] = y1[i];
-#else
-	y = y1;
-#endif
-
-	if (lastStep) {
-#ifdef RODENT_DEBUG
-	  std::cerr << "rodent::IntegrateTo   Steps--  good = "
-		    << n_good_steps;
-	  std::cerr << "   bad = " << n_bad_steps;
-	  std::cerr << "   x = " << x << endl;
-	  std::cerr << "   y = " << y << endl;
-	  std::cerr << "  yp = " << yp << endl;
-	  std::cerr << "   dx = " << dx << endl;
-#endif
-	  dx = dxold;	// There might be a bit of an error here...
-	  return x;
-	}
-      }
-      _THROW(jlt::too_many_steps
-	      ("Too many steps taken in IntegrateTo ", max_steps));
-
-      return x;
-    }
-
-  stepT IntegrateTo(const stepT x1)
-    {
-      vecT y1(n);
-
-      return IntegrateTo(x1, y1);
-    }
-
-  stepT IntegrateTo(const stepT x1, vecT& y1, vecT& y1p)
-    {
-      IntegrateTo(x1, y1);
- 
-#ifndef RODENT_ITERATOR_LOOPS
-      for (int i = 0; i < n; ++i) {
-	y1p[i] = yp[i];
-      }
-#else
-      y1p = yp;
-#endif
-
-      return x;
-    }
-
-  // Integrates to x+dx1.
-  stepT IntegrateAddTo(const stepT dx1)
-    {
-      return IntegrateTo(x + dx1);
-    }
-
-  // Take one step, return the new x.
-  stepT TakeStep(vecT& y1, vecT& y1p)
-    {
-
-#ifdef RODENT_DEBUG
-      n_good_steps = n_bad_steps = 0;
-#endif
-
-      Control().Step(y1);
-
-#ifndef RODENT_ITERATOR_LOOPS
-      for (int i = 0; i < n; ++i) {
-	y[i] = y1[i];
-	y1p[i] = yp[i];
-      }
-#else
-      y = y1;
-      y1p = yp;
-#endif
-
-#ifdef RODENT_DEBUG
-      std::cerr << "rodent::TakeStep   Steps--  good = " << n_good_steps;
-      std::cerr << "   bad = " << n_bad_steps << endl;
-#endif
-
-      return x;
-    }
-
-  // Take one step, return the new x.
-  stepT TakeStep(vecT& y1)
-    {
-
-#ifdef RODENT_DEBUG
-      n_good_steps = n_bad_steps = 0;
-#endif
-
-      Control().Step(y1);
-
-#ifndef RODENT_ITERATOR_LOOPS
-      for (int i = 0; i < n; ++i) {
-	y[i] = y1[i];
-      }
-#else
-      y = y1;
-#endif
-
-#ifdef RODENT_DEBUG
-      std::cerr << "rodent::TakeStep   Steps--  good = " << n_good_steps;
-      std::cerr << "   bad = " << n_bad_steps << endl;
-#endif
-
-      return x;
-    }
-
-  // Take one step, return the new x.
-  stepT operator++()
-    {
-      vecT y1(n);
-
-#ifdef RODENT_DEBUG
-      n_good_steps = n_bad_steps = 0;
-#endif
-
-      Control().Step(y1);
-
-#ifndef RODENT_ITERATOR_LOOPS
-      for (int i = 0; i < n; ++i) y[i] = y1[i];
-#else
-      y = y1;
-#endif
-
-#ifdef RODENT_DEBUG
-      std::cerr << "rodent::++   Steps--  good = " << n_good_steps;
-      std::cerr << "   bad = " << n_bad_steps << endl;
-#endif
-
-      return x;
-    }
-
-  const vecT& operator()(const stepT x1)
-    {
-      IntegrateTo(x1);
-
-      return y;
-    }
-
-  stepT operator()(const stepT x1, vecT& y1)
-    {
-      return IntegrateTo(x1,y1);
-    }
-
-  stepT operator()(const stepT x1, vecT& y1, vecT& yp1)
-    {
-      return IntegrateTo(x1,y1,yp1);
-    }
+  //
+  // Query Parameters
+  //
 
   stepT stepSize() const
     {
       return dx;
     }
 
-  void PrintOn(std::ostream& strm)
+
+  // These are all aliases to obtain the dependent (state) variable y.
+
+  const vecT& dependent() const
     {
-      strm << x << "\t" << y << "\t" << yp << std::endl;
+      return y;
     }
+
+  const vecT& getState() const
+    {
+      return dependent();
+    }
+
+  const stepT getState(vecT& _y) const
+    {
+      _y = y;
+      return x;
+    }
+
+  const stepT getState(vecT& _y, vecT& _yp) const
+    {
+      _y = y;
+      _yp = yp;
+      return x;
+    }
+
+  // These are all aliases to obtain the independent variable x.
 
   const stepT independent() const
     {
@@ -405,22 +180,242 @@ public:
       return independent();
     }
 
-  const vecT& dependent() const
-    {
-      return y;
-    }
-
-  const vecT& state() const
-    {
-      return dependent();
-    }
-
+  // Access individual elements of the state vector.
   const T& operator[](int i) const
     {
       return y[i];
     }
 
+
+  //
+  // Integrate!
+  //
+
+  inline stepT integrateTo(const stepT x1, vecT& y1);
+
+  stepT integrateTo(const stepT x1)
+    {
+      vecT y1(n);
+
+      return integrateTo(x1, y1);
+    }
+
+  stepT integrateTo(const stepT x1, vecT& y1, vecT& y1p)
+    {
+      integrateTo(x1, y1);
+ 
+#ifndef RODENT_ITERATOR_LOOPS
+      for (int i = 0; i < n; ++i) {
+	y1p[i] = yp[i];
+      }
+#else
+      y1p = yp;
+#endif
+
+      return x;
+    }
+
+  // Integrates to x+dx1.
+  stepT integrateAddTo(const stepT dx1)
+    {
+      return integrateTo(x + dx1);
+    }
+
+  // Take one step, return the new x and y. Provide derivative.
+  inline stepT takeStep(vecT& y1, vecT& y1p);
+
+  // Take one step, return the new x and y. Compute derivative.
+  inline stepT takeStep(vecT& y1);
+
+  // Take one step, return the new x. Compute derivative.
+  inline stepT operator++();
+
+  // Aliases for IntegrateTo.
+  const vecT& operator()(const stepT x1)
+    {
+      integrateTo(x1);
+
+      return y;
+    }
+
+  stepT operator()(const stepT x1, vecT& y1)
+    {
+      return integrateTo(x1,y1);
+    }
+
+  stepT operator()(const stepT x1, vecT& y1, vecT& yp1)
+    {
+      return integrateTo(x1,y1,yp1);
+    }
+
+
+  //
+  // Output
+  //
+
+  void PrintOn(std::ostream& strm)
+    {
+      strm << x << "\t" << y << "\t" << yp << std::endl;
+    }
+
 }; // class SolverBase
+
+
+//
+// Member Functions Definitions
+//
+
+template<class T_Control, class vecT, class vecT_traits>
+typename SolverBase<T_Control,vecT,vecT_traits>::stepT
+SolverBase<T_Control,vecT,vecT_traits>::integrateTo(const stepT x1, vecT& y1)
+{
+  if (x == x1) {
+    // Already there, do nothing, but copy current state to y1.
+#ifndef RODENT_ITERATOR_LOOPS
+    for (int i = 0; i < n; ++i) y1[i] = y[i];
+#else
+    y1 = y;
+#endif
+    return x;
+  }
+
+  // Make sure we are going in the right direction: reverse the
+  // sign of dx if needed, but keep the same magnitude.
+  if (dx*(x1 - x) < 0) dx = -dx;
+
+  stepT dxold = dx;
+
+#ifdef RODENT_DEBUG
+  n_good_steps = n_bad_steps = 0;
+#endif
+
+  for (unsigned long int nstp = 1; nstp <= max_steps; ++nstp) {
+    bool lastStep = false;
+
+    // Check to make sure that we don't overshoot x1.
+    if ((dx > 0 && x + dx >= x1) || (dx < 0 && x + dx <= x1)) {
+      // Save size of last step, in case we are really close to goal.
+      // This makes it easier to restart the integration.
+      dxold = dx;
+      dx = x1 - x;
+      lastStep = true;
+    }
+
+    lastStep &= Control().Step(y1);
+
+    // The logical AND ensures that if the last step fails,
+    // then it isn't the last one anymore.
+
+    // Next step starts at y1.
+#ifndef RODENT_ITERATOR_LOOPS
+    for (int i = 0; i < n; ++i) y[i] = y1[i];
+#else
+    y = y1;
+#endif
+
+    if (lastStep) {
+#ifdef RODENT_DEBUG
+      std::cerr << "rodent::integrateTo   Steps--  good = "
+		<< n_good_steps;
+      std::cerr << "   bad = " << n_bad_steps;
+      std::cerr << "   x = " << x << endl;
+      std::cerr << "   y = " << y << endl;
+      std::cerr << "  yp = " << yp << endl;
+      std::cerr << "   dx = " << dx << endl;
+#endif
+      dx = dxold;	// There might be a bit of an error here...
+      return x;
+    }
+  }
+  _THROW(jlt::too_many_steps
+	 ("Too many steps taken in integrateTo ", max_steps));
+
+  return x;
+}
+
+
+template<class T_Control, class vecT, class vecT_traits>
+typename SolverBase<T_Control,vecT,vecT_traits>::stepT
+SolverBase<T_Control,vecT,vecT_traits>::takeStep(vecT& y1, vecT& y1p)
+{
+#ifdef RODENT_DEBUG
+  n_good_steps = n_bad_steps = 0;
+#endif
+
+  Control().Step(y1);
+
+#ifndef RODENT_ITERATOR_LOOPS
+  for (int i = 0; i < n; ++i) {
+    y[i] = y1[i];
+    y1p[i] = yp[i];
+  }
+#else
+  y = y1;
+  y1p = yp;
+#endif
+
+#ifdef RODENT_DEBUG
+  std::cerr << "rodent::takeStep   Steps--  good = " << n_good_steps;
+  std::cerr << "   bad = " << n_bad_steps << endl;
+#endif
+
+  return x;
+}
+
+
+template<class T_Control, class vecT, class vecT_traits>
+typename SolverBase<T_Control,vecT,vecT_traits>::stepT
+SolverBase<T_Control,vecT,vecT_traits>::takeStep(vecT& y1)
+{
+#ifdef RODENT_DEBUG
+  n_good_steps = n_bad_steps = 0;
+#endif
+
+  Control().Step(y1);
+
+#ifndef RODENT_ITERATOR_LOOPS
+  for (int i = 0; i < n; ++i) {
+    y[i] = y1[i];
+  }
+#else
+  y = y1;
+#endif
+
+#ifdef RODENT_DEBUG
+  std::cerr << "rodent::takeStep   Steps--  good = " << n_good_steps;
+  std::cerr << "   bad = " << n_bad_steps << endl;
+#endif
+
+  return x;
+}
+
+
+template<class T_Control, class vecT, class vecT_traits>
+typename SolverBase<T_Control,vecT,vecT_traits>::stepT
+SolverBase<T_Control,vecT,vecT_traits>::operator++()
+{
+  vecT y1(n);
+
+#ifdef RODENT_DEBUG
+  n_good_steps = n_bad_steps = 0;
+#endif
+
+  Control().Step(y1);
+
+#ifndef RODENT_ITERATOR_LOOPS
+  for (int i = 0; i < n; ++i) y[i] = y1[i];
+#else
+  y = y1;
+#endif
+
+#ifdef RODENT_DEBUG
+  std::cerr << "rodent::++   Steps--  good = " << n_good_steps;
+  std::cerr << "   bad = " << n_bad_steps << endl;
+#endif
+
+  return x;
+}
+
 
 } // namespace rodent
 

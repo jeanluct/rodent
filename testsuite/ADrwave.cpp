@@ -53,8 +53,10 @@ int main(int argc, const char **argv)
   // Initial condition.
   y[rw.pk(1,0,0)] = M_SQRT1_2;
 
-  AdaptiveETDRK4<ADrwave> int_rw(rw, 0.0, y, c);
-  int_rw.tolerance(acc);
+  AdaptiveETDRK4<ADrwave> int_rw(rw, c);
+  int_rw
+    .tolerance(acc)
+    .setState(0.0,y);
 
   cout.precision(5);
   cout.setf(std::ios::scientific);
@@ -66,7 +68,7 @@ int main(int argc, const char **argv)
     // Integrate to the very edge of the interval...
     int_rw(t-tiny,y);
     // ... then jump over it.
-    int_rw.Restart(t+tiny,y);
+    int_rw.setState(t+tiny,y);
 
     mean_var += rw.variance(y);
 

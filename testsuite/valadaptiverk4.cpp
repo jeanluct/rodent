@@ -68,8 +68,10 @@ int main()
   y[0] = 0.;
   y[1] = 1.;
 
-  AdaptiveRK4<valSimpleHarmonic,std::valarray<double> > sho_rk(sho, 0.0, y);
-  sho_rk.tolerance(1.0e-10);
+  AdaptiveRK4<valSimpleHarmonic,std::valarray<double> > sho_rk(sho);
+  sho_rk
+    .tolerance(1.0e-10)
+    .setState(0.0,y);
 
   /*
   cout << t+10 << "\t" << sho_rk(t+10) << endl;

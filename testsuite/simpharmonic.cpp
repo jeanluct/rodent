@@ -33,17 +33,25 @@ int main()
 
   cout << "Initial conditions: " << y << endl;
 
-  AdaptiveRK4<SimpleHarmonic<double> > sho_ark4(sho, 0.0, y);
-  sho_ark4.tolerance(ark4_acc);
+  AdaptiveRK4<SimpleHarmonic<double> > sho_ark4(sho);
+  sho_ark4
+    .tolerance(ark4_acc)
+    .setState(0.0,y);
 
-  FixedRK4<SimpleHarmonic<double> > sho_frk4(sho, 0.0, y);
-  sho_frk4.stepSize(rk4_step);
+  FixedRK4<SimpleHarmonic<double> > sho_frk4(sho);
+  sho_frk4
+    .stepSize(rk4_step)
+    .setState(0.0,y);
 
-  AdaptiveEuler<SimpleHarmonic<double> > sho_aeuler(sho, 0.0, y);
-  sho_aeuler.tolerance(euler_acc);
+  AdaptiveEuler<SimpleHarmonic<double> > sho_aeuler(sho);
+  sho_aeuler
+    .tolerance(euler_acc)
+    .setState(0.0,y);
 
-  FixedEuler<SimpleHarmonic<double> > sho_feuler(sho, 0.0, y);
-  sho_feuler.stepSize(euler_step);
+  FixedEuler<SimpleHarmonic<double> > sho_feuler(sho);
+  sho_feuler
+    .stepSize(euler_step)
+    .setState(0.0,y);
 
   cout.precision(10);
 

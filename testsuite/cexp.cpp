@@ -33,17 +33,25 @@ int main()
 
   cout << "Initial condition: " << y << endl;
 
-  AdaptiveRK4<CExp,std::vector<dcomplex> > expi_ark4(expi, 0.0, y);
-  expi_ark4.tolerance(ark4_acc);
+  AdaptiveRK4<CExp,std::vector<dcomplex> > expi_ark4(expi);
+  expi_ark4
+    .tolerance(ark4_acc)
+    .setState(0.0,y);
 
-  FixedRK4<CExp,std::vector<dcomplex> > expi_frk4(expi, 0.0, y);
-  expi_frk4.stepSize(rk4_step);
+  FixedRK4<CExp,std::vector<dcomplex> > expi_frk4(expi);
+  expi_frk4
+    .stepSize(rk4_step)
+    .setState(0.0,y);
 
-  AdaptiveEuler<CExp,std::vector<dcomplex> > expi_aeuler(expi, 0.0, y);
-  expi_aeuler.tolerance(euler_acc);
+  AdaptiveEuler<CExp,std::vector<dcomplex> > expi_aeuler(expi);
+  expi_aeuler
+    .tolerance(euler_acc)
+    .setState(0.0,y);
 
-  FixedEuler<CExp,std::vector<dcomplex> > expi_feuler(expi, 0.0, y);
-  expi_feuler.stepSize(euler_step);
+  FixedEuler<CExp,std::vector<dcomplex> > expi_feuler(expi);
+  expi_feuler
+    .stepSize(euler_step)
+    .setState(0.0,y);
 
   cout.precision(10);
 

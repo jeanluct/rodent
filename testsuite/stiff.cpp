@@ -34,8 +34,10 @@ int main()
 
   cout.precision(10);
 
-  FixedEuler<Stiff> feuler(stiff, 0.0, y);
-  feuler.stepSize(euler_step);
+  FixedEuler<Stiff> feuler(stiff);
+  feuler
+    .stepSize(euler_step)
+    .setState(0.0,y);
 
   DataPoints<FixedEuler<Stiff> >
     feuler_data(feuler,0.,3*t,dtsav);
@@ -47,8 +49,10 @@ int main()
   cout << "\nFixed Explicit Euler:  step size = " << euler_step << endl;
   feuler_data.PrintOn(cout,2*t,3*t);
 
-  FixedImplicitEuler<Stiff> fimplicit_euler(stiff, 0.0, y);
-  fimplicit_euler.stepSize(euler_step);
+  FixedImplicitEuler<Stiff> fimplicit_euler(stiff);
+  fimplicit_euler
+    .stepSize(euler_step)
+    .setState(0.0,y);
 
   DataPoints<FixedImplicitEuler<Stiff> >
     fimplicit_euler_data(fimplicit_euler,0.0,3*t,dtsav);
@@ -56,8 +60,10 @@ int main()
   cout << "\nFixed Implicit Euler:  step size = " << euler_step << endl;
   fimplicit_euler_data.PrintOn(cout,2*t,3*t);
 
-  AdaptiveImplicitEuler<Stiff> aimplicit_euler(stiff, 0.0, y);
-  aimplicit_euler.tolerance(aeul_acc);
+  AdaptiveImplicitEuler<Stiff> aimplicit_euler(stiff);
+  aimplicit_euler
+    .tolerance(aeul_acc)
+    .setState(0.0,y);
 
   DataPoints<AdaptiveImplicitEuler<Stiff> >
     aimplicit_euler_data(aimplicit_euler,0.,3*t,dtsav);
@@ -65,10 +71,11 @@ int main()
   cout << "\nAdaptive Implicit Euler:  accuracy = " << aeul_acc << endl;
     aimplicit_euler_data.PrintOn(cout,2*t,3*t);
 
-  AdaptiveGRK<Stiff> grk(stiff, 0.0, y);
+  AdaptiveGRK<Stiff> grk(stiff);
   grk
     .stepSize(t)
-    .tolerance(grk_acc);
+    .tolerance(grk_acc)
+    .setState(0.0,y);
 
   DataPoints<AdaptiveGRK<Stiff> >
     grk_data(grk,0.,3*t,dtsav);

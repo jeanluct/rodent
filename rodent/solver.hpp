@@ -44,9 +44,9 @@ protected:
   SolverBase<FixedSolver<T_Method,vecT,vecT_traits>,vecT,vecT_traits>::n;
 
 public:
-  FixedSolver(const int _n, const stepT x0, const vecT& y0)
+  FixedSolver(const int _n)
     : SolverBase<FixedSolver<T_Method,vecT,vecT_traits>, vecT,
-                 vecT_traits>(_n, x0, y0)
+                 vecT_traits>(_n)
     {
     }
 
@@ -115,7 +115,7 @@ private:
   vecmagT err_rel;			// Desired relative accuracy.
   vecmagT err_abs;			// Desired absolute accuracy.
 
-  const magT tiny;
+  static const magT tiny = 1.0e-30;
 
   magT expand(magT err)
     {
@@ -139,14 +139,12 @@ protected:
   vecT yerr;				// Error vector.
 
 public:
-  AdaptiveSolver(const int _n, const stepT x0, const vecT& y0,
-		 const int _order)
+  AdaptiveSolver(const int _n, const int _order)
     :
       SolverBase<AdaptiveSolver<T_Method,vecT,vecT_traits>, vecT, vecT_traits>
-                                ( _n, x0, y0 ),
+                                ( _n ),
       err_rel			( _n, 1.0e-6 ),
       err_abs			( _n, 1.0e-6 ),
-      tiny			( 1.e-30 ),
       order			( _order ),
       expand_factor		( -1./(magT)(_order+1) ),
       shrink_factor		( -1./(magT)(_order) ),
@@ -159,7 +157,7 @@ public:
 
 
   //
-  // Named Parameters
+  // Methods for Setting Parameters
   //
 
   T_Method& tolerance(vecmagT _err)
@@ -171,8 +169,10 @@ public:
 
   T_Method& tolerance(magT _err)
     {
-      err_abs = vecmagT(n,_err);
-      err_rel = vecmagT(n,_err);
+      for (int i = 0; i < n; ++i)
+	{
+	  err_abs[i] = err_rel[i] = _err;
+	}
       return Method();
     }
 
@@ -190,13 +190,19 @@ public:
 
   T_Method& absoluteTolerance(magT _err_abs)
     {
-      err_abs = vecmagT(n,_err_abs);
+      for (int i = 0; i < n; ++i)
+	{
+	  err_abs[i] = _err_abs;
+	}
       return Method();
     }
 
   T_Method& relativeTolerance(magT _err_rel)
     {
-      err_rel = vecmagT(n,_err_rel);
+      for (int i = 0; i < n; ++i)
+	{
+	  err_rel[i] = _err_rel;
+	}
       return Method();
     }
 
@@ -357,10 +363,10 @@ private:
   vecT y1p;				// Derivative at y1.
 
 public:
-  FixedImplicitSolver(const int _n, const stepT x0, const vecT& y0)
+  FixedImplicitSolver(const int _n)
     :
       SolverBase<FixedImplicitSolver<T_Method,vecT,vecT_traits>, vecT,
-                 vecT_traits>   ( _n, x0, y0 ),
+                 vecT_traits>   ( _n ),
       y1p			( _n )
     {
     }
@@ -426,7 +432,9 @@ public:
 #endif
 
 private:
-  magT eps;				// Desired accuracy.
+  magT err;				// Desired accuracy.
+
+  static const magT tiny = 1.0e-30;
 
   magT expand(magT err)
     {
@@ -440,9 +448,9 @@ private:
 
   const int order;			// The order of the method used.
                                         // Error scale as (order+1).
-  const magT expand_factor;		// How much to expand a good step.
-  const magT shrink_factor;		// How much to shrink a bad step.
-  const magT safety_factor;		// Safety factor for step adjustment.
+  magT expand_factor;			// How much to expand a good step.
+  magT shrink_factor;			// How much to shrink a bad step.
+  magT safety_factor;			// Safety factor for step adjustment.
 
   vecmagT yscal;			// Scale factor vector.
   vecT y1p;				// Derivative at y1.
@@ -451,13 +459,12 @@ protected:
   vecT yerr;				// Error vector.
 
 public:
-  AdaptiveImplicitSolver(const int _n, const stepT x0, const vecT& y0,
-			 const int _order)
+  AdaptiveImplicitSolver(const int _n, const int _order)
     :
       SolverBase<AdaptiveImplicitSolver<T_Method,vecT,vecT_traits>, vecT,
                  vecT_traits>
-                                ( _n, x0, y0 ),
-      eps			( 1.0e-6 ),
+                                ( _n ),
+      err			( 1.0e-6 ),
       order			( _order ),
       expand_factor		( -1./(magT)(_order+1) ),
       shrink_factor		( -1./(magT)(_order) ),
@@ -470,12 +477,12 @@ public:
     }
 
   //
-  // Named Parameters
+  // Methods for Setting Parameters
   //
 
   T_Method& tolerance(magT _err)
     {
-      eps = _err;
+      err = _err;
       return Method();
     }
 
@@ -514,9 +521,9 @@ public:
 
 #ifndef RODENT_ITERATOR_LOOPS
       // for (int i = 0; i < n; i++)
-      // yscal[i] = vecT_traits::mag(y[i]) + vecT_traits::mag(yp[i]*dx) + eps;
+      // yscal[i] = vecT_traits::mag(y[i]) + vecT_traits::mag(yp[i]*dx) + err;
       for (int i = 0; i < n; i++)
-	yscal[i] = vecT_traits::mag(y[i]) + vecT_traits::mag(yp[i]*dx) + 1.e-30;
+	yscal[i] = vecT_traits::mag(y[i]) + vecT_traits::mag(yp[i]*dx) + tiny;
 #else
       {
 	CIt yit = y.begin(), ypit = yp.begin();
@@ -524,9 +531,9 @@ public:
 	     ++yscalit, ++yit, ++ypit)
 	  {
 	    //*yscalit = vecT_traits::mag(*yit)
-	    //  + vecT_traits::mag(*ypit*dx) + eps;
+	    //  + vecT_traits::mag(*ypit*dx) + err;
 	    *yscalit = vecT_traits::mag(*yit)
-	      + vecT_traits::mag(*ypit*dx) + 1.e-30;
+	      + vecT_traits::mag(*ypit*dx) + tiny;
 	  }
       }
 #endif
@@ -545,7 +552,7 @@ public:
 	    errmax = std::max(errmax, vecT_traits::mag(*yerrit/(*yscalit)));
 	  }
 #endif
-	errmax /= eps;
+	errmax /= err;
 	if (errmax <= 1) {
 	  x += h;
 #ifdef RODENT_DEBUG
@@ -567,10 +574,10 @@ public:
 	if (vecT_traits::absval(h) < dx_min) {
 #ifdef __EXCEPTIONS
 	  _THROW(jlt::stepsize_too_small<magT>
-	    ("Stepsize too small in rodent::ImplicitAdaptiveSolver::Step.",h));
+	    ("Stepsize too small in rodent::AdaptiveImplicitSolver::Step.",h));
 #else
 	  std::cerr <<
-	    "Stepsize too small in rodent::ImplicitAdaptiveSolver::Step.\n";
+	    "Stepsize too small in rodent::AdaptiveImplicitSolver::Step.\n";
 	  std::exit(1);
 #endif
 	}

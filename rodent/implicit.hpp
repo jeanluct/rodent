@@ -131,10 +131,10 @@ protected:
 public:
   typedef typename vecT_traits::step_type	stepT;
 
-  FixedImplicitEuler(T_Func& _f, const stepT x0, const vecT& y0)
+  FixedImplicitEuler(T_Func& _f)
     :
       FixedImplicitSolver<FixedImplicitEuler<T_Func,vecT,vecT_traits>,
-                          vecT, vecT_traits>	( _f.size(), x0, y0 ),
+                          vecT, vecT_traits>	( _f.size() ),
       ImplicitEuler<T_Func,vecT,vecT_traits>	( _f )
     {
       reset();
@@ -212,10 +212,10 @@ private:
   static const int order = 1;
 
 public:
-  AdaptiveImplicitEuler(T_Func& _f, const stepT x0, const vecT& y0)
+  AdaptiveImplicitEuler(T_Func& _f)
     :
       AdaptiveImplicitSolver<AdaptiveImplicitEuler<T_Func,vecT,vecT_traits>,
-                             vecT,vecT_traits>  ( _f.size(), x0, y0, order ),
+                             vecT,vecT_traits>  ( _f.size(), order ),
       ImplicitEuler<T_Func,vecT,vecT_traits>	( _f ),
       y_mid					( n ),
       yp_mid					( n ),

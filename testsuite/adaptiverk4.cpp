@@ -32,8 +32,10 @@ int main()
   cout.precision(10);
 
   AdaptiveRK4<SimpleHarmonic<double> >
-    sho_rk(sho, 0.0, y);
-  sho_rk.tolerance(1.0e-10);
+    sho_rk(sho);
+  sho_rk
+    .tolerance(1.0e-10)
+    .setState(0.0,y);
 
   DataPoints<AdaptiveRK4<SimpleHarmonic<double> > >
     sho_data(sho_rk,0.0,t,dtsav);
