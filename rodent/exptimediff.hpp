@@ -243,11 +243,11 @@ protected:
 public:
   typedef typename vecT_traits::step_type	stepT;
 
-  FixedETD1(T_Func& _f, const stepT x0, const vecT& y0,
-	    const stepT dx0, vecT& _c)
-    : FixedSolver<FixedETD1<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
-                 (_f.size(), x0, y0, dx0),
-		   ETD1<T_Func, vecT, vecT_traits>(_f,_c)
+  FixedETD1(T_Func& _f, const stepT x0, const vecT& y0, vecT& _c)
+    :
+      FixedSolver<FixedETD1<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
+                                        ( _f.size(), x0, y0 ),
+      ETD1<T_Func, vecT, vecT_traits>	( _f,_c )
     {
       reset();
     }
@@ -289,11 +289,11 @@ protected:
 public:
   typedef typename vecT_traits::step_type	stepT;
 
-  FixedETDRK2(T_Func& _f, const stepT x0, const vecT& y0,
-	    const stepT dx0, vecT& _c)
-    : FixedSolver<FixedETDRK2<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
-                 (_f.size(), x0, y0, dx0),
-		   ETDRK2<T_Func, vecT, vecT_traits>(_f,_c)
+  FixedETDRK2(T_Func& _f, const stepT x0, const vecT& y0, vecT& _c)
+    :
+      FixedSolver<FixedETDRK2<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
+                                                ( _f.size(), x0, y0 ),
+      ETDRK2<T_Func, vecT, vecT_traits>		( _f,_c )
     {
       reset();
     }
@@ -335,11 +335,11 @@ protected:
 public:
   typedef typename vecT_traits::step_type	stepT;
 
-  FixedETDRK3(T_Func& _f, const stepT x0, const vecT& y0,
-	    const stepT dx0, vecT& _c)
-    : FixedSolver<FixedETDRK3<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
-                 (_f.size(), x0, y0, dx0),
-		   ETDRK3<T_Func, vecT, vecT_traits>(_f,_c)
+  FixedETDRK3(T_Func& _f, const stepT x0, const vecT& y0, vecT& _c)
+    :
+      FixedSolver<FixedETDRK3<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
+                                                ( _f.size(), x0, y0 ),
+      ETDRK3<T_Func, vecT, vecT_traits>		( _f,_c )
     {
       reset();
     }
@@ -381,11 +381,11 @@ protected:
 public:
   typedef typename vecT_traits::step_type	stepT;
 
-  FixedETDRK4(T_Func& _f, const stepT x0, const vecT& y0,
-	    const stepT dx0, vecT& _c)
-    : FixedSolver<FixedETDRK4<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
-                 (_f.size(), x0, y0, dx0),
-		   ETDRK4<T_Func, vecT, vecT_traits>(_f,_c)
+  FixedETDRK4(T_Func& _f, const stepT x0, const vecT& y0, vecT& _c)
+    :
+      FixedSolver<FixedETDRK4<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
+                                                ( _f.size(), x0, y0 ),
+      ETDRK4<T_Func, vecT, vecT_traits>		( _f,_c )
     {
       reset();
     }
@@ -439,27 +439,17 @@ private:
   vecT yp_mid;		// Derivative of y at midpoint of interval.
   vecT yh;		// y after one large step.
 
-public:
-  AdaptiveETDRK3(T_Func& _f, const stepT x0, const vecT& y0,
-	      const stepT dx0, const magT dx_min,
-	      const magT err, vecT& _c)
-    : AdaptiveSolver<AdaptiveETDRK3<T_Func,vecT,vecT_traits>,
-		     vecT, vecT_traits>
-                    (_f.size(), x0, y0, dx0, dx_min, err, err, 4),
-      ETDRK3<T_Func, vecT, vecT_traits>(_f,_c), 
-      y_mid(n), yp_mid(n), yh(n)
-    {
-      reset();
-    }
+  static const int order = 4;
 
-  AdaptiveETDRK3(T_Func& _f, const stepT x0, const vecT& y0,
-		 const stepT dx0, const magT dx_min,
-		 const magT err_rel, const magT err_abs, vecT& _c)
-    : AdaptiveSolver<AdaptiveETDRK3<T_Func,vecT,vecT_traits>,
+public:
+  AdaptiveETDRK3(T_Func& _f, const stepT x0, const vecT& y0, vecT& _c)
+    : AdaptiveSolver<AdaptiveETDRK3<T_Func,vecT,vecT_traits>, 
 		     vecT, vecT_traits>
-                    (_f.size(), x0, y0, dx0, dx_min, err_rel, err_abs, 4),
-      ETDRK3<T_Func, vecT, vecT_traits>(_f,_c), 
-      y_mid(n), yp_mid(n), yh(n)
+                                                ( _f.size(), x0, y0, order ),
+      ETDRK3<T_Func, vecT, vecT_traits>		( _f,_c ), 
+      y_mid					( n ),
+      yp_mid					( n ),
+      yh					( n )
     {
       reset();
     }
@@ -524,27 +514,16 @@ private:
   vecT yp_mid;		// Derivative of y at midpoint of interval.
   vecT yh;		// y after one large step.
 
+  static const int order = 4;
 public:
-  AdaptiveETDRK4(T_Func& _f, const stepT x0, const vecT& y0,
-	      const stepT dx0, const magT dx_min,
-	      const magT err, vecT& _c)
+  AdaptiveETDRK4(T_Func& _f, const stepT x0, const vecT& y0, vecT& _c)
     : AdaptiveSolver<AdaptiveETDRK4<T_Func,vecT,vecT_traits>,
 		     vecT, vecT_traits>
-                    (_f.size(), x0, y0, dx0, dx_min, err, err, 4),
-      ETDRK4<T_Func, vecT, vecT_traits>(_f,_c), 
-      y_mid(n), yp_mid(n), yh(n)
-    {
-      reset();
-    }
-
-  AdaptiveETDRK4(T_Func& _f, const stepT x0, const vecT& y0,
-		 const stepT dx0, const magT dx_min,
-		 const magT err_rel, const magT err_abs, vecT& _c)
-    : AdaptiveSolver<AdaptiveETDRK4<T_Func,vecT,vecT_traits>,
-		     vecT, vecT_traits>
-                    (_f.size(), x0, y0, dx0, dx_min, err_rel, err_abs, 4),
-      ETDRK4<T_Func, vecT, vecT_traits>(_f,_c), 
-      y_mid(n), yp_mid(n), yh(n)
+                                                ( _f.size(), x0, y0, order ),
+      ETDRK4<T_Func, vecT, vecT_traits>		( _f,_c ), 
+      y_mid					( n ),
+      yp_mid					( n ),
+      yh					( n )
     {
       reset();
     }

@@ -44,9 +44,9 @@ protected:
   SolverBase<FixedSolver<T_Method,vecT,vecT_traits>,vecT,vecT_traits>::n;
 
 public:
-  FixedSolver(const int _n, const stepT x0, const vecT& y0, const stepT dx0)
+  FixedSolver(const int _n, const stepT x0, const vecT& y0)
     : SolverBase<FixedSolver<T_Method,vecT,vecT_traits>, vecT,
-                 vecT_traits>(_n, x0, y0, dx0)
+                 vecT_traits>(_n, x0, y0)
     {
     }
 
@@ -129,9 +129,9 @@ private:
 
   const int order;			// The order of the method used.
                                         // Error scale as (order+1).
-  const magT expand_factor;		// How much to expand a good step.
-  const magT shrink_factor;		// How much to shrink a bad step.
-  const magT safety_factor;		// Safety factor for step adjustment.
+  magT expand_factor;			// How much to expand a good step.
+  magT shrink_factor;			// How much to shrink a bad step.
+  magT safety_factor;			// Safety factor for step adjustment.
 
   vecmagT yscal;			// Scale factor vector.
 
@@ -140,58 +140,92 @@ protected:
 
 public:
   AdaptiveSolver(const int _n, const stepT x0, const vecT& y0,
-		 const stepT dx0, const magT _dx_min,
-		 const vecmagT _err_rel, const vecmagT _err_abs,
 		 const int _order)
-    : SolverBase<AdaptiveSolver<T_Method,vecT,vecT_traits>, vecT, vecT_traits>
-                (_n, x0, y0, dx0, _dx_min),
-		  err_rel(_err_rel), err_abs(_err_abs), tiny(1.e-30),
-		  order(_order),
-		  expand_factor(-1./(magT)(_order+1)),
-		  shrink_factor(-1./(magT)(_order)),
-		  safety_factor(0.9),
-		  yscal(_n), yerr(_n)
+    :
+      SolverBase<AdaptiveSolver<T_Method,vecT,vecT_traits>, vecT, vecT_traits>
+                                ( _n, x0, y0 ),
+      err_rel			( _n, 1.0e-6 ),
+      err_abs			( _n, 1.0e-6 ),
+      tiny			( 1.e-30 ),
+      order			( _order ),
+      expand_factor		( -1./(magT)(_order+1) ),
+      shrink_factor		( -1./(magT)(_order) ),
+      safety_factor		( 0.9 ),
+      yscal			( _n ),
+      yerr			( _n )
     {
       assert(order > 0);
-
-      // Check if step size is already too small.
-      if (vecT_traits::absval(dx0) < dx_min) {
-#ifdef __EXCEPTIONS
-	_THROW(jlt::stepsize_too_small<magT>
-	       ("Initial stepsize too small in rodent::AdaptiveSolver.",dx0));
-#else
-	std::cerr << "Initial stepsize too small in rodent::AdaptiveSolver.\n";
-	std::exit(1);
-#endif
-      }
     }
 
-  AdaptiveSolver(const int _n, const stepT x0, const vecT& y0,
-		 const stepT dx0, const magT _dx_min,
-		 const magT _err_rel, const magT _err_abs,
-		 const int _order)
-    : SolverBase<AdaptiveSolver<T_Method,vecT,vecT_traits>, vecT, vecT_traits>
-                (_n, x0, y0, dx0, _dx_min),
-		  err_rel(_n,_err_rel), err_abs(_n,_err_abs), tiny(1.e-30),
-		  order(_order),
-		  expand_factor(-1./(magT)(_order+1)),
-		  shrink_factor(-1./(magT)(_order)),
-		  safety_factor(0.9),
-		  yscal(_n), yerr(_n)
+
+  //
+  // Named Parameters
+  //
+
+  T_Method& tolerance(vecmagT _err)
     {
-      assert(order > 0);
-
-      // Check if step size is already too small.
-      if (vecT_traits::absval(dx0) < dx_min) {
-#ifdef __EXCEPTIONS
-	_THROW(jlt::stepsize_too_small<magT>
-	       ("Initial stepsize too small in rodent::AdaptiveSolver.",dx0));
-#else
-	std::cerr << "Initial stepsize too small in rodent::AdaptiveSolver.\n";
-	std::exit(1);
-#endif
-      }
+      err_abs = _err;
+      err_rel = _err;
+      return Method();
     }
+
+  T_Method& tolerance(magT _err)
+    {
+      err_abs = vecmagT(n,_err);
+      err_rel = vecmagT(n,_err);
+      return Method();
+    }
+
+  T_Method& absoluteTolerance(vecmagT _err_abs)
+    {
+      err_abs = _err_abs;
+      return Method();
+    }
+
+  T_Method& relativeTolerance(vecmagT _err_rel)
+    {
+      err_rel = _err_rel;
+      return Method();
+    }
+
+  T_Method& absoluteTolerance(magT _err_abs)
+    {
+      err_abs = vecmagT(n,_err_abs);
+      return Method();
+    }
+
+  T_Method& relativeTolerance(magT _err_rel)
+    {
+      err_rel = vecmagT(n,_err_rel);
+      return Method();
+    }
+
+  T_Method& expandFactor(magT _expand_factor)
+    {
+      expand_factor = _expand_factor;
+      return Method();
+    }
+
+  T_Method& shrinkFactor(magT _shrink_factor)
+    {
+      shrink_factor = _shrink_factor;
+      return Method();
+    }
+
+  T_Method& safetyFactor(magT _safety_factor)
+    {
+      safety_factor = _safety_factor;
+      return Method();
+    }
+
+  //
+  // Query Parameters
+  //
+
+
+  //
+  // Take a Step
+  //
 
   bool Step(vecT& y1)
     {
@@ -323,10 +357,11 @@ private:
   vecT y1p;				// Derivative at y1.
 
 public:
-  FixedImplicitSolver(const int _n, const stepT x0, const vecT& y0,
-		      const stepT dx0)
-    : SolverBase<FixedImplicitSolver<T_Method,vecT,vecT_traits>, vecT,
-                 vecT_traits>(_n, x0, y0, dx0), y1p(_n)
+  FixedImplicitSolver(const int _n, const stepT x0, const vecT& y0)
+    :
+      SolverBase<FixedImplicitSolver<T_Method,vecT,vecT_traits>, vecT,
+                 vecT_traits>   ( _n, x0, y0 ),
+      y1p			( _n )
     {
     }
 
@@ -417,32 +452,59 @@ protected:
 
 public:
   AdaptiveImplicitSolver(const int _n, const stepT x0, const vecT& y0,
-			 const stepT dx0, const magT _dx_min,
-			 const magT err, const int _order)
-    : SolverBase<AdaptiveImplicitSolver<T_Method,vecT,vecT_traits>, vecT,
+			 const int _order)
+    :
+      SolverBase<AdaptiveImplicitSolver<T_Method,vecT,vecT_traits>, vecT,
                  vecT_traits>
-                (_n, x0, y0, dx0, _dx_min),
-		  eps(err),
-		  order(_order),
-		  expand_factor(-1./(magT)(_order+1)),
-		  shrink_factor(-1./(magT)(_order)),
-		  safety_factor(0.9),
-		  yscal(_n), y1p(_n), yerr(_n)
+                                ( _n, x0, y0 ),
+      eps			( 1.0e-6 ),
+      order			( _order ),
+      expand_factor		( -1./(magT)(_order+1) ),
+      shrink_factor		( -1./(magT)(_order) ),
+      safety_factor		( 0.9 ),
+      yscal			( _n ),
+      y1p			( _n ),
+      yerr			( _n )
     {
       assert(order > 0);
-
-      // Check if step size is already too small.
-      if (vecT_traits::absval(dx0) < dx_min) {
-#ifdef __EXCEPTIONS
-	_THROW(jlt::stepsize_too_small<magT>
-	("Initial stepsize too small in rodent::ImplicitAdaptiveSolver.",dx0));
-#else
-	std::cerr <<
-	  "Initial stepsize too small in rodent::ImplicitAdaptiveSolver.\n";
-	std::exit(1);
-#endif
-      }
     }
+
+  //
+  // Named Parameters
+  //
+
+  T_Method& tolerance(magT _err)
+    {
+      eps = _err;
+      return Method();
+    }
+
+  T_Method& expandFactor(magT _expand_factor)
+    {
+      expand_factor = _expand_factor;
+      return Method();
+    }
+
+  T_Method& shrinkFactor(magT _shrink_factor)
+    {
+      shrink_factor = _shrink_factor;
+      return Method();
+    }
+
+  T_Method& safetyFactor(magT _safety_factor)
+    {
+      safety_factor = _safety_factor;
+      return Method();
+    }
+
+  //
+  // Query Parameters
+  //
+
+
+  //
+  // Take a Step
+  //
 
   bool Step(vecT& y1)
     {

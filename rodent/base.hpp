@@ -47,8 +47,8 @@ protected:
 
   stepT	x;				// Current independent coordinate.
   stepT	dx;				// Current step size.
-  const stepT dx_init;			// Initial step size.
-  const magT dx_min;			// Minimum step size.
+  stepT dx_init;			// Initial step size.
+  magT dx_min;				// Minimum step size.
   vecT 	y;				// State vector at x.
   vecT 	yp;				// Derivative vector at x.
 
@@ -59,20 +59,71 @@ protected:
 private:
   T_Control& Control() { return static_cast<T_Control&>(*this); }
 
-  const unsigned long int max_steps;	// Maximum number of internal steps.
-                                        // Largest is 2^32 =~ 4,000,000,000.
+  unsigned long int max_steps;	// Maximum number of internal steps.
+                                // Largest is 2^32 =~ 4,000,000,000.
 
 public:
+
   // Constructor: Initialize internal state and save first data point.
-  SolverBase(const int _n, const stepT x0, const vecT& y0,
-	     const stepT dx0, const magT dx_min0 = 0)
-    : n(_n), x(x0), dx(dx0), dx_init(dx0), dx_min(dx_min0),
-      y(vecT_traits::copy(y0)), yp(_n), max_steps(10000000)
+  SolverBase(const int _n, const stepT x0, const vecT& y0)
+    :
+      n				( _n ),
+      x				( x0 ),
+      dx			( 0.01 ),
+      dx_init			( dx ),
+      dx_min			( 0 ),
+      y				( vecT_traits::copy(y0) ),
+      yp			( _n ),
+      max_steps			( 10000000 )
     {
     }
 
+
+  //
+  // Named Parameters
+  //
+  // http://www.parashift.com/c++-faq-lite/ctors.html#faq-10.17
+
+  T_Control& stepSize(const stepT _dx)
+    {
+      dx = _dx;
+      dx_init = dx;		// I think this is the thing to do...
+
+      /*
+      // Check if step size is already too small.
+      if (vecT_traits::absval(dx) < dx_min) {
+#ifdef __EXCEPTIONS
+	_THROW(jlt::stepsize_too_small<magT>
+	       ("Initial stepsize too small in rodent::Base.",dx));
+#else
+	std::cerr << "Initial stepsize too small in rodent::Base.\n";
+	std::exit(1);
+#endif
+      }
+      */
+
+      return Control();
+    }
+
+  T_Control& minStepSize(const stepT _dx_min)
+    {
+      dx_min = absval(_dx_min);
+      return Control();
+    }
+
+  T_Control& maxSteps(unsigned long int _max_steps)
+    {
+      max_steps = _max_steps;
+      return Control();
+    }
+
+  //
+  // Query Parameters
+  //
+
+
   // Re-initialize the integrator, recalculating the derivative yp.
-  void Restart(const stepT x0, const vecT& y0, const stepT dx0)
+  T_Control& Restart(const stepT x0, const vecT& y0, const stepT dx0)
     {
       // Check if step size is already too small.
       if (vecT_traits::absval(dx0) < dx_min) {
@@ -94,17 +145,19 @@ public:
 #endif
       // Update derivative vector yp at x.
       Control().reset();
+
+      return Control();
     }
 
   // Re-initialize the integrator, recalculating the derivative yp.
   // Set step size to same as initially.
-  void Restart(const stepT x0, const vecT& y0)
+  T_Control& Restart(const stepT x0, const vecT& y0)
     {
-      Restart(x0,y0,dx_init);
+      return Restart(x0,y0,dx_init);
     }
 
   // Re-initialize the integrator, explicitly providing the derivative yp.
-  void Restart(const stepT x0, const vecT& y0, const stepT dx0,
+  T_Control& Restart(const stepT x0, const vecT& y0, const stepT dx0,
 	       const vecT& yp0)
     {
       if (vecT_traits::absval(dx0) < dx_min) {
@@ -126,13 +179,15 @@ public:
 #endif
       // Derivative vector yp at x.
       yp = yp0;
+
+      return Control();
     }
 
   // Re-initialize the integrator, explicitly providing the derivative yp.
   // Set step size to same as initially.
-  void Restart(const stepT x0, const vecT& y0, const vecT& yp0)
+  T_Control& Restart(const stepT x0, const vecT& y0, const vecT& yp0)
     {
-      Restart(x0,y0,dx_init,yp0);
+      return Restart(x0,y0,dx_init,yp0);
     }
 
   stepT IntegrateTo(const stepT x1, vecT& y1)
@@ -327,13 +382,6 @@ public:
 
   stepT stepSize() const
     {
-      return dx;
-    }
-
-  stepT stepSize(const stepT dx_new)
-    {
-      dx = dx_new;
-
       return dx;
     }
 

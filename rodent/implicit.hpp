@@ -131,11 +131,11 @@ protected:
 public:
   typedef typename vecT_traits::step_type	stepT;
 
-  FixedImplicitEuler(T_Func& _f, const stepT x0, const vecT& y0,
-	     const stepT dx0)
-    : FixedImplicitSolver<FixedImplicitEuler<T_Func,vecT,vecT_traits>,
-                          vecT, vecT_traits>(_f.size(), x0, y0, dx0),
-      ImplicitEuler<T_Func,vecT,vecT_traits>(_f)
+  FixedImplicitEuler(T_Func& _f, const stepT x0, const vecT& y0)
+    :
+      FixedImplicitSolver<FixedImplicitEuler<T_Func,vecT,vecT_traits>,
+                          vecT, vecT_traits>	( _f.size(), x0, y0 ),
+      ImplicitEuler<T_Func,vecT,vecT_traits>	( _f )
     {
       reset();
     }
@@ -209,14 +209,17 @@ public:
 private:
   vecT y_mid, yp_mid, yh;		// Working variables for OneStep.
 
+  static const int order = 1;
+
 public:
-  AdaptiveImplicitEuler(T_Func& _f, const stepT x0, const vecT& y0,
-		const stepT dx0, const magT dx_min, const magT err)
-    : AdaptiveImplicitSolver<AdaptiveImplicitEuler<T_Func,vecT,vecT_traits>,
-                             vecT,vecT_traits>(_f.size(), x0, y0,
-					       dx0, dx_min, err, 1),
-      ImplicitEuler<T_Func,vecT,vecT_traits>(_f),
-      y_mid(n), yp_mid(n), yh(n)
+  AdaptiveImplicitEuler(T_Func& _f, const stepT x0, const vecT& y0)
+    :
+      AdaptiveImplicitSolver<AdaptiveImplicitEuler<T_Func,vecT,vecT_traits>,
+                             vecT,vecT_traits>  ( _f.size(), x0, y0, order ),
+      ImplicitEuler<T_Func,vecT,vecT_traits>	( _f ),
+      y_mid					( n ),
+      yp_mid					( n ),
+      yh					( n )
     {
       reset();
     }

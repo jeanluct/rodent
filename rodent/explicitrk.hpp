@@ -227,11 +227,11 @@ protected:
 public:
   typedef typename vecT_traits::step_type	stepT;
 
-  FixedEuler(T_Func& _f, const stepT x0, const vecT& y0,
-	     const stepT dx0)
-    : FixedSolver<FixedEuler<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
-                 (_f.size(), x0, y0, dx0),
-		   Euler<T_Func, vecT, vecT_traits>(_f)
+  FixedEuler(T_Func& _f, const stepT x0, const vecT& y0)
+    :
+      FixedSolver<FixedEuler<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
+                                                ( _f.size(), x0, y0 ),
+      Euler<T_Func, vecT, vecT_traits>		( _f )
     {
       reset();
     }
@@ -277,10 +277,11 @@ protected:
 public:
   typedef typename vecT_traits::step_type	stepT;
 
-  FixedMidpoint(T_Func& _f, const stepT x0, const vecT& y0, const stepT dx0)
-    : FixedSolver<FixedMidpoint<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
-                 (_f.size(), x0, y0, dx0),
-      Midpoint<T_Func, vecT, vecT_traits>(_f)
+  FixedMidpoint(T_Func& _f, const stepT x0, const vecT& y0)
+    :
+      FixedSolver<FixedMidpoint<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
+                                                ( _f.size(), x0, y0 ),
+      Midpoint<T_Func, vecT, vecT_traits>	( _f )
     {
       reset();
     }
@@ -320,10 +321,11 @@ protected:
 public:
   typedef typename vecT_traits::step_type	stepT;
 
-  FixedRK4(T_Func& _f, const stepT x0, const vecT& y0, const stepT dx0)
-    : FixedSolver<FixedRK4<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
-                 (_f.size(), x0, y0, dx0),
-      RK4<T_Func, vecT, vecT_traits>(_f)
+  FixedRK4(T_Func& _f, const stepT x0, const vecT& y0)
+    :
+      FixedSolver<FixedRK4<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
+                                        ( _f.size(), x0, y0 ),
+      RK4<T_Func, vecT, vecT_traits>	( _f )
     {
       reset();
     }
@@ -389,24 +391,17 @@ private:
   vecT yp_mid;		// Derivative of y at midpoint of interval.
   vecT yh;		// y after one large step.
 
-public:
-  AdaptiveEuler(T_Func& _f, const stepT x0, const vecT& y0,
-		const stepT dx0, const magT dx_min, const magT err)
-    : AdaptiveSolver<AdaptiveEuler<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
-                    (_f.size(), x0, y0, dx0, dx_min, err, err, 1),
-      Euler<T_Func, vecT, vecT_traits>(_f), 
-      y_mid(n), yp_mid(n), yh(n)
-    {
-      reset();
-    }
+  static const int order = 1;
 
-  AdaptiveEuler(T_Func& _f, const stepT x0, const vecT& y0,
-		const stepT dx0, const magT dx_min,
-		const magT err_rel, const magT err_abs)
-    : AdaptiveSolver<AdaptiveEuler<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
-                    (_f.size(), x0, y0, dx0, dx_min, err_rel, err_abs, 1),
-      Euler<T_Func, vecT, vecT_traits>(_f), 
-      y_mid(n), yp_mid(n), yh(n)
+public:
+  AdaptiveEuler(T_Func& _f, const stepT x0, const vecT& y0)
+    :
+      AdaptiveSolver<AdaptiveEuler<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
+                                                ( _f.size(), x0, y0, order ),
+      Euler<T_Func, vecT, vecT_traits>		( _f ), 
+      y_mid					( n ),
+      yp_mid					( n ),
+      yh					( n )
     {
       reset();
     }
@@ -499,26 +494,18 @@ private:
   vecT yp_mid;		// Derivative of y at midpoint of interval.
   vecT yh;		// y after one large step.
 
-public:
-  AdaptiveMidpoint(T_Func& _f, const stepT x0, const vecT& y0,
-		   const stepT dx0, const magT dx_min, const magT err)
-    : AdaptiveSolver<AdaptiveMidpoint<T_Func,vecT,vecT_traits>,
-                     vecT, vecT_traits>
-                    (_f.size(), x0, y0, dx0, dx_min, err, err, 2),
-      Midpoint<T_Func, vecT, vecT_traits>(_f), 
-      y_mid(n), yp_mid(n), yh(n)
-    {
-      reset();
-    }
+  static const int order = 2;
 
-  AdaptiveMidpoint(T_Func& _f, const stepT x0, const vecT& y0,
-		   const stepT dx0, const magT dx_min,
-		   const magT err_rel, const magT err_abs)
-    : AdaptiveSolver<AdaptiveMidpoint<T_Func,vecT,vecT_traits>,
+public:
+  AdaptiveMidpoint(T_Func& _f, const stepT x0, const vecT& y0)
+    :
+      AdaptiveSolver<AdaptiveMidpoint<T_Func,vecT,vecT_traits>,
                      vecT, vecT_traits>
-                    (_f.size(), x0, y0, dx0, dx_min, err_rel, err_abs, 2),
-      Midpoint<T_Func, vecT, vecT_traits>(_f), 
-      y_mid(n), yp_mid(n), yh(n)
+                                                ( _f.size(), x0, y0, order ),
+      Midpoint<T_Func, vecT, vecT_traits>	( _f ),
+      y_mid					( n ),
+      yp_mid					( n ),
+      yh					( n )
     {
       reset();
     }
@@ -611,25 +598,17 @@ private:
   vecT yp_mid;		// Derivative of y at midpoint of interval.
   vecT yh;		// y after one large step.
 
-public:
-  AdaptiveRK4(T_Func& _f, const stepT x0, const vecT& y0,
-	      const stepT dx0, const magT dx_min,
-	      const magT err)
-    : AdaptiveSolver<AdaptiveRK4<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
-                    (_f.size(), x0, y0, dx0, dx_min, err, err, 4),
-      RK4<T_Func, vecT, vecT_traits>(_f), 
-      y_mid(n), yp_mid(n), yh(n)
-    {
-      reset();
-    }
+  static const int order = 4;
 
-  AdaptiveRK4(T_Func& _f, const stepT x0, const vecT& y0,
-	      const stepT dx0, const magT dx_min,
-	      const magT err_rel, const magT err_abs)
-    : AdaptiveSolver<AdaptiveRK4<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
-                    (_f.size(), x0, y0, dx0, dx_min, err_rel, err_abs, 4),
-      RK4<T_Func, vecT, vecT_traits>(_f), 
-      y_mid(n), yp_mid(n), yh(n)
+public:
+  AdaptiveRK4(T_Func& _f, const stepT x0, const vecT& y0)
+    :
+      AdaptiveSolver<AdaptiveRK4<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
+                                        ( _f.size(), x0, y0, order ),
+      RK4<T_Func, vecT, vecT_traits>	( _f ),
+      y_mid				( n ),
+      yp_mid				( n ),
+      yh				( n )
     {
       reset();
     }
@@ -718,6 +697,7 @@ private:
   vecT ak1, ak2, ak3, ak4, ak5, ytemp;
 
   // Parameters for Cash-Karp method, given in NRC 2nd p. 717 (here 0 indexed).
+  /** These should really be static const **/
   const stepT
     a1,  a2,  a3,  a4,  a5,
     b10,
@@ -735,100 +715,21 @@ private:
   // but the Dorman and Price method would require telling
   // AdaptiveSolver not to re-evaluate yp.
 
+  static const int order = 4;
+
 public:
   // Constructor: absolute and relative errors are equal scalars.
-  AdaptiveRKCashKarp(T_Func& _f, const stepT x0, const vecT& y0,
-		     const stepT dx0, const magT dx_min, const magT err)
-    : AdaptiveSolver<AdaptiveRKCashKarp<T_Func,vecT,vecT_traits>, vecT,
+  AdaptiveRKCashKarp(T_Func& _f, const stepT x0, const vecT& y0)
+    :
+      AdaptiveSolver<AdaptiveRKCashKarp<T_Func,vecT,vecT_traits>, vecT,
                      vecT_traits>
-                    (_f.size(), x0, y0, dx0, dx_min, err, err, 4),
-      ak1(n), ak2(n), ak3(n), ak4(n), ak5(n), ytemp(n),
-      a1  (0.2L),		a2  (0.3L),
-      a3  (0.6L),		a4  (1.L),
-      a5  (0.875L),
-      b10 (0.2L),
-      b20 (3./40.L),		b21 (9./40.L),
-      b30 (0.3L),		b31 (-0.9L),		b32 (1.2L),
-      b40 (-11./54.L),		b41 (2.5L),		b42 (-70./27.L),
-      b43 (35./27.L),		
-      b50 (1631./55296.L),  	b51 (175./512.L),	 b52 (575./13824.L),
-      b53 (44275./110592.L),	b54 (253./4096.L),
-      c0  (37./378.L),
-      c2  (250./621.L),
-      c3  (125./594.L),	        c5 (512./1771.L),
-      dc0 (c0-2825./27648.L),
-      dc2 (c2-18575./48384.L),	dc3 (c3-13525./55296.L),
-      dc4 (-277./14336.L),      dc5 (c5-0.25L),
-      func(_f)
-    {
-      reset();
-    }
-
-  // Constructor: absolute and relative errors specified as separate scalars.
-  AdaptiveRKCashKarp(T_Func& _f, const stepT x0, const vecT& y0,
-		     const stepT dx0, const magT dx_min,
-		     const magT err_rel, const magT err_abs)
-    : AdaptiveSolver<AdaptiveRKCashKarp<T_Func,vecT,vecT_traits>, vecT,
-                     vecT_traits>
-                    (_f.size(), x0, y0, dx0, dx_min, err_rel, err_abs, 4),
-      ak1(n), ak2(n), ak3(n), ak4(n), ak5(n), ytemp(n),
-      a1  (0.2L),		a2  (0.3L),
-      a3  (0.6L),		a4  (1.L),
-      a5  (0.875L),
-      b10 (0.2L),
-      b20 (3./40.L),		b21 (9./40.L),
-      b30 (0.3L),		b31 (-0.9L),		b32 (1.2L),
-      b40 (-11./54.L),		b41 (2.5L),		b42 (-70./27.L),
-      b43 (35./27.L),		
-      b50 (1631./55296.L),  	b51 (175./512.L),	 b52 (575./13824.L),
-      b53 (44275./110592.L),	b54 (253./4096.L),
-      c0  (37./378.L),
-      c2  (250./621.L),
-      c3  (125./594.L),	        c5 (512./1771.L),
-      dc0 (c0-2825./27648.L),
-      dc2 (c2-18575./48384.L),	dc3 (c3-13525./55296.L),
-      dc4 (-277./14336.L),      dc5 (c5-0.25L),
-      func(_f)
-    {
-      reset();
-    }
-
-  // Constructor: absolute and relative errors are equal vectors.
-  AdaptiveRKCashKarp(T_Func& _f, const stepT x0, const vecT& y0,
-		     const stepT dx0, const magT dx_min, const vecmagT err)
-    : AdaptiveSolver<AdaptiveRKCashKarp<T_Func,vecT,vecT_traits>, vecT,
-                     vecT_traits>
-                    (_f.size(), x0, y0, dx0, dx_min, err, err, 4),
-      ak1(n), ak2(n), ak3(n), ak4(n), ak5(n), ytemp(n),
-      a1  (0.2L),		a2  (0.3L),
-      a3  (0.6L),		a4  (1.L),
-      a5  (0.875L),
-      b10 (0.2L),
-      b20 (3./40.L),		b21 (9./40.L),
-      b30 (0.3L),		b31 (-0.9L),		b32 (1.2L),
-      b40 (-11./54.L),		b41 (2.5L),		b42 (-70./27.L),
-      b43 (35./27.L),		
-      b50 (1631./55296.L),  	b51 (175./512.L),	 b52 (575./13824.L),
-      b53 (44275./110592.L),	b54 (253./4096.L),
-      c0  (37./378.L),
-      c2  (250./621.L),
-      c3  (125./594.L),	        c5 (512./1771.L),
-      dc0 (c0-2825./27648.L),
-      dc2 (c2-18575./48384.L),	dc3 (c3-13525./55296.L),
-      dc4 (-277./14336.L),      dc5 (c5-0.25L),
-      func(_f)
-    {
-      reset();
-    }
-
-  // Constructor: absolute and relative errors specified as separate vectors.
-  AdaptiveRKCashKarp(T_Func& _f, const stepT x0, const vecT& y0,
-		     const stepT dx0, const magT dx_min,
-		     const vecmagT err_rel, const vecmagT err_abs)
-    : AdaptiveSolver<AdaptiveRKCashKarp<T_Func,vecT,vecT_traits>, vecT,
-                     vecT_traits>
-                    (_f.size(), x0, y0, dx0, dx_min, err_rel, err_abs, 4),
-      ak1(n), ak2(n), ak3(n), ak4(n), ak5(n), ytemp(n),
+                                ( _f.size(), x0, y0, order ),
+      ak1			( n ),
+      ak2			( n ),
+      ak3			( n ),
+      ak4			( n ),
+      ak5			( n ),
+      ytemp(n),
       a1  (0.2L),		a2  (0.3L),
       a3  (0.6L),		a4  (1.L),
       a5  (0.875L),
@@ -966,13 +867,23 @@ private:
     c1, c2, c3, c4,
     ch1, ch2, ch3;
 
+  static const int order = 3;
+
 public:
-  AdaptiveGRK(T_Func& _f, const stepT x0, const vecT& y0,
-		const stepT dx0, const magT dx_min, const magT err)
-    : AdaptiveSolver<AdaptiveGRK<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
-                    (_f.size(), x0, y0, dx0, dx_min, err, err, 3),
-      Jac(n,n), A(n,n), fs1(n), fs2(n), fs3(n), fs4(n),
-      yy1(n), yy2(n), yy1p(n), yy2p(n),
+  AdaptiveGRK(T_Func& _f, const stepT x0, const vecT& y0)
+    :
+      AdaptiveSolver<AdaptiveGRK<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
+                                ( _f.size(), x0, y0, order ),
+      Jac			( n,n ),
+      A				( n,n ),
+      fs1			( n ),
+      fs2			( n ),
+      fs3			( n ),
+      fs4			( n ),
+      yy1			( n ),
+      yy2			( n ),
+      yy1p			( n ),
+      yy2p			( n ),
 #     if defined(RODENT_GRK4A)
 
       g   (0.395),

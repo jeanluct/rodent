@@ -74,39 +74,39 @@ int main()
 #if defined(ORDER_AB)
   // Adams-Bashforth methods
   AdamsBashforth2<ExpM<Real>,std::vector<Real> >
-    expm_ab2(expm, 0., y, 0.);
+    expm_ab2(expm, 0., y);
   AdamsBashforth3<ExpM<Real>,std::vector<Real> >
-    expm_ab3(expm, 0., y, 0.);
+    expm_ab3(expm, 0., y);
   AdamsBashforth4<ExpM<Real>,std::vector<Real> >
-    expm_ab4(expm, 0., y, 0.);
+    expm_ab4(expm, 0., y);
   AdamsBashforth5<ExpM<Real>,std::vector<Real> >
-    expm_ab5(expm, 0., y, 0.);
+    expm_ab5(expm, 0., y);
 
 #elif defined(ORDER_FRK)
   // Fixed Runge-Kutta methods
   FixedEuler<ExpM<Real>,std::vector<Real> >
-    expm_feul(expm, 0., y, 0.);
+    expm_feul(expm, 0., y);
   FixedImplicitEuler<ExpM<Real>,std::vector<Real> >
-    expm_fieul(expm, 0., y, 0.);
+    expm_fieul(expm, 0., y);
   FixedMidpoint<ExpM<Real>,std::vector<Real> >
-    expm_fmid(expm, 0., y, 0.);
+    expm_fmid(expm, 0., y);
   FixedRK4<ExpM<Real>,std::vector<Real> >
-    expm_frk4(expm, 0., y, 0.);
+    expm_frk4(expm, 0., y);
 
 #elif defined(ORDER_ARK)
   // Adaptive Runge-Kutta methods
   AdaptiveEuler<ExpM<Real>,std::vector<Real> >
-    expm_aeul(expm, 0., y, 0., 0., 1.);
+    expm_aeul(expm, 0., y);
   AdaptiveImplicitEuler<ExpM<Real>,std::vector<Real> >
-    expm_aieul(expm, 0., y, 0., 0., 1.);
+    expm_aieul(expm, 0., y);
   AdaptiveMidpoint<ExpM<Real>,std::vector<Real> >
-    expm_amid(expm, 0., y, 0., 0., 1.);
+    expm_amid(expm, 0., y);
   AdaptiveGRK<ExpM<Real>,std::vector<Real> >
-    expm_agrk(expm, 0., y, 0., 0., 1.);
+    expm_agrk(expm, 0., y);
   AdaptiveRK4<ExpM<Real>,std::vector<Real> >
-    expm_ark4(expm, 0., y, 0., 0., 1.);
+    expm_ark4(expm, 0., y);
   AdaptiveRKCashKarp<ExpM<Real>,std::vector<Real> >
-    expm_rkck(expm, 0., y, 0., 0., 1.);
+    expm_rkck(expm, 0., y);
 #endif
 
   cout.setf(std::ios::scientific);

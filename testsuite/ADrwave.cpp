@@ -53,7 +53,8 @@ int main(int argc, const char **argv)
   // Initial condition.
   y[rw.pk(1,0,0)] = M_SQRT1_2;
 
-  AdaptiveETDRK4<ADrwave> int_rw(rw, 0.0, y, .01, 0, acc, c);
+  AdaptiveETDRK4<ADrwave> int_rw(rw, 0.0, y, c);
+  int_rw.tolerance(acc);
 
   cout.precision(5);
   cout.setf(std::ios::scientific);

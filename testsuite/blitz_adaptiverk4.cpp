@@ -85,7 +85,8 @@ int main()
   y[0] = 0.;
   y[1] = 1.;
 
-  Integrator sho_rk(sho, 0.0, y, 0.01, 0, 1.0e-10);
+  Integrator sho_rk(sho, 0.0, y);
+  sho_rk.tolerance(1.0e-10);
 
   Data sho_data(sho_rk,0.0,t,dtsav);
 

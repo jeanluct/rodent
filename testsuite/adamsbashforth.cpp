@@ -32,7 +32,7 @@ int main()
   cout.precision(10);
 
   AdamsBashforth2<SimpleHarmonic<double> >
-    sho_rk(sho, 0.0, y, 0.001);
+    sho_rk(sho, 0.0, y);
 
   DataPoints<AdamsBashforth2<SimpleHarmonic<double> > >
     sho_data(sho_rk,0.0,t,dtsav);

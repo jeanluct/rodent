@@ -91,8 +91,8 @@ int main()
   y.push_back(1.);
   y.push_back(1.);
 
-  AdaptiveRK4<ListExp,std::list<double> >
-    lexp_rk(lexp, 0.0, y, 0.01, 0, 1.0e-10);
+  AdaptiveRK4<ListExp,std::list<double> > lexp_rk(lexp, 0.0, y);
+  lexp_rk.tolerance(1.0e-10);
 
   DataPoints<AdaptiveRK4<ListExp,std::list<double> >,std::list<double> >
     lexp_data(lexp_rk,0.0,t,dtsav);
