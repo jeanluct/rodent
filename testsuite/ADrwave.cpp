@@ -8,12 +8,14 @@
 #include <jlt/stlio.hpp>
 #include "ADrwave.hpp"
 
-using namespace std;
-using namespace jlt;
 using namespace rodent;
 
 int main(int argc, const char **argv)
 {
+  using std::cout;
+  using std::cerr;
+  using std::endl;
+
   int N = 20;			// Number of modes.
   double D = .001;		// Diffusivity
   double U = 1;			// Magnitude of velocity field.
@@ -38,15 +40,15 @@ int main(int argc, const char **argv)
   ADrwave rw(N,D,U,L,T);
 
   // Linear part of the equations.
-  vector<double> c(rw.size());
+  std::vector<double> c(rw.size());
   for (int row = 0; row < rw.size(); ++row) {
     int m, n, ri;
     rw.ipk(row,m,n,ri);
     c[row] = -(4*M_PI*M_PI*D/(L*L))*(m*m + n*n);
   }
 
-  vector<double> y(rw.size());
-  matrix<complex<double> > Th(2*N+1,2*N+1);
+  std::vector<double> y(rw.size());
+  jlt::matrix<std::complex<double> > Th(2*N+1,2*N+1);
 
   // Initial condition.
   y[rw.pk(1,0,0)] = M_SQRT1_2;
@@ -54,7 +56,7 @@ int main(int argc, const char **argv)
   AdaptiveETDRK4<ADrwave> int_rw(rw, 0.0, y, .01, 0, acc, c);
 
   cout.precision(5);
-  cout.setf(ios::scientific);
+  cout.setf(std::ios::scientific);
 
   // Running sum for mean variance.
   double mean_var = 0;
@@ -68,7 +70,7 @@ int main(int argc, const char **argv)
     mean_var += rw.variance(y);
 
     // Effective diffusivity.
-    double Deff = Deff0 / Sqrt(mean_var/iter);
+    double Deff = Deff0 / jlt::Sqrt(mean_var/iter);
     cout << t << "\t" << rw.variance(y) << "\t";
     cout << Deff << endl;
   }

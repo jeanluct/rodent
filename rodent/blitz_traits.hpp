@@ -6,22 +6,21 @@
 #include <blitz/vector.h>
 #include <rodent/traits.hpp>
 
-using namespace blitz;
 
 namespace rodent {
 
 template<class float_type>
-struct vec_traits<Vector<float_type> >
+struct vec_traits<blitz::Vector<float_type> >
 {
-  typedef Vector<float_type>				vec_type;
-  typedef typename Vector<float_type>::T_numtype 	value_type;
-  typedef value_type					step_type;
-  typedef value_type					mag_type;
-  typedef Vector<mag_type>				vec_mag_type;
-  typedef jlt::matrix<value_type>			matrix_type;
+  typedef blitz::Vector<float_type>				vec_type;
+  typedef typename blitz::Vector<float_type>::T_numtype 	value_type;
+  typedef value_type						step_type;
+  typedef value_type						mag_type;
+  typedef blitz::Vector<mag_type>				vec_mag_type;
+  typedef jlt::matrix<value_type>				matrix_type;
 #ifdef RODENT_ITERATOR_LOOPS
-  typedef typename Vector<value_type>::T_iterator	iterator;
-  typedef typename Vector<value_type>::T_iterator	const_iterator;
+  typedef typename blitz::Vector<value_type>::T_iterator	iterator;
+  typedef typename blitz::Vector<value_type>::T_iterator	const_iterator;
   typedef typename vec_mag_type::T_iterator		mag_iterator;
   typedef typename vec_mag_type::T_iterator		const_mag_iterator;
 #endif
@@ -33,7 +32,7 @@ struct vec_traits<Vector<float_type> >
   // The assignment operator (=) copies memory, yielding two disjoint
   // objects.  Hence, use copy() method when duplicating data with
   // copy constructor.
-  static inline Vector<value_type> copy(const Vector<value_type>& _v)
+  static inline blitz::Vector<value_type> copy(const blitz::Vector<value_type>& _v)
     {
       return _v.copy();
     }

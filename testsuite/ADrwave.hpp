@@ -7,8 +7,6 @@
 #include <jlt/matrix.hpp>
 #include <jlt/stlio.hpp>
 
-using namespace std;
-using namespace jlt;
 
 class ADrwave
 {
@@ -26,12 +24,13 @@ public:
     D(4*M_PI*M_PI*D_/(L_*L_)), U(U_), L(L_), T(T_), T2(0.5*T),
     ULc(M_SQRT2*M_PI*(U/L)) {}
 
-  void operator()(double t, const vector<double>& y, vector<double>& y_dot)
+  void operator()(double t, const std::vector<double>& y,
+		  std::vector<double>& y_dot)
   {
     static double X1, X2;
     static int it0 = -1;
 
-    double dt = Mod(t,T);
+    double dt = jlt::Mod(t,T);
     int it = (int)(t/T);
 
     // Generate random angles at first, or if we reach a new interval.
@@ -50,9 +49,9 @@ public:
     }
     for (int row = 0; row < size(); ++row) y_dot[row] = 0;
 
-    if (Abs(dt) < T2) {
+    if (jlt::Abs(dt) < T2) {
       // y-dependent wave in x direction.
-      double cX1 = Cos(X1), sX1 = Sin(X1);
+      double cX1 = jlt::Cos(X1), sX1 = jlt::Sin(X1);
       for (int m = 1; m <= N; ++m) {
 	for (int n = -N; n <= N; ++n) {
 	  // Real coefficients.
@@ -78,7 +77,7 @@ public:
       }
     } else {
       // x-dependent wave in y direction.
-      double cX2 = Cos(X2), sX2 = Sin(X2);
+      double cX2 = jlt::Cos(X2), sX2 = jlt::Sin(X2);
       for (int m = 1; m <= N; ++m) {
 	for (int n = -N; n <= N; ++n) {
 	  if (n != 0) {
@@ -131,52 +130,54 @@ public:
     y_dot[pk(1,0,i)] += S * (-M_SQRT1_2);
   }
 
-  void Jacobian(double t, const vector<double>& y, const vector<double>& y_dot,
-		const double scale, matrix<double>& Jac)
+  void Jacobian(double t, const std::vector<double>& y,
+		const std::vector<double>& y_dot,
+		const double scale, jlt::matrix<double>& Jac)
   {
     // The Jacobian matrix is sparse.  Inefficient for implicit methods.
   }
 
-  void toMode(const vector<double> y, matrix<complex<double> >& Th)
+  void toMode(const std::vector<double> y,
+	      jlt::matrix<std::complex<double> >& Th)
   {
     Th(0,0) = 0;
 
     for (int n = 1; n <= N; ++n) {
-      Th(N+0,N+n) = complex<double>(y[pk(0,n,r)],y[pk(0,n,i)]);
+      Th(N+0,N+n) = std::complex<double>(y[pk(0,n,r)],y[pk(0,n,i)]);
     }
     for (int m = 1; m <= N; ++m) {
       for (int n = -N; n <= N; ++n) {
-	Th(N+m,N+n) = complex<double>(y[pk(m,n,r)],y[pk(m,n,i)]);
+	Th(N+m,N+n) = std::complex<double>(y[pk(m,n,r)],y[pk(m,n,i)]);
       }
     }
 
     for (int n = -N; n <= -1; ++n) {
-      Th(N+0,N+n) = complex<double>(y[pk(0,-n,r)],-y[pk(0,-n,i)]);
+      Th(N+0,N+n) = std::complex<double>(y[pk(0,-n,r)],-y[pk(0,-n,i)]);
     }
     for (int m = -N; m <= -1; ++m) {
       for (int n = -N; n <= N; ++n) {
-	Th(N+m,N+n) = complex<double>(y[pk(-m,-n,r)],-y[pk(-m,-n,i)]);
+	Th(N+m,N+n) = std::complex<double>(y[pk(-m,-n,r)],-y[pk(-m,-n,i)]);
       }
     }
   }
 
-  std::ostream& printModeList(const vector<double>& y,
+  std::ostream& printModeList(const std::vector<double>& y,
 			      std::ostream& strm) const
   {
     for (int n = 1; n <= N; ++n) {
       strm << 0 << "\t" << n << "\t";
-      strm << y[pk(0,n,r)] << "\t" << y[pk(0,n,i)] << endl;
+      strm << y[pk(0,n,r)] << "\t" << y[pk(0,n,i)] << std::endl;
     }
     for (int m = 1; m <= N; ++m) {
       for (int n = -N; n <= N; ++n) {
 	strm << m << "\t" << n << "\t";
-	strm << y[pk(m,n,r)] << "\t" << y[pk(m,n,i)] << endl;
+	strm << y[pk(m,n,r)] << "\t" << y[pk(m,n,i)] << std::endl;
       }
     }
     return strm;
   }
 
-  double variance(const vector<double>& y)
+  double variance(const std::vector<double>& y)
   {
     double var = 0;
 

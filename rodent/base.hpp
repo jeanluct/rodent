@@ -15,8 +15,6 @@ typedef std::vector<double> rodent_vec;
 #include <jlt/stlio.hpp>
 
 
-using namespace jlt;
-
 namespace rodent {
 
 template<class T_Control, class vecT, class vecT_traits>
@@ -79,11 +77,11 @@ public:
       // Check if step size is already too small.
       if (vecT_traits::absval(dx0) < dx_min) {
 #ifdef __EXCEPTIONS
-	_THROW(stepsize_too_small<magT>
+	_THROW(jlt::stepsize_too_small<magT>
 	       ("New stepsize too small in rodent::Restart.",dx0));
 #else
-	cerr << "New stepsize too small in rodent::Restart.\n";
-	exit(1);
+	std::cerr << "New stepsize too small in rodent::Restart.\n";
+	std::exit(1);
 #endif
       }
 
@@ -111,11 +109,11 @@ public:
     {
       if (vecT_traits::absval(dx0) < dx_min) {
 #ifdef __EXCEPTIONS
-	_THROW(stepsize_too_small<magT>
+	_THROW(jlt::stepsize_too_small<magT>
 	       ("New stepsize too small in rodent::Restart.",dx0));
 #else
-	cerr << "New stepsize too small in rodent::Restart.\n";
-	exit(1);
+	std::cerr << "New stepsize too small in rodent::Restart.\n";
+	std::exit(1);
 #endif
       }
 
@@ -185,18 +183,19 @@ public:
 
 	if (lastStep) {
 #ifdef RODENT_DEBUG
-	  cerr << "rodent::IntegrateTo   Steps--  good = " << n_good_steps;
-	  cerr << "   bad = " << n_bad_steps;
-	  cerr << "   x = " << x << endl;
-	  cerr << "   y = " << y << endl;
-	  cerr << "  yp = " << yp << endl;
-	  cerr << "   dx = " << dx << endl;
+	  std::cerr << "rodent::IntegrateTo   Steps--  good = "
+		    << n_good_steps;
+	  std::cerr << "   bad = " << n_bad_steps;
+	  std::cerr << "   x = " << x << endl;
+	  std::cerr << "   y = " << y << endl;
+	  std::cerr << "  yp = " << yp << endl;
+	  std::cerr << "   dx = " << dx << endl;
 #endif
 	  dx = dxold;	// There might be a bit of an error here...
 	  return x;
 	}
       }
-      _THROW(too_many_steps
+      _THROW(jlt::too_many_steps
 	      ("Too many steps taken in IntegrateTo ", max_steps));
 
       return x;
@@ -251,8 +250,8 @@ public:
 #endif
 
 #ifdef RODENT_DEBUG
-      cerr << "rodent::TakeStep   Steps--  good = " << n_good_steps;
-      cerr << "   bad = " << n_bad_steps << endl;
+      std::cerr << "rodent::TakeStep   Steps--  good = " << n_good_steps;
+      std::cerr << "   bad = " << n_bad_steps << endl;
 #endif
 
       return x;
@@ -277,8 +276,8 @@ public:
 #endif
 
 #ifdef RODENT_DEBUG
-      cerr << "rodent::TakeStep   Steps--  good = " << n_good_steps;
-      cerr << "   bad = " << n_bad_steps << endl;
+      std::cerr << "rodent::TakeStep   Steps--  good = " << n_good_steps;
+      std::cerr << "   bad = " << n_bad_steps << endl;
 #endif
 
       return x;
@@ -302,8 +301,8 @@ public:
 #endif
 
 #ifdef RODENT_DEBUG
-      cerr << "rodent::++   Steps--  good = " << n_good_steps;
-      cerr << "   bad = " << n_bad_steps << endl;
+      std::cerr << "rodent::++   Steps--  good = " << n_good_steps;
+      std::cerr << "   bad = " << n_bad_steps << endl;
 #endif
 
       return x;
@@ -338,9 +337,9 @@ public:
       return dx;
     }
 
-  void PrintOn(ostream& strm)
+  void PrintOn(std::ostream& strm)
     {
-      strm << x << "\t" << y << "\t" << yp << endl;
+      strm << x << "\t" << y << "\t" << yp << std::endl;
     }
 
   const stepT independent() const

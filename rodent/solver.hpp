@@ -11,7 +11,6 @@
 #include <rodent/traits.hpp>
 #include <jlt/math.hpp>
 
-using namespace jlt;
 
 namespace rodent {
 
@@ -120,12 +119,12 @@ private:
 
   magT expand(magT err)
     {
-      return safety_factor*Exp(expand_factor*Log(err));
+      return safety_factor*jlt::Exp(expand_factor*jlt::Log(err));
     }
 
   magT shrink(magT err)
     {
-      return safety_factor*Exp(shrink_factor*Log(err));
+      return safety_factor*jlt::Exp(shrink_factor*jlt::Log(err));
     }
 
   const int order;			// The order of the method used.
@@ -158,11 +157,11 @@ public:
       // Check if step size is already too small.
       if (vecT_traits::absval(dx0) < dx_min) {
 #ifdef __EXCEPTIONS
-	_THROW(stepsize_too_small<magT>
+	_THROW(jlt::stepsize_too_small<magT>
 	       ("Initial stepsize too small in rodent::AdaptiveSolver.",dx0));
 #else
-	cerr << "Initial stepsize too small in rodent::AdaptiveSolver.\n";
-	exit(1);
+	std::cerr << "Initial stepsize too small in rodent::AdaptiveSolver.\n";
+	std::exit(1);
 #endif
       }
     }
@@ -185,11 +184,11 @@ public:
       // Check if step size is already too small.
       if (vecT_traits::absval(dx0) < dx_min) {
 #ifdef __EXCEPTIONS
-	_THROW(stepsize_too_small<magT>
+	_THROW(jlt::stepsize_too_small<magT>
 	       ("Initial stepsize too small in rodent::AdaptiveSolver.",dx0));
 #else
-	cerr << "Initial stepsize too small in rodent::AdaptiveSolver.\n";
-	exit(1);
+	std::cerr << "Initial stepsize too small in rodent::AdaptiveSolver.\n";
+	std::exit(1);
 #endif
       }
     }
@@ -225,14 +224,14 @@ public:
 	// this by an arbitrary norm, provided by traits.
 #ifndef RODENT_ITERATOR_LOOPS
 	for (int i = 0; i < n; i++) {
-	  errmax = max(errmax, vecT_traits::mag(yerr[i]/yscal[i]));
+	  errmax = std::max(errmax, vecT_traits::mag(yerr[i]/yscal[i]));
 	}
 #else
 	CIt yerrit = yerr.begin();
 	for (CItmag yscalit = yscal.begin(); yerrit != yerr.end();
 	     ++yerrit, ++yscalit)
 	  {
-	    errmax = max(errmax, vecT_traits::mag(*yerrit/(*yscalit)));
+	    errmax = std::max(errmax, vecT_traits::mag(*yerrit/(*yscalit)));
 	  }
 #endif
 	if (errmax <= 1) {
@@ -255,13 +254,13 @@ public:
 	// Check if new step size is too small.
 	if (vecT_traits::absval(h) < dx_min) {
 #ifdef __EXCEPTIONS
-	  cerr << "h = " << h << endl;
-	  cerr << "dx_min = " << dx_min << endl;
-	  _THROW(stepsize_too_small<magT>
+	  std::cerr << "h = " << h << std::endl;
+	  std::cerr << "dx_min = " << dx_min << std::endl;
+	  _THROW(jlt::stepsize_too_small<magT>
 		 ("Stepsize too small in rodent::AdaptiveSolver::Step.",h));
 #else
-	  cerr << "Stepsize too small in rodent::AdaptiveSolver::Step.\n";
-	  exit(1);
+	  std::cerr << "Stepsize too small in rodent::AdaptiveSolver::Step.\n";
+	  std::exit(1);
 #endif
 	}
       }
@@ -396,12 +395,12 @@ private:
 
   magT expand(magT err)
     {
-      return safety_factor*Exp(expand_factor*Log(err));
+      return safety_factor*jlt::Exp(expand_factor*jlt::Log(err));
     }
 
   magT shrink(magT err)
     {
-      return safety_factor*Exp(shrink_factor*Log(err));
+      return safety_factor*jlt::Exp(shrink_factor*jlt::Log(err));
     }
 
   const int order;			// The order of the method used.
@@ -435,12 +434,12 @@ public:
       // Check if step size is already too small.
       if (vecT_traits::absval(dx0) < dx_min) {
 #ifdef __EXCEPTIONS
-	_THROW(stepsize_too_small<magT>
+	_THROW(jlt::stepsize_too_small<magT>
 	("Initial stepsize too small in rodent::ImplicitAdaptiveSolver.",dx0));
 #else
-	cerr <<
+	std::cerr <<
 	  "Initial stepsize too small in rodent::ImplicitAdaptiveSolver.\n";
-	exit(1);
+	std::exit(1);
 #endif
       }
     }
@@ -475,13 +474,13 @@ public:
 	errmax = 0.;
 #ifndef RODENT_ITERATOR_LOOPS
 	for (int i = 0; i < n; i++) {
-	  errmax = max(errmax, vecT_traits::mag(yerr[i]/yscal[i]));
+	  errmax = std::max(errmax, vecT_traits::mag(yerr[i]/yscal[i]));
 	}
 #else
 	for (CIt yerrit = yerr.begin(), yscalit = yscal.begin();
 	     yerrit != yerr.end(); ++yerrit, ++yscalit)
 	  {
-	    errmax = max(errmax, vecT_traits::mag(*yerrit/(*yscalit)));
+	    errmax = std::max(errmax, vecT_traits::mag(*yerrit/(*yscalit)));
 	  }
 #endif
 	errmax /= eps;
@@ -505,12 +504,12 @@ public:
 	// Check if new step size is too small.
 	if (vecT_traits::absval(h) < dx_min) {
 #ifdef __EXCEPTIONS
-	  _THROW(stepsize_too_small<magT>
+	  _THROW(jlt::stepsize_too_small<magT>
 	    ("Stepsize too small in rodent::ImplicitAdaptiveSolver::Step.",h));
 #else
-	  cerr <<
+	  std::cerr <<
 	    "Stepsize too small in rodent::ImplicitAdaptiveSolver::Step.\n";
-	  exit(1);
+	  std::exit(1);
 #endif
 	}
       }

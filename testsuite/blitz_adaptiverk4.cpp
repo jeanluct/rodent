@@ -8,7 +8,6 @@
 #include <blitz/vector.h>
 
 using namespace rodent;
-using namespace blitz;
 
 
 class BlitzSimpleHarmonic {
@@ -24,15 +23,17 @@ private:
 public:
   BlitzSimpleHarmonic(double omega_) : omega(omega_), omega2(omega_*omega_) {}
 
-  void operator()(double, const Vector<double>& y, Vector<double>& y_dot)
+  void operator()(double, const blitz::Vector<double>& y,
+		  blitz::Vector<double>& y_dot)
     {
       y_dot[q] = y[p];
       y_dot[p] = -omega2*y[q];
     }
 
-  Vector<double> Exact(double t, const Vector<double>& yinit) const
+  blitz::Vector<double> Exact(double t,
+			      const blitz::Vector<double>& yinit) const
     {
-      Vector<double> yexact(n);
+      blitz::Vector<double> yexact(n);
 
       yexact[q] = yinit[p]/omega*sin(omega*t) + yinit[q]*cos(omega*t);
       yexact[p] = yinit[p]*cos(omega*t) - yinit[q]*omega*cos(omega*t);
@@ -41,8 +42,9 @@ public:
     }
 
   // Jacobian matrix of the equation.
-  void Jacobian(double, const Vector<double>&, const Vector<double>&,
-		const double scale, matrix<double>& Jac)
+  void Jacobian(double, const blitz::Vector<double>&,
+		const blitz::Vector<double>&,
+		const double scale, jlt::matrix<double>& Jac)
     {
       Jac(q,q) = 0.;
       Jac(q,p) = scale;
@@ -55,17 +57,20 @@ public:
 
 
 typedef
-AdaptiveRK4<BlitzSimpleHarmonic, Vector<double> >
+AdaptiveRK4<BlitzSimpleHarmonic, blitz::Vector<double> >
 Integrator;
 
 typedef
-DataPoints<Integrator, Vector<double> >
+DataPoints<Integrator, blitz::Vector<double> >
 Data;
 
 int main()
 {
+  using std::cout;
+  using std::endl;
+
   BlitzSimpleHarmonic sho(1.);
-  Vector<double> y(sho.size());
+  blitz::Vector<double> y(sho.size());
 
   double t_last = 10.;
 

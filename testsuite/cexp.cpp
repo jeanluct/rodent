@@ -7,13 +7,15 @@
 #include "cexp.hpp"
 
 using namespace rodent;
-using namespace std;
-using namespace jlt;
 
 int main()
 {
+  using std::cout;
+  using std::endl;
+  using jlt::operator<<;
+
   CExp expi(dcomplex(0.,1.));
-  vector<dcomplex> y(expi.size());
+  std::vector<dcomplex> y(expi.size());
 
   double ark4_acc = 1.e-10;
   double euler_acc = 1.e-6;
@@ -31,16 +33,16 @@ int main()
 
   cout << "Initial condition: " << y << endl;
 
-  AdaptiveRK4<CExp,vector<dcomplex> >
+  AdaptiveRK4<CExp,std::vector<dcomplex> >
     expi_ark4(expi, 0.0, y, 0.01, 0, ark4_acc);
 
-  FixedRK4<CExp,vector<dcomplex> >
+  FixedRK4<CExp,std::vector<dcomplex> >
     expi_frk4(expi, 0.0, y, rk4_step);
 
-  AdaptiveEuler<CExp,vector<dcomplex> >
+  AdaptiveEuler<CExp,std::vector<dcomplex> >
     expi_aeuler(expi, 0.0, y, 0.01, 0, euler_acc);
 
-  FixedEuler<CExp,vector<dcomplex> >
+  FixedEuler<CExp,std::vector<dcomplex> >
     expi_feuler(expi, 0.0, y, euler_step);
 
   cout.precision(10);

@@ -13,8 +13,6 @@
 #include <rodent/traits.hpp>
 #include <jlt/stlio.hpp>
 
-using namespace std;
-using namespace jlt;
 
 namespace rodent {
 
@@ -39,10 +37,10 @@ public:
 
 private:
   // Iterator types
-  typedef typename map<stepT, vecT>::iterator		mapIter;
-  typedef typename map<stepT, vecT>::const_iterator	mapCIter;
+  typedef typename std::map<stepT, vecT>::iterator		mapIter;
+  typedef typename std::map<stepT, vecT>::const_iterator	mapCIter;
 
-  map<stepT, vecT> y_data;		// Data points.
+  std::map<stepT, vecT> y_data;		// Data points.
 
   stepT dxsav;		// Interval at which points are currently saved.
   stepT x_lastsav;	// Last point saved.
@@ -62,13 +60,14 @@ public:
       // With this constructor, the difference between x_min and x_max
       // sets the sign of dxsav.
       if (x_max >= x_min) {
-	dxsav = Abs(dxsav);
+	dxsav = jlt::Abs(dxsav);
       } else {
-	dxsav = -Abs(dxsav);
+	dxsav = -jlt::Abs(dxsav);
       }
 
       // Save first point.
-      y_data.insert(make_pair(x_min, vecT_traits::copy(data_func(x_min))));
+      y_data.insert(std::make_pair(x_min,
+				   vecT_traits::copy(data_func(x_min))));
 
       x_lastsav = x_min;
 
@@ -91,11 +90,11 @@ public:
 
       assert(n_sample >= 0);
 
-      double xx = x_lastsav;
+      stepT xx = x_lastsav;
 
       for (int i = 1; i <= n_sample; ++i) {
 	xx = x_lastsav + i*dxsav;
-	y_data.insert(make_pair(xx, vecT_traits::copy(data_func(xx))));
+	y_data.insert(std::make_pair(xx, vecT_traits::copy(data_func(xx))));
       }
       x_lastsav = xx;
     }
@@ -123,7 +122,7 @@ public:
     {
       // Sample to x2, using a sampling interval close to current dxsav.
 
-      int n_sample = (int)floor(Abs((x2 - x_lastsav)/dxsav) + 0.5);
+      int n_sample = (int)(jlt::Floor(jlt::Abs((x2 - x_lastsav)/dxsav) + 0.5));
 
       // Adjust the magnitude and sign of dxsav.
       dxsav = (x2 - x_lastsav)/n_sample;
@@ -131,24 +130,24 @@ public:
       Sample(n_sample);
     }
 
-  void SampleAndPrintOn(ostream& strm, int n_sample)
+  void SampleAndPrintOn(std::ostream& strm, int n_sample)
     {
       // Sample the next n_sample data points, at current sampling interval.
       // Output to strm as we go.
 
-      double xx = x_lastsav;
+      stepT xx = x_lastsav;
 
       assert(n_sample >= 0);
 
       for (int i = 1; i <= n_sample; i++) {
 	xx = x_lastsav + i*dxsav;
 	y_data.insert(make_pair(xx, vecT_traits::copy(data_func(xx))));
-	strm << xx << "\t" << y_data[xx] << endl;
+	strm << xx << "\t" << y_data[xx] << std::endl;
       }
       x_lastsav = xx;
     }
 
-  void SampleAndPrintOn(ostream& strm, const stepT x2, int n_sample)
+  void SampleAndPrintOn(std::ostream& strm, const stepT x2, int n_sample)
     {
       // Sample to x2 with n_sample data points, adjusting dxsav.
       // Output to strm as we go.
@@ -158,7 +157,7 @@ public:
       SampleAndPrintOn(strm,n_sample);
     }
 
-  void SampleAndPrintOn(ostream& strm, const stepT x2, const stepT dxsav_)
+  void SampleAndPrintOn(std::ostream& strm, const stepT x2, const stepT dxsav_)
     {
       // Sample to x2, using a sampling interval close to dxsav_.
       // Output to strm as we go.
@@ -168,12 +167,12 @@ public:
       SampleAndPrintOn(strm,x2);
     }
 
-  void SampleAndPrintOn(ostream& strm, const stepT x2)
+  void SampleAndPrintOn(std::ostream& strm, const stepT x2)
     {
       // Sample to x2, using a sampling interval close to current dxsav.
       // Output to strm as we go.
 
-      int n_sample = (int)floor(Abs((x2 - x_lastsav)/dxsav) + 0.5);
+      int n_sample = (int)(jlt::Floor(jlt::Abs((x2 - x_lastsav)/dxsav) + 0.5));
 
       // Adjust the magnitude and sign of dxsav.
       dxsav = (x2 - x_lastsav)/n_sample;
@@ -181,24 +180,30 @@ public:
       SampleAndPrintOn(strm,n_sample);
     }
 
-  void PrintOn(ostream& strm, stepT x0, stepT x1)
+  void PrintOn(std::ostream& strm, stepT x0, stepT x1)
     {
+      using jlt::operator<<;
+
       for (mapCIter it = y_data.lower_bound(x0);
 	   it != y_data.upper_bound(x1); ++it)
 	{
-	  strm << (*it).first << "\t" << (*it).second  << endl;
+	  strm << (*it).first << "\t" << (*it).second  << std::endl;
 	}
     }
 
-  void PrintOn(ostream& strm, stepT x0)
+  void PrintOn(std::ostream& strm, stepT x0)
     {
+      using jlt::operator<<;
+
       mapCIter it = y_data.lower_bound(x0);
 
-      strm << (*it).first << "\t" << (*it).second  << endl;
+      strm << (*it).first << "\t" << (*it).second  << std::endl;
     }
 
-  void PrintOn(ostream& strm)
+  void PrintOn(std::ostream& strm)
     {
+      using jlt::operator<<;
+
       strm << y_data;
     }
 

@@ -8,13 +8,15 @@
 #include "stiff.hpp"
 
 using namespace rodent;
-using namespace std;
-using namespace jlt;
 
 int main()
 {
+  using std::cout;
+  using std::endl;
+  using jlt::Exp;
+
   Stiff stiff(.1,0.,-10000.,0.);
-  vector<double> y(stiff.size());
+  std::vector<double> y(stiff.size());
 
   double euler_step = 2.e-4;
   double aeul_acc = 1.e-6;

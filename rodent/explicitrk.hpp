@@ -7,7 +7,6 @@
 #include <rodent/traits.hpp>
 #include <jlt/matrixutil.hpp>
 
-using namespace jlt;
 
 namespace rodent {
 
@@ -1043,10 +1042,10 @@ public:
       }
 
       // LU-decompose the matrix.
-      LUdecomp<T,matrixT>(A, idx, &perm);
+      jlt::LUdecomp<T,matrixT>(A, idx, &perm);
 
       // Solve the equation A.fs1 = yp.
-      LUbacksub<T,matrixT>(A, idx, &fs1[0]);
+      jlt::LUbacksub<T,matrixT>(A, idx, &fs1[0]);
 
       for (int i = 0; i < n; ++i) yy1[i] = y[i] + h*b21*fs1[i];
 
@@ -1055,7 +1054,7 @@ public:
       for (int i = 0; i < n; ++i) fs2[i] = yy1p[i] + g21*fs1[i];
 
       // Solve the equation A.(fs2 + g21 fs1) = b.
-      LUbacksub<T,matrixT>(A, idx, &fs2[0]);
+      jlt::LUbacksub<T,matrixT>(A, idx, &fs2[0]);
 
       for (int i = 0; i < n; ++i) {
 	fs2[i] -= g21*fs1[i];
@@ -1067,7 +1066,7 @@ public:
       for (int i = 0; i < n; ++i) fs3[i] = yy2p[i] + g31*fs1[i] + g32*fs2[i];
 
       // Solve the equation A.(fs3 + g31 fs1 + g32 fs2) = b.
-      LUbacksub<T,matrixT>(A, idx, &fs3[0]);
+      jlt::LUbacksub<T,matrixT>(A, idx, &fs3[0]);
 
       for (int i = 0; i < n; ++i) fs3[i] -= (g31*fs1[i] + g32*fs2[i]);
 
@@ -1076,7 +1075,7 @@ public:
       }
 
       // Solve the equation A.(fs4 + g41 fs1 + g42 fs2 + g43 fs3) = b.
-      LUbacksub<T,matrixT>(A, idx, &fs4[0]);
+      jlt::LUbacksub<T,matrixT>(A, idx, &fs4[0]);
 
       for (int i = 0; i < n; ++i) {
 	fs4[i] -= (g41*fs1[i] + g42*fs2[i] + g43*fs3[i]);

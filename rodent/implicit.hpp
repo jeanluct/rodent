@@ -9,7 +9,6 @@
 #include <jlt/exceptions.hpp>
 #include <jlt/matrixutil.hpp>
 
-using namespace jlt;
 
 namespace rodent {
 
@@ -73,9 +72,9 @@ protected:
 	// Compute F(y0), store in dy.
 	for (int i = 0; i < func.size(); ++i) dy[i] = y1[i] - y0[i] - h*y1p[i];
 	// LU-decompose the Jacobian matrix.
-	LUdecomp<value_type,matrix_type>(Jac, idx, &perm);
+	jlt::LUdecomp<value_type,matrix_type>(Jac, idx, &perm);
 	// Solve the equation Jac.dy = -F(y0).
-	LUbacksub<value_type,matrix_type>(Jac, idx, &dy[0]);
+	jlt::LUbacksub<value_type,matrix_type>(Jac, idx, &dy[0]);
 
 	// Compute y1 (new) = y1 (guess) + dy.
 	for (int i = 0; i < func.size(); ++i) y1[i] += dy[i];
@@ -94,12 +93,12 @@ protected:
 	// the step.
       }
 #ifdef __EXCEPTIONS
-      _THROW(too_many_steps
+      _THROW(jlt::too_many_steps
 	("Newton iteration failed to converge in ImplicitEuler ", max_iter));
 #else
-      cerr << "rodent::ImplicitEuler::ieuler_step: ";
-      cerr << "Failed to converge after " << max_iter << " iterations.\n";
-      exit(1);
+      std::cerr << "rodent::ImplicitEuler::ieuler_step: ";
+      std::cerr << "Failed to converge after " << max_iter << " iterations.\n";
+      std::exit(1);
 #endif
     }
 }; // class ImplicitEuler
@@ -152,9 +151,9 @@ public:
 	ieuler_step(x, y, yp, h, y1, y1p);
       }
 #ifdef __EXCEPTIONS
-      catch(too_many_steps& ex)
+      catch(jlt::too_many_steps& ex)
       {
-	cerr << ex.what() << "after " << ex.how_many() << " steps.\n";
+	std::cerr << ex.what() << "after " << ex.how_many() << " steps.\n";
 	throw;
       }
 #endif
@@ -252,9 +251,9 @@ public:
 	}
       }
 #ifdef __EXCEPTIONS
-      catch(too_many_steps& ex)
+      catch(jlt::too_many_steps& ex)
       {
-	cerr << ex.what() << "after " << ex.how_many() << " steps.\n";
+	std::cerr << ex.what() << "after " << ex.how_many() << " steps.\n";
 	throw;
       }
 #endif

@@ -3,7 +3,7 @@
 
 #include <jlt/math.hpp>
 
-typedef complex<double> dcomplex;
+typedef std::complex<double> dcomplex;
 
 // Complex exponential function.
 // Exactly like the simple Harmonic oscillator.
@@ -17,14 +17,16 @@ private:
 public:
   CExp(dcomplex sigma_) : sigma(sigma_) {}
 
-  void operator()(double, const vector<dcomplex>& y, vector<dcomplex>& y_dot)
+  void operator()(double, const std::vector<dcomplex>& y,
+		  std::vector<dcomplex>& y_dot)
     {
       y_dot[0] = sigma*y[0];
     }
 
-  vector<dcomplex> Exact(double t, const vector<dcomplex>& yinit) const
+  std::vector<dcomplex> Exact(double t,
+			      const std::vector<dcomplex>& yinit) const
     {
-      vector<dcomplex> yexact(n);
+      std::vector<dcomplex> yexact(n);
 
       yexact[0] = yinit[0]*exp(sigma*t);
 

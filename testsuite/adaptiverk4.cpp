@@ -6,12 +6,15 @@
 #include "simpharmonic.hpp"
 
 using namespace rodent;
-using namespace std;
 
 int main()
 {
+  using std::cout;
+  using std::endl;
+  using jlt::operator<<;
+
   SimpleHarmonic<double> sho(1.);
-  vector<double> y(sho.size());
+  std::vector<double> y(sho.size());
 
   double t_last = 10.;
 

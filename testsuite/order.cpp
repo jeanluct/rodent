@@ -12,12 +12,10 @@
 #endif
 
 using namespace rodent;
-using namespace std;
-using namespace jlt;
 
 typedef long double Real;
 
-ostream& printErrorOn(ostream& strm, Real err, Real h, int order);
+std::ostream& printErrorOn(std::ostream& strm, Real err, Real h, int order);
 
 long int factorial(int n);
 
@@ -33,25 +31,25 @@ public:
 
   ExpM(T lambda_, T y0_) : lambda(lambda_), y0(y0_) {}
 
-  void operator()(T, const vector<T>& y, vector<T>& y_dot)
+  void operator()(T, const std::vector<T>& y, std::vector<T>& y_dot)
     {
       y_dot[u] = lambda*(y[u] + y0);
     }
 
-  vector<T> Exact(T t, const vector<T>& yinit) const
+  std::vector<T> Exact(T t, const std::vector<T>& yinit) const
     {
-      vector<T> yexact(n);
+      std::vector<T> yexact(n);
 
       // Use Expm1 to get a very accurate value for small t.
       // (especially for yinit[u] = 0.)
-      yexact[u] = yinit[u]*Exp(lambda*t) + y0*Expm1(lambda*t);
+      yexact[u] = yinit[u]*jlt::Exp(lambda*t) + y0*jlt::Expm1(lambda*t);
 
       return yexact;
     }
 
   // Jacobian matrix of the equation.
-  void Jacobian(T, const vector<T>&, const vector<T>&,
-		const T scale, matrix<T>& Jac)
+  void Jacobian(T, const std::vector<T>&, const std::vector<T>&,
+		const T scale, jlt::matrix<T>& Jac)
     {
       Jac(u,u) = scale*lambda;
     }
@@ -61,65 +59,68 @@ public:
 
 int main()
 {
+  using std::cout;
+  using std::endl;
+
   int ord = 16;
   Real h, y0ex;
   Real lambda = 1., y0 = 1.;
   ExpM<Real> expm(lambda,y0);
-  vector<Real> y(expm.size());
+  std::vector<Real> y(expm.size());
 
   // Initial condition such that y = t + t^2/2 + t^3/6 +...
   y[0] = 0.;
 
 #if defined(ORDER_AB)
   // Adams-Bashforth methods
-  AdamsBashforth2<ExpM<Real>,vector<Real> >
+  AdamsBashforth2<ExpM<Real>,std::vector<Real> >
     expm_ab2(expm, 0., y, 0.);
-  AdamsBashforth3<ExpM<Real>,vector<Real> >
+  AdamsBashforth3<ExpM<Real>,std::vector<Real> >
     expm_ab3(expm, 0., y, 0.);
-  AdamsBashforth4<ExpM<Real>,vector<Real> >
+  AdamsBashforth4<ExpM<Real>,std::vector<Real> >
     expm_ab4(expm, 0., y, 0.);
-  AdamsBashforth5<ExpM<Real>,vector<Real> >
+  AdamsBashforth5<ExpM<Real>,std::vector<Real> >
     expm_ab5(expm, 0., y, 0.);
 
 #elif defined(ORDER_FRK)
   // Fixed Runge-Kutta methods
-  FixedEuler<ExpM<Real>,vector<Real> >
+  FixedEuler<ExpM<Real>,std::vector<Real> >
     expm_feul(expm, 0., y, 0.);
-  FixedImplicitEuler<ExpM<Real>,vector<Real> >
+  FixedImplicitEuler<ExpM<Real>,std::vector<Real> >
     expm_fieul(expm, 0., y, 0.);
-  FixedMidpoint<ExpM<Real>,vector<Real> >
+  FixedMidpoint<ExpM<Real>,std::vector<Real> >
     expm_fmid(expm, 0., y, 0.);
-  FixedRK4<ExpM<Real>,vector<Real> >
+  FixedRK4<ExpM<Real>,std::vector<Real> >
     expm_frk4(expm, 0., y, 0.);
 
 #elif defined(ORDER_ARK)
   // Adaptive Runge-Kutta methods
-  AdaptiveEuler<ExpM<Real>,vector<Real> >
+  AdaptiveEuler<ExpM<Real>,std::vector<Real> >
     expm_aeul(expm, 0., y, 0., 0., 1.);
-  AdaptiveImplicitEuler<ExpM<Real>,vector<Real> >
+  AdaptiveImplicitEuler<ExpM<Real>,std::vector<Real> >
     expm_aieul(expm, 0., y, 0., 0., 1.);
-  AdaptiveMidpoint<ExpM<Real>,vector<Real> >
+  AdaptiveMidpoint<ExpM<Real>,std::vector<Real> >
     expm_amid(expm, 0., y, 0., 0., 1.);
-  AdaptiveGRK<ExpM<Real>,vector<Real> >
+  AdaptiveGRK<ExpM<Real>,std::vector<Real> >
     expm_agrk(expm, 0., y, 0., 0., 1.);
-  AdaptiveRK4<ExpM<Real>,vector<Real> >
+  AdaptiveRK4<ExpM<Real>,std::vector<Real> >
     expm_ark4(expm, 0., y, 0., 0., 1.);
-  AdaptiveRKCashKarp<ExpM<Real>,vector<Real> >
+  AdaptiveRKCashKarp<ExpM<Real>,std::vector<Real> >
     expm_rkck(expm, 0., y, 0., 0., 1.);
 #endif
 
-  cout.setf(ios::scientific);
+  cout.setf(std::ios::scientific);
 
   // Output the Log10 of the errors vs the Log10 of the stepsize.
   // Normalize to remove the coefficient of the Taylor expansion of
   // the exact solution (*(order+1)!).
 
   for (int i = 1; i <= ord; ++i) {
-    h = Pow(10.,-i/4.);
+    h = jlt::Pow(10.,-i/4.);
 
     y0ex = expm.Exact(h,y)[0];
 
-    cout << Log10(h);
+    cout << jlt::Log10(h);
 
 #ifdef ORDER_AB
     expm_ab2.Restart(0.,y,h);
@@ -171,18 +172,18 @@ int main()
   }
 }
 
-ostream& printErrorOn(ostream& strm, Real err, Real h, int order)
+std::ostream& printErrorOn(std::ostream& strm, Real err, Real h, int order)
 {
   strm << "\t";
   if (err != 0) {
     // Multiply by (order+1)! to compensate for the terms in the
     // expansion of expm getting smaller.
-    strm << Log10(factorial(order+1)*Abs(err));
+    strm << jlt::Log10(factorial(order+1)*jlt::Abs(err));
   } else {
     // If the error is zero to machine precision, just print the exact
     // value of the error, for comparison purposes.
     // Mark this with a "*".
-    strm << Log10(Pow(h,order+1)) << "*";
+    strm << jlt::Log10(jlt::Pow(h,order+1)) << "*";
   }
 
   return strm;

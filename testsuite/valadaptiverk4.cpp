@@ -6,8 +6,6 @@
 #include <jlt/math.hpp>
 
 using namespace rodent;
-using namespace std;
-using namespace jlt;
 
 class valSimpleHarmonic {
 private:
@@ -23,15 +21,20 @@ private:
 public:
   valSimpleHarmonic(double omega_) : omega(omega_), omega2(omega_*omega_) {}
 
-  void operator()(double, const valarray<double>& y, valarray<double>& y_dot)
+  void operator()(double, const std::valarray<double>& y,
+		  std::valarray<double>& y_dot)
     {
       y_dot[q] = y[p];
       y_dot[p] = -omega2*y[q];
     }
 
-  valarray<double> Exact(double t, const valarray<double>& yinit) const
+  std::valarray<double> Exact(double t, const std::valarray<double>& yinit)
+    const
     {
-      valarray<double> yexact(n);
+      using jlt::Sin;
+      using jlt::Cos;
+
+      std::valarray<double> yexact(n);
 
       yexact[q] = yinit[p]/omega*Sin(omega*t) + yinit[q]*Cos(omega*t);
       yexact[p] = yinit[p]*Cos(omega*t) - yinit[q]*omega*Sin(omega*t);
@@ -42,10 +45,15 @@ public:
   int size() const { return n; }
 };
 
+
 int main()
 {
+  using std::cout;
+  using std::endl;
+  using jlt::operator<<;
+
   valSimpleHarmonic sho(1.);
-  valarray<double> y(sho.size());
+  std::valarray<double> y(sho.size());
 
   double t_last = 10.;
 
@@ -60,14 +68,15 @@ int main()
   y[0] = 0.;
   y[1] = 1.;
 
-  AdaptiveRK4<valSimpleHarmonic,valarray<double> >
+  AdaptiveRK4<valSimpleHarmonic,std::valarray<double> >
     sho_rk(sho, 0.0, y, 0.01, 0, 1.0e-10);
 
   /*
   cout << t+10 << "\t" << sho_rk(t+10) << endl;
   */
 
-  DataPoints<AdaptiveRK4<valSimpleHarmonic,valarray<double> >,valarray<double> >
+  DataPoints<AdaptiveRK4<valSimpleHarmonic,std::valarray<double> >,
+    std::valarray<double> >
     sho_data(sho_rk,0.0,t,dtsav);
 
   cout.precision(10);

@@ -5,8 +5,6 @@
 #include <jlt/matrix.hpp>
 #include <jlt/math.hpp>
 
-using namespace std;
-using namespace jlt;
 
 class Stiff {
 public:
@@ -15,7 +13,7 @@ public:
 private:
   double uu, uv;
   double vv, vu;
-  vector<double> y1peps;		// For finite differencing
+  std::vector<double> y1peps;		// For finite differencing
 
   static const int n = num;
 
@@ -26,7 +24,8 @@ public:
   // Good stiff values (NRC 2nd ed., p. 734).
   Stiff() : uu(998.), uv(1998.), vv(-1999.), vu(-999.), y1peps(num) {}
 
-  void operator()(double, const vector<double>& y, vector<double>& y_dot)
+  void operator()(double, const std::vector<double>& y,
+		  std::vector<double>& y_dot)
     {
       y_dot[u] = uu*y[u] + uv*y[v];
       y_dot[v] = vu*y[u] + vv*y[v];
@@ -34,9 +33,10 @@ public:
 
   // Solution corresponding to the default values
   // and initial conditions u = 1, v = 0.
-  vector<double> Exact(double t, const vector<double>& yinit) const
+  std::vector<double> Exact(double t, const std::vector<double>& yinit) const
     {
-      vector<double> yexact(n);
+      using jlt::Exp;
+      std::vector<double> yexact(n);
 
       yexact[u] = 2.*Exp(-t) - Exp(-1000.*t);
       yexact[v] = -Exp(-t) + Exp(-1000.*t);
@@ -47,8 +47,8 @@ public:
   // Jacobian matrix of the equation.
 
   // Exact
-  void Jacobian(double, const vector<double>&, const vector<double>&,
-		const double scale, matrix<double>& Jac)
+  void Jacobian(double, const std::vector<double>&, const std::vector<double>&,
+		const double scale, jlt::matrix<double>& Jac)
     {
       Jac(u,u) = scale*uu;
       Jac(u,v) = scale*uv;
@@ -58,8 +58,9 @@ public:
 
 #if 0==1
   // By finite differencing
-  void Jacobian(double x1, vector<double>& y1, const vector<double>& y1p,
-		const double scale, matrix<double>& Jac)
+  void Jacobian(double x1, std::vector<double>& y1,
+		const std::vector<double>& y1p,
+		const double scale, jlt::matrix<double>& Jac)
     {
 	double dh, temp, eps = 1.e-4;
 

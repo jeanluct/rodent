@@ -5,8 +5,6 @@
 #include <jlt/matrix.hpp>
 #include <jlt/math.hpp>
 
-using namespace std;
-using namespace jlt;
 
 template<class Real>
 class SimpleHarmonic {
@@ -22,15 +20,17 @@ private:
 public:
   SimpleHarmonic(Real omega_) : omega(omega_), omega2(omega_*omega_) {}
 
-  void operator()(Real, const vector<Real>& y, vector<Real>& y_dot)
+  void operator()(Real, const std::vector<Real>& y, std::vector<Real>& y_dot)
     {
       y_dot[q] = y[p];
       y_dot[p] = -omega2*y[q];
     }
 
-  vector<Real> Exact(Real t, const vector<Real>& yinit) const
+  std::vector<Real> Exact(Real t, const std::vector<Real>& yinit) const
     {
-      vector<Real> yexact(n);
+      using jlt::Sin;
+      using jlt::Cos;
+      std::vector<Real> yexact(n);
 
       yexact[q] = yinit[p]/omega*Sin(omega*t) + yinit[q]*Cos(omega*t);
       yexact[p] = yinit[p]*Cos(omega*t) - yinit[q]*omega*Sin(omega*t);
@@ -39,8 +39,8 @@ public:
     }
 
   // Jacobian matrix of the equation.
-  void Jacobian(Real, const vector<Real>&, const vector<Real>&,
-		const Real scale, matrix<Real>& Jac)
+  void Jacobian(Real, const std::vector<Real>&, const std::vector<Real>&,
+		const Real scale, jlt::matrix<Real>& Jac)
     {
       Jac(q,q) = 0.;
       Jac(q,p) = scale;

@@ -9,7 +9,6 @@
 #include <rodent/traits.hpp>
 #include <rodent/base.hpp>
 
-using namespace std;
 
 //
 // Provide functionality for maps that mimics rodent for ODE's.

@@ -6,13 +6,15 @@
 #include "simpharmonic.hpp"
 
 using namespace rodent;
-using namespace std;
-using namespace jlt;
 
 int main()
 {
+  using std::cout;
+  using std::endl;
+  using jlt::operator<<;
+
   SimpleHarmonic<double> sho(1.);
-  vector<double> y(sho.size());
+  std::vector<double> y(sho.size());
 
   double ark4_acc = 1.e-10;
   double euler_acc = 1.e-6;
