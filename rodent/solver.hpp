@@ -37,6 +37,8 @@ protected:
   using
   SolverBase<FixedSolver<T_Method,vecT,vecT_traits>,vecT,vecT_traits>::dx_min;
   using
+  SolverBase<FixedSolver<T_Method,vecT,vecT_traits>,vecT,vecT_traits>::dx_max;
+  using
   SolverBase<FixedSolver<T_Method,vecT,vecT_traits>,vecT,vecT_traits>::y;
   using
   SolverBase<FixedSolver<T_Method,vecT,vecT_traits>,vecT,vecT_traits>::yp;
@@ -94,6 +96,8 @@ protected:
 		   vecT,vecT_traits>::dx;
   using SolverBase<AdaptiveSolver<T_Method,vecT,vecT_traits>,
 		   vecT,vecT_traits>::dx_min;
+  using SolverBase<AdaptiveSolver<T_Method,vecT,vecT_traits>,
+		   vecT,vecT_traits>::dx_max;
   using SolverBase<AdaptiveSolver<T_Method,vecT,vecT_traits>,
 		   vecT,vecT_traits>::y;
   using SolverBase<AdaptiveSolver<T_Method,vecT,vecT_traits>,
@@ -283,6 +287,14 @@ public:
 	  Method().func(x, y1, yp);
 
 	  dx = h*expand(errmax);
+
+	  // Check if new step size is too large.
+	  if (dx_max != 0) {
+	    if (vecT_traits::absval(h) > dx_max) {
+	      h = (h >= 0 ? dx_max : -dx_max);
+	    }
+	  }
+
 	  break;
 	}
 #ifdef RODENT_DEBUG
@@ -350,6 +362,8 @@ protected:
   using SolverBase<FixedImplicitSolver<T_Method,vecT,vecT_traits>,
 		   vecT,vecT_traits>::dx_min;
   using SolverBase<FixedImplicitSolver<T_Method,vecT,vecT_traits>,
+		   vecT,vecT_traits>::dx_max;
+  using SolverBase<FixedImplicitSolver<T_Method,vecT,vecT_traits>,
 		   vecT,vecT_traits>::y;
   using SolverBase<FixedImplicitSolver<T_Method,vecT,vecT_traits>,
 		   vecT,vecT_traits>::yp;
@@ -415,6 +429,8 @@ protected:
 		   vecT,vecT_traits>::dx;
   using SolverBase<AdaptiveImplicitSolver<T_Method,vecT,vecT_traits>,
 		   vecT,vecT_traits>::dx_min;
+  using SolverBase<AdaptiveImplicitSolver<T_Method,vecT,vecT_traits>,
+		   vecT,vecT_traits>::dx_max;
   using SolverBase<AdaptiveImplicitSolver<T_Method,vecT,vecT_traits>,
 		   vecT,vecT_traits>::y;
   using SolverBase<AdaptiveImplicitSolver<T_Method,vecT,vecT_traits>,
@@ -562,6 +578,14 @@ public:
 	  Method().func(x, y1, yp);
 
 	  dx = h*expand(errmax);
+
+	  // Check if new step size is too large.
+	  if (dx_max != 0) {
+	    if (vecT_traits::absval(h) > dx_max) {
+	      h = (h >= 0 ? dx_max : -dx_max);
+	    }
+	  }
+
 	  break;
 	}
 #ifdef RODENT_DEBUG

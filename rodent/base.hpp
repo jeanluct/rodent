@@ -43,6 +43,7 @@ protected:
   stepT	x;				// Current independent coordinate.
   stepT	dx;				// Current step size.
   magT	dx_min;				// Minimum step size.
+  magT	dx_max;				// Maximum step size.
   vecT 	y;				// State vector at x.
   vecT 	yp;				// Derivative vector at x.
 
@@ -65,6 +66,7 @@ public:
       x				( 0 ),
       dx			( 0.01 ),
       dx_min			( 0 ),
+      dx_max			( 0 ),
       y				( _n ),
       yp			( _n ),
       max_steps			( 10000000 )
@@ -86,6 +88,12 @@ public:
   T_Control& minStepSize(const stepT _dx_min)
     {
       dx_min = vecT_traits::absval(_dx_min);
+      return Control();
+    }
+
+  T_Control& maxStepSize(const stepT _dx_max)
+    {
+      dx_max = vecT_traits::absval(_dx_max);
       return Control();
     }
 
