@@ -290,8 +290,8 @@ public:
 
 	  // Check if new step size is too large.
 	  if (dx_max != 0) {
-	    if (vecT_traits::absval(h) > dx_max) {
-	      h = (h >= 0 ? dx_max : -dx_max);
+	    if (vecT_traits::absval(dx) > dx_max) {
+	      dx = (dx >= 0 ? dx_max : -dx_max);
 	    }
 	  }
 
