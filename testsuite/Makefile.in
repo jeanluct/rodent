@@ -40,6 +40,21 @@ adamsbashforth:		adamsbashforth.o
 blitz_adaptiverk4:	blitz_adaptiverk4.o
 ADrwave:		ADrwave.o
 
+inline_test:
+	@rm -f inline_test.o
+	@echo
+	@echo 'Compile without inlining:'
+	@echo
+	$(CXX) -Wall -c -I$(srcdir)/$(RODENTDIR) -I$(JLTDIR) inline_test.cpp
+	@echo 'The function is called, as seen in the disassembly:'
+	objdump -Cd inline_test.o | grep Harmonic\<double\>::operator\(\)
+	@echo
+	@echo 'Compile with inlining (-O):'
+	@echo
+	$(CXX) -Wall -c -O -I$(srcdir)/$(RODENTDIR) -I$(JLTDIR) inline_test.cpp
+	-objdump -Cd inline_test.o | grep Harmonic\<double\>::operator\(\)
+	@echo 'The function does not appear in the disassembly.'
+
 ###########################################################################
 
 clean:
