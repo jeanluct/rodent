@@ -33,12 +33,6 @@ namespace rodent {
     typedef value_type				mag_type;
     typedef std::vector<mag_type>		vec_mag_type;
     typedef jlt::matrix<value_type>		matrix_type;
-#ifdef RODENT_ITERATOR_LOOPS
-    typedef typename vecT::iterator		iterator;
-    typedef typename vecT::const_iterator	const_iterator;
-    typedef typename vec_mag_type::iterator	mag_iterator;
-    typedef typename vec_mag_type::const_iterator	const_mag_iterator;
-#endif
 
     static inline mag_type	absval(step_type _x) { return jlt::Abs(_x); }
     static inline mag_type	mag(value_type _x) { return jlt::Abs(_x); }
@@ -58,12 +52,6 @@ namespace rodent {
     typedef float_type					mag_type;
     typedef std::vector<mag_type>			vec_mag_type;
     typedef jlt::matrix<value_type>			matrix_type;
-#ifdef RODENT_ITERATOR_LOOPS
-    typedef typename vec_type::iterator		iterator;
-    typedef typename vec_type::const_iterator	const_iterator;
-    typedef typename vec_mag_type::iterator	mag_iterator;
-    typedef typename vec_mag_type::const_iterator	const_mag_iterator;
-#endif
 
     static inline mag_type 	absval(step_type _x) { return jlt::Abs(_x); }
     static inline mag_type	mag(value_type _x) { return abs(_x); }

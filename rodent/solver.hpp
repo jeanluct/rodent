@@ -109,11 +109,6 @@ public:
   typedef typename vecT_traits::mag_type	magT;
   typedef typename vecT_traits::step_type	stepT;
   typedef typename vecT_traits::vec_mag_type	vecmagT;
-#ifdef RODENT_ITERATOR_LOOPS
-  typedef typename vecT_traits::const_iterator		CIt;
-  typedef typename vecT_traits::mag_iterator		Itmag;
-  typedef typename vecT_traits::const_mag_iterator	CItmag;
-#endif
 
 private:
   vecmagT err_rel;			// Desired relative accuracy.
@@ -243,41 +238,20 @@ public:
       stepT h = dx;
       bool result = true;
 
-#ifndef RODENT_ITERATOR_LOOPS
       for (int i = 0; i < n; i++) {
 	yscal[i] = err_abs[i] + err_rel[i]*(vecT_traits::mag(y[i])
 					  + vecT_traits::mag(yp[i]*dx)) + tiny;
       }
-#else
-      {
-	CIt yit = y.begin(), ypit = yp.begin();
-	CItmag relit = err_rel.begin(), absit = err_abs.begin();
-	for (Itmag yscalit = yscal.begin(); yscalit != yscal.end();
-	     ++yscalit, ++yit, ++ypit, ++relit, ++absit)
-	  {
-	    *yscalit = *absit + *relit*(vecT_traits::mag(*yit)
-					+ vecT_traits::mag(*ypit*dx)) + tiny;
-	  }
-      }
-#endif
 
       for (;;) {
 	Method().OneStep(h, y1);
 	errmax = 0.;
 	// This is the L_infinity norm max_i |v_i|.  Could replace
 	// this by an arbitrary norm, provided by traits.
-#ifndef RODENT_ITERATOR_LOOPS
 	for (int i = 0; i < n; i++) {
 	  errmax = std::max(errmax, vecT_traits::mag(yerr[i]/yscal[i]));
 	}
-#else
-	CIt yerrit = yerr.begin();
-	for (CItmag yscalit = yscal.begin(); yerrit != yerr.end();
-	     ++yerrit, ++yscalit)
-	  {
-	    errmax = std::max(errmax, vecT_traits::mag(*yerrit/(*yscalit)));
-	  }
-#endif
+
 	if (errmax <= 1) {
 	  x += h;
 #ifdef RODENT_DEBUG
@@ -442,10 +416,6 @@ public:
   typedef typename vecT_traits::mag_type	magT;
   typedef typename vecT_traits::step_type	stepT;
   typedef typename vecT_traits::vec_mag_type	vecmagT;
-#ifdef RODENT_ITERATOR_LOOPS
-  typedef typename vecT_traits::iterator		It;
-  typedef typename vecT_traits::const_iterator		CIt;
-#endif
 
 private:
   magT err;				// Desired accuracy.
@@ -535,39 +505,17 @@ public:
       stepT h = dx;
       bool result = true;
 
-#ifndef RODENT_ITERATOR_LOOPS
       // for (int i = 0; i < n; i++)
       // yscal[i] = vecT_traits::mag(y[i]) + vecT_traits::mag(yp[i]*dx) + err;
       for (int i = 0; i < n; i++)
 	yscal[i] = vecT_traits::mag(y[i]) + vecT_traits::mag(yp[i]*dx) + tiny;
-#else
-      {
-	CIt yit = y.begin(), ypit = yp.begin();
-	for (It yscalit = yscal.begin(); yscalit != yscal.end();
-	     ++yscalit, ++yit, ++ypit)
-	  {
-	    //*yscalit = vecT_traits::mag(*yit)
-	    //  + vecT_traits::mag(*ypit*dx) + err;
-	    *yscalit = vecT_traits::mag(*yit)
-	      + vecT_traits::mag(*ypit*dx) + tiny;
-	  }
-      }
-#endif
 
       for (;;) {
 	Method().OneStep(h, y1, y1p);
 	errmax = 0.;
-#ifndef RODENT_ITERATOR_LOOPS
 	for (int i = 0; i < n; i++) {
 	  errmax = std::max(errmax, vecT_traits::mag(yerr[i]/yscal[i]));
 	}
-#else
-	for (CIt yerrit = yerr.begin(), yscalit = yscal.begin();
-	     yerrit != yerr.end(); ++yerrit, ++yscalit)
-	  {
-	    errmax = std::max(errmax, vecT_traits::mag(*yerrit/(*yscalit)));
-	  }
-#endif
 	errmax /= err;
 	if (errmax <= 1) {
 	  x += h;

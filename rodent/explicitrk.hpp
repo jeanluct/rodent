@@ -22,10 +22,6 @@ class Euler
 {
 public:
   typedef typename vecT_traits::step_type	step_type;
-#ifdef RODENT_ITERATOR_LOOPS
-  typedef typename vecT_traits::iterator	iterator;
-  typedef typename vecT_traits::const_iterator	const_iterator;
-#endif
 
   Euler(T_Func& _f) : func(_f) {}
 
@@ -35,20 +31,9 @@ protected:
   void euler_step(const step_type x0, const vecT& y0, const vecT& yp0,
 		  const step_type h, vecT& y1) const
     {
-#ifndef RODENT_ITERATOR_LOOPS
       for (int i = 0; i < func.size(); i++) {
 	y1[i] = y0[i] + h*yp0[i];
       }
-#else
-    {
-      const_iterator yit = y0.begin(), ypit = yp0.begin();
-      for (iterator y1it = y1.begin();
-	   y1it != y1.end(); ++y1it, ++yit, ++ypit)
-	{
-	  *y1it = *yit + *ypit*h;
-	}
-    }
-#endif
     }
 }; // class Euler
 
@@ -61,10 +46,6 @@ class Midpoint
 {
 public:
   typedef typename vecT_traits::step_type	step_type;
-#ifdef RODENT_ITERATOR_LOOPS
-  typedef typename vecT_traits::iterator	iterator;
-  typedef typename vecT_traits::const_iterator	const_iterator;
-#endif
 
   Midpoint(T_Func& _f) : func(_f), y_2(_f.size()), yp_2(_f.size()) {}
 
@@ -79,32 +60,11 @@ protected:
     {
       step_type h_2 = 0.5L*h, x_2 = x0 + h_2;
 
-#ifndef RODENT_ITERATOR_LOOPS
       for (int i = 0; i < func.size(); i++) { y_2[i] = y0[i] + h_2*yp0[i]; }
-#else
-      {
-	const_iterator y0it = y0.begin(), yp0it = yp0.begin();
-	for (iterator y_2it = y_2.begin();
-	     y_2it != y_2.end(); ++y_2it, ++y0it, ++yp0it)
-	{
-	  *y_2it = *y0it + *yp0it*h_2;
-	}
-      }
-#endif
+
       func(x_2, y_2, yp_2);
 
-#ifndef RODENT_ITERATOR_LOOPS
       for (int i = 0; i < func.size(); i++) { y1[i] = y0[i] + h*yp_2[i]; }
-#else
-      {
-	const_iterator y0it = y0.begin(), yp_2it = yp_2.begin();
-	for (iterator y1it = y1.begin();
-	     y1it != y1.end(); ++y1it, ++y0it, ++yp_2it)
-	{
-	  *y1it = *y0it + *yp_2it*h;
-	}
-      }
-#endif
     }
 }; // class Midpoint
 
@@ -117,10 +77,6 @@ class RK4
 {
 public:
   typedef typename vecT_traits::step_type	step_type;
-#ifdef RODENT_ITERATOR_LOOPS
-  typedef typename vecT_traits::iterator	iterator;
-  typedef typename vecT_traits::const_iterator	const_iterator;
-#endif
 
   RK4(T_Func& _f) :
     func(_f), y_2(_f.size()), yp_2(_f.size()), yp1(_f.size()) {}
@@ -136,67 +92,24 @@ protected:
     {
       step_type h_2 = 0.5L*h, h_6 = h/6.L, x_2 = x0 + h_2;
 
-#ifndef RODENT_ITERATOR_LOOPS
       for (int i = 0; i < func.size(); i++) { y_2[i] = y0[i] + h_2*yp0[i]; }
-#else
-      {
-	const_iterator y0it = y0.begin(), yp0it = yp0.begin();
-	for (iterator y_2it = y_2.begin();
-	     y_2it != y_2.end(); ++y_2it, ++y0it, ++yp0it)
-	{
-	  *y_2it = *y0it + *yp0it*h_2;
-	}
-      }
-#endif
+
       func(x_2, y_2, yp_2);
 
-#ifndef RODENT_ITERATOR_LOOPS
       for (int i = 0; i < func.size(); i++) { y_2[i] = y0[i] + h_2*yp_2[i]; }
-#else
-      {
-	const_iterator y0it = y0.begin(), yp_2it = yp_2.begin();
-	for (iterator y_2it = y_2.begin();
-	     y_2it != y_2.end(); ++y_2it, ++y0it, ++yp_2it)
-	{
-	  *y_2it = *y0it + *yp_2it*h_2;
-	}
-      }
-#endif
+
       func(x_2, y_2, yp1);
 
-#ifndef RODENT_ITERATOR_LOOPS
       for (int i = 0; i < func.size(); i++) {
 	y_2[i] = y0[i] + h*yp1[i];
 	yp1[i] += yp_2[i];
       }
-#else
-      {
-	const_iterator y0it = y0.begin(), yp_2it = yp_2.begin();
-	for (iterator y_2it = y_2.begin(), yp1it = yp1.begin();
-	     y_2it != y_2.end(); ++y_2it, ++yp1it, ++y0it, ++yp_2it)
-	{
-	  *y_2it = *y0it + *yp1it*h;
-	  *yp1it += *yp_2it;
-	}
-      }
-#endif
 
       func(x0 + h, y_2, yp_2);
-#ifndef RODENT_ITERATOR_LOOPS
+
       for (int i = 0; i < func.size(); i++) {
 	y1[i] = y0[i] + h_6*(yp0[i] + yp_2[i] + 2.*yp1[i]);
       }
-#else
-      {
-	const_iterator y0it = y0.begin(), yp0it = yp0.begin();
-	const_iterator yp_2it = yp_2.begin(), yp1it = yp1.begin();
-	for (iterator y1it = y1.begin();
-	     y1it != y1.end(); ++y1it, ++y0it, ++yp0it, ++yp_2it, ++yp1it)
-	{
-	  *y1it = *y0it + h_6*(*yp0it + *yp_2it + 2.*(*yp1it));
-	}
-      }
-#endif
     }
 }; // class RK4
 
@@ -377,10 +290,6 @@ protected:
 public:
   typedef typename vecT_traits::mag_type	magT;
   typedef typename vecT_traits::step_type	stepT;
-#ifdef RODENT_ITERATOR_LOOPS
-  typedef typename vecT_traits::iterator	It;
-  typedef typename vecT_traits::const_iterator	CIt;
-#endif
 
 private:
   // Working variables for OneStep.
@@ -420,22 +329,10 @@ public:
       euler_step(x, y, yp, h, yh);
 
       // Compute error and a 2nd order correction.
-#ifndef RODENT_ITERATOR_LOOPS
       for (int i = 0; i < n; i++) {
 	yerr[i] = y1[i] - yh[i];
 	y1[i] += corr * yerr[i];
       }
-#else
-      // The only reason not to use two simple assignments here is to
-      // avoid two loops.
-      CIt yhit = yh.begin();
-      for (It yerrit = yerr.begin(), y1it = y1.begin();
-	   yerrit != yerr.end(); ++yerrit, ++y1it, ++yhit)
-	{
-	  *yerrit = *y1it - *yhit;
-	  *y1it += corr * (*yerrit);
-	}
-#endif
     }
 
   void reset()
@@ -479,10 +376,6 @@ protected:
 public:
   typedef typename vecT_traits::mag_type	magT;
   typedef typename vecT_traits::step_type	stepT;
-#ifdef RODENT_ITERATOR_LOOPS
-  typedef typename vecT_traits::iterator	It;
-  typedef typename vecT_traits::const_iterator	CIt;
-#endif
 
 private:
   // Working variables for OneStep.
@@ -523,22 +416,10 @@ public:
       midpoint_step(x, y, yp, h, yh);
 
       // Compute error and a 3rd order correction.
-#ifndef RODENT_ITERATOR_LOOPS
       for (int i = 0; i < n; i++) {
 	yerr[i] = y1[i] - yh[i];
 	y1[i] += corr * yerr[i];
       }
-#else
-      {
-	CIt yhit = yh.begin();
-	for (It yerrit = yerr.begin(), y1it = y1.begin();
-	     yerrit != yerr.end(); ++yerrit, ++y1it, ++yhit)
-	{
-	  *yerrit = *y1it - *yhit;
-	  *y1it += corr * (*yerrit);
-	}
-      }
-#endif
     }
 
   void reset()
@@ -582,10 +463,6 @@ protected:
 public:
   typedef typename vecT_traits::mag_type	magT;
   typedef typename vecT_traits::step_type	stepT;
-#ifdef RODENT_ITERATOR_LOOPS
-  typedef typename vecT_traits::iterator	It;
-  typedef typename vecT_traits::const_iterator	CIt;
-#endif
 
 private:
   // Working variables for OneStep.
@@ -625,22 +502,10 @@ public:
       rk4_step(x, y, yp, h, yh);
 
       // Compute error and a 5th order correction.
-#ifndef RODENT_ITERATOR_LOOPS
       for (int i = 0; i < n; i++) {
 	yerr[i] = y1[i] - yh[i];
 	y1[i] += corr * yerr[i];
       }
-#else
-      {
-	CIt yhit = yh.begin();
-	for (It yerrit = yerr.begin(), y1it = y1.begin();
-	     yerrit != yerr.end(); ++yerrit, ++y1it, ++yhit)
-	{
-	  *yerrit = *y1it - *yhit;
-	  *y1it += corr * (*yerrit);
-	}
-      }
-#endif
     }
 
   void reset()

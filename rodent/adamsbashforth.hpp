@@ -64,24 +64,12 @@ public:
 
   void OneStep(const stepT h, vecT& y1)
     {
-#ifdef RODENT_ITERATOR_LOOPS
-      CIt yit = y.begin(), ypit = yp.begin();
-      for (It y1it = y1.begin(), ypm1it = ypm1.begin();
-	   y1it != y1.end(); ++y1it, ++yit, ++ypit, ++ypm1it)
-        {
-	  *y1it = *yit + 0.5L*h*(3*(*ypit) - *ypm1it);
-	  
-	  // Cycle the data from previous steps.
-	  *ypm1it = *ypit;
-	}
-#else
       for (int i = 0; i < n; ++i) {
 	y1[i] = y[i] + 0.5L*h*(3*yp[i] - ypm1[i]);
 
 	// Cycle the data from previous steps.
 	ypm1[i] = yp[i];
       }
-#endif
     }
 
   void reset()
@@ -155,20 +143,6 @@ public:
 
   void OneStep(const stepT h, vecT& y1)
     {
-#ifdef RODENT_ITERATOR_LOOPS
-      CIt yit = y.begin(), ypit = yp.begin();
-      for (It y1it = y1.begin(), ypm1it = ypm1.begin(),
-	            ypm2it = ypm2.begin();
-	   y1it != y1.end(); ++y1it, ++yit, ++ypit, ++ypm1it, ++ypm2it)
-        {
-	  *y1it = *yit + (1.L/12.L)*h*(23*(*ypit) - 16*(*ypm1it)
-				       + 5*(*ypm2it));
-	  
-	  // Cycle the data from previous steps.
-	  *ypm2it = *ypm1it;
-	  *ypm1it = *ypit;
-	}
-#else
       for (int i = 0; i < n; ++i) {
 	y1[i] = y[i] + (1.L/12.L)*h*(23*yp[i] - 16*ypm1[i] + 5*ypm2[i]);
 
@@ -176,7 +150,6 @@ public:
 	ypm2[i] = ypm1[i];
 	ypm1[i] = yp[i];
       }
-#endif
     }
 
   void reset()
@@ -255,22 +228,6 @@ public:
 
   void OneStep(const stepT h, vecT& y1)
     {
-#ifdef RODENT_ITERATOR_LOOPS
-      CIt yit = y.begin(), ypit = yp.begin();
-      for (It y1it = y1.begin(), ypm1it = ypm1.begin(),
-	            ypm2it = ypm2.begin(), ypm3it = ypm3.begin();
-	   y1it != y1.end();
-	   ++y1it, ++yit, ++ypit, ++ypm1it, ++ypm2it, ++ypm3it)
-        {
-	  *y1it = *yit + (1.L/24.L)*h*(55*(*ypit) - 59*(*ypm1it) + 37*(*ypm2it)
-				       - 9*(*ypm3it));
-	  
-	  // Cycle the data from previous steps.
-	  *ypm3it = *ypm2it;
-	  *ypm2it = *ypm1it;
-	  *ypm1it = *ypit;
-	}
-#else
       for (int i = 0; i < n; ++i) {
 	y1[i] = y[i] + (1.L/24.L)*h*(55*yp[i] - 59*ypm1[i] + 37*ypm2[i]
 				     - 9*ypm3[i]);
@@ -280,7 +237,6 @@ public:
 	ypm2[i] = ypm1[i];
 	ypm1[i] = yp[i];
       }
-#endif
     }
 
   void reset()
@@ -366,24 +322,6 @@ public:
 
   void OneStep(const stepT h, vecT& y1)
     {
-#ifdef RODENT_ITERATOR_LOOPS
-      CIt yit = y.begin(), ypit = yp.begin();
-      for (It y1it = y1.begin(),
-	            ypm1it = ypm1.begin(), ypm2it = ypm2.begin(),
-	            ypm3it = ypm3.begin(), ypm4it = ypm4.begin();
-	   y1it != y1.end();
-	   ++y1it, ++yit, ++ypit, ++ypm1it, ++ypm2it, ++ypm3it, ++ypm4it)
-        {
-	  *y1it = *yit + (1.L/720.L)*h*(1901*(*ypit) - 2774*(*ypm1it)
-			    + 2616*(*ypm2it) - 1274*(*ypm3it) + 251*(*ypm4it));
-	  
-	  // Cycle the data from previous steps.
-	  *ypm4it = *ypm3it;
-	  *ypm3it = *ypm2it;
-	  *ypm2it = *ypm1it;
-	  *ypm1it = *ypit;
-	}
-#else
       for (int i = 0; i < n; ++i) {
 	y1[i] = y[i] + (1.L/720.L)*h*(1901*yp[i] - 2774*ypm1[i] + 2616*ypm2[i]
 				      - 1274*ypm3[i] + 251*ypm4[i]);
@@ -394,7 +332,6 @@ public:
 	ypm2[i] = ypm1[i];
 	ypm1[i] = yp[i];
       }
-#endif
     }
 
   void reset()

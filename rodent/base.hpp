@@ -30,12 +30,6 @@ public:
   typedef typename vecT_traits::step_type	stepT;
   typedef typename vecT_traits::vec_mag_type	vecmagT;
   typedef typename vecT_traits::matrix_type	matrixT;
-#ifdef RODENT_ITERATOR_LOOPS
-  typedef typename vecT_traits::iterator		It;
-  typedef typename vecT_traits::const_iterator		CIt;
-  typedef typename vecT_traits::mag_iterator		Itmag;
-  typedef typename vecT_traits::const_mag_iterator	CItmag;
-#endif
 
 protected:
   const int n;				// Number of integration variables.
@@ -108,11 +102,7 @@ public:
   T_Control& setState(const stepT x0, const vecT& y0)
     {
       x = x0;
-#ifndef RODENT_ITERATOR_LOOPS
       for (int i = 0; i < n; ++i) y[i] = y0[i];
-#else
-      y = y0;
-#endif
       // Update derivative vector yp at x.
       Control().reset();
 
@@ -124,11 +114,7 @@ public:
   T_Control& setState(const stepT x0, const vecT& y0, const vecT& yp0)
     {
       x = x0;
-#ifndef RODENT_ITERATOR_LOOPS
       for (int i = 0; i < n; ++i) y[i] = y0[i];
-#else
-      y = y0;
-#endif
       // Derivative vector yp at x.
       yp = yp0;
 
@@ -212,13 +198,9 @@ public:
     {
       integrateTo(x1, y1);
  
-#ifndef RODENT_ITERATOR_LOOPS
       for (int i = 0; i < n; ++i) {
 	y1p[i] = yp[i];
       }
-#else
-      y1p = yp;
-#endif
 
       return x;
     }
@@ -279,11 +261,7 @@ SolverBase<T_Control,vecT,vecT_traits>::integrateTo(const stepT x1, vecT& y1)
 {
   if (x == x1) {
     // Already there, do nothing, but copy current state to y1.
-#ifndef RODENT_ITERATOR_LOOPS
     for (int i = 0; i < n; ++i) y1[i] = y[i];
-#else
-    y1 = y;
-#endif
     return x;
   }
 
@@ -315,11 +293,7 @@ SolverBase<T_Control,vecT,vecT_traits>::integrateTo(const stepT x1, vecT& y1)
     // then it isn't the last one anymore.
 
     // Next step starts at y1.
-#ifndef RODENT_ITERATOR_LOOPS
     for (int i = 0; i < n; ++i) y[i] = y1[i];
-#else
-    y = y1;
-#endif
 
     if (lastStep) {
 #ifdef RODENT_DEBUG
@@ -352,15 +326,10 @@ SolverBase<T_Control,vecT,vecT_traits>::takeStep(vecT& y1, vecT& y1p)
 
   Control().Step(y1);
 
-#ifndef RODENT_ITERATOR_LOOPS
   for (int i = 0; i < n; ++i) {
     y[i] = y1[i];
     y1p[i] = yp[i];
   }
-#else
-  y = y1;
-  y1p = yp;
-#endif
 
 #ifdef RODENT_DEBUG
   std::cerr << "rodent::takeStep   Steps--  good = " << n_good_steps;
@@ -381,13 +350,9 @@ SolverBase<T_Control,vecT,vecT_traits>::takeStep(vecT& y1)
 
   Control().Step(y1);
 
-#ifndef RODENT_ITERATOR_LOOPS
   for (int i = 0; i < n; ++i) {
     y[i] = y1[i];
   }
-#else
-  y = y1;
-#endif
 
 #ifdef RODENT_DEBUG
   std::cerr << "rodent::takeStep   Steps--  good = " << n_good_steps;
@@ -410,11 +375,7 @@ SolverBase<T_Control,vecT,vecT_traits>::operator++()
 
   Control().Step(y1);
 
-#ifndef RODENT_ITERATOR_LOOPS
   for (int i = 0; i < n; ++i) y[i] = y1[i];
-#else
-  y = y1;
-#endif
 
 #ifdef RODENT_DEBUG
   std::cerr << "rodent::++   Steps--  good = " << n_good_steps;

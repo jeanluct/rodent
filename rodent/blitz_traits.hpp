@@ -18,12 +18,6 @@ struct vec_traits<blitz::Vector<float_type> >
   typedef value_type						mag_type;
   typedef blitz::Vector<mag_type>				vec_mag_type;
   typedef jlt::matrix<value_type>				matrix_type;
-#ifdef RODENT_ITERATOR_LOOPS
-  typedef typename blitz::Vector<value_type>::T_iterator	iterator;
-  typedef typename blitz::Vector<value_type>::T_iterator	const_iterator;
-  typedef typename vec_mag_type::T_iterator		mag_iterator;
-  typedef typename vec_mag_type::T_iterator		const_mag_iterator;
-#endif
   static inline mag_type	absval(step_type _x) { return jlt::Abs(_x); }
   static inline mag_type	mag(value_type _x) { return jlt::Abs(_x); }
 

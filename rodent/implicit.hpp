@@ -24,10 +24,6 @@ public:
   typedef typename vecT_traits::step_type	step_type;
   typedef typename vecT_traits::mag_type	mag_type;
   typedef typename vecT_traits::matrix_type	matrix_type;
-#ifdef RODENT_ITERATOR_LOOPS
-  typedef typename vecT_traits::iterator	iterator;
-  typedef typename vecT_traits::const_iterator	const_iterator;
-#endif
 
   ImplicitEuler(T_Func& _f)
     : func(_f), tol(1.e-10), Jac(_f.size(),_f.size()), dy(_f.size())

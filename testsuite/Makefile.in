@@ -10,7 +10,7 @@ LIBS = -lm
 
 ############################################################################
 
-TESTSUITE = simpharmonic cexp adaptiverk4 cadaptiverk4 valadaptiverk4 arkCashKarp list_adaptiverk4 stiff order adamsbashforth blitz_adaptiverk4 ADrwave
+TESTSUITE = simpharmonic cexp adaptiverk4 cadaptiverk4 valadaptiverk4 arkCashKarp stiff order adamsbashforth blitz_adaptiverk4 ADrwave
 
 .SUFFIXES: .o .cpp
 
@@ -34,7 +34,6 @@ adaptiverk4:		adaptiverk4.o
 cadaptiverk4:		cadaptiverk4.o
 valadaptiverk4:		valadaptiverk4.o
 arkCashKarp:		arkCashKarp.o
-list_adaptiverk4:	list_adaptiverk4.o
 stiff:			stiff.o
 order:			order.o
 adamsbashforth:		adamsbashforth.o
