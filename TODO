@@ -1,0 +1,95 @@
++Function should be given a chance to supply its own Jacobian for
+implicit methods. (1999/03/10)
+
++Exceptions? Only if they can be turned off. (1999/03/10)
+
++RKF (Cash-Karp) step control for RK methods. (1999/03/11)
+
++optional bounds checking in Vec and Mat. (1999/03)
+
++Kaps and Rentrop (S&B p.492). (1999/03/23)
+
+-+The specialization of cout << vector for doubles doesn't reset the
+ format flags properly.  Also, why is the first line always
+ unformatted? (1999/09/21) [Not quite fixed in Vec.hpp...]
+
++Fewer #include's.  Should not need to include everything all the time.
+	- In fact, only data.hpp, explicitrk.hpp and implicit.hpp need
+          to be included by a program.  Do I need rodent.hpp?  I don't
+          think so... just merge the few definitions in there with
+          rodent_base.hpp (1999/09/23).
+
++rodent subdirectory (a la blitz) (1999/09/23)?
+
++Lordy, the PrintOn routine has got to be able to output as the
+calculation proceeds [Very Kludgy fix using new family of functions,
+SampleAndPrintOn (1999/09/24)].
+
+-Option for a maximum step size in adaptive constructors.
+
+-When using aggregate types, such as vectors of vectors, rodent uses
+expressions of the form yp(n) to allocate vectors.  This is bad, since
+the vectors created contain objects of size 0!  Need to fix this
+somehow, perhaps with an allocator?  My feeling is that that I will
+need to provide a way to allocate T's in the traits class.
+
+-Put some (optional?) diagnostic stuff:
+  +Number of good/bad steps
+  -The current step size
+  -Internal state
+
+-Relative/absolute error
+
+-Fehlberg's (S&B p.452) and Dormand and Prince (S&B p.454) using
+ AdaptiveImplicitSolver.
+
+-RKCashKarp -> RKFCK? RKF_CK
+
+-Multistep methods (Adams-Bashforth)
+
+-Implicit methods (implicit RKF, Adams-Moulton) --> Solver (Broyden?)
+	-Give function chance to provide derivatives for Newton.
+
+-Extrapolation methods (Bulirsch-Stoer)
+
+-Interpolation/thinning in DataPoints.
+
+-(Vec, Mat) -> (Vector, Matrix)?  Why is my Vec less efficient?
+ +Could add check before assigment to see whether we need
+ to reallocate memory. (storage pointer: end_of_storage). (1999/03)
+
+-debugging levels: RODENT_DEBUG1, etc., with the highest setting all
+ the others.  Indentation depending on how deep the routine is.
+ Write some class to uniformly handle errors.
+
+-Use an internal storage type?  Problem is that the types vecT and
+ivecT need to get passed around interchangeably.
+
+  //  Container to use for internal storage.
+  //  Using this would lighten the requirements of the vecT class.
+  //  For instance, it wouldn't necessarily need to provide
+  //  a vecT(n) constructor, which for instance a matrix wouldn't
+  //  particularly have a reason to.
+  // typedef typename vector<T>			ivecT;
+
+-Move the T_Func argument to the first slot in templates, then provide
+vector<double> as a default for vecT.
+
+-Catch "singular matrix in LUdecomp" in det() and return 0.
+
+-x_lastsav (in DataPoints) is a pretty cryptic name.  Need two numbers
+to hold the upper and the lower bounds of the sampled data.  Possible
+names: x0 and x1, xmin and xmax, x_min and x_max (be careful: some of
+these are already argument names in member functions).
+
+-DataPoints should also handle calls in the "negative" direction.
+Should restart from point nearest target.
+
+-Should overload << in DataPoints to output all the data.
+
+-The inheritance scheme for "n" is confusing.  Maybe create a member
+function "size()" to make access indirect.
+
+-Plugin of some sort for measuring error in AdaptiveSolver.
+
+-Avoid copying of new data point by flip-flopiing pointer.
