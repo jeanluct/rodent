@@ -108,7 +108,7 @@ private:
   vecmagT err_rel;			// Desired relative accuracy.
   vecmagT err_abs;			// Desired absolute accuracy.
 
-  static const magT tiny = 1.0e-30;
+  static const magT tiny;
 
   magT expand(magT err)
     {
@@ -294,6 +294,12 @@ public:
 
 }; // AdaptiveSolver
 
+// Must initialise (define) tiny outside of the class.
+// Required by the standard for non-integral types, for some reason.
+template<class T_Method, class vecT, class vecT_traits>
+const typename AdaptiveSolver<T_Method,vecT,vecT_traits>::magT
+AdaptiveSolver<T_Method,vecT,vecT_traits>::tiny = 1.0e-30;
+
 
 //
 // Implicit Solvers
@@ -409,7 +415,7 @@ public:
 private:
   magT err;				// Desired accuracy.
 
-  static const magT tiny = 1.0e-30;
+  static const magT tiny;
 
   magT expand(magT err)
     {
@@ -555,6 +561,12 @@ public:
     }
 
 }; // class AdaptiveImplicitSolver
+
+// Must initialise (define) tiny outside of the class.
+// Required by the standard for non-integral types, for some reason.
+template<class T_Method, class vecT, class vecT_traits>
+const typename AdaptiveImplicitSolver<T_Method,vecT,vecT_traits>::magT
+AdaptiveImplicitSolver<T_Method,vecT,vecT_traits>::tiny = 1.0e-30;
 
 } // namespace rodent
 
