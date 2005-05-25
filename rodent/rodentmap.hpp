@@ -40,31 +40,31 @@ public:
     }
 
   // Reinitialize the map.
-  void Restart(const stepT it0, const vecT& y0)
+  void setState(const stepT it0, const vecT& y0)
     {
       iter = (int)it0;
       y = y0;
     }
 
   // Iterate the map to x1.
-  stepT IntegrateTo(const stepT x1, vecT& y1)
+  stepT integrateTo(const stepT x1, vecT& y1)
     {
       if (x1 == (stepT)iter) return x1;	// Already there, do nothing.
 
-      while (TakeStep(y1) < x1);
+      while (takeStep(y1) < x1);
 
       return x1;
     }
 
-  stepT IntegrateTo(const stepT x1)
+  stepT integrateTo(const stepT x1)
     {
       vecT y1(func.size());
 
-      return IntegrateTo(x1, y1);
+      return integrateTo(x1, y1);
     }
 
   // Iterate the map once.
-  stepT TakeStep(vecT& y1)
+  stepT takeStep(vecT& y1)
     {
       // The convention for maps is that they are called with an
       // argument of n=iter and return the value at n+1.  Hence use
