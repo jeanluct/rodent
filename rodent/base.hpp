@@ -225,7 +225,7 @@ public:
   // Take one step, return the new x. Compute derivative.
   inline stepT operator++();
 
-  // Aliases for IntegrateTo.
+  // Aliases for integrateTo.
   const vecT& operator()(const stepT x1)
     {
       integrateTo(x1);
