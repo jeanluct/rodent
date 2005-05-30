@@ -518,7 +518,9 @@ public:
       bool result = true;
 
       /*
-	Think about the error computation more carefully. Compare to CVODE.
+	Think about the error computation more carefully. Compare to
+	CVODE.  Maybe update to be like AdaptiveSolver.  Can these two
+	classes be merged?  They share a lot of code...
       */
       // for (int i = 0; i < n; i++)
       // yscal[i] = vecT_traits::mag(y[i]) + vecT_traits::mag(yp[i]*dx) + err;
@@ -526,31 +528,49 @@ public:
 	yscal[i] = vecT_traits::mag(y[i]) + vecT_traits::mag(yp[i]*dx) + tiny;
 
       for (;;) {
-	Method().OneStep(h, y1, y1p);
-	errmax = 0.;
-	for (int i = 0; i < n; i++) {
-	  errmax = std::max(errmax, vecT_traits::mag(yerr[i]/yscal[i]));
-	}
-	errmax /= err;
-	if (errmax <= 1) {
-	  x += h;
-#ifdef RODENT_DEBUG
-	  ++n_good_steps;
-#endif
-	  // Update derivative at x + dx.
-	  Method().func(x, y1, yp);
-
-	  dx = h*expand(errmax);
-
-	  // Check if new step size is too large.
-	  if (dx_max != 0) {
-	    if (vecT_traits::absval(h) > dx_max) {
-	      h = (h >= 0 ? dx_max : -dx_max);
-	    }
+	_TRY
+	{
+	  Method().OneStep(h, y1, y1p);
+	  errmax = 0.;
+	  for (int i = 0; i < n; i++) {
+	    errmax = std::max(errmax, vecT_traits::mag(yerr[i]/yscal[i]));
 	  }
 
-	  break;
+	  errmax /= err;
+	  if (errmax <= 1) {
+	    x += h;
+#ifdef RODENT_DEBUG
+	    ++n_good_steps;
+#endif
+	    // Update derivative at x + dx.
+	    Method().func(x, y1, yp);
+
+	    dx = h*expand(errmax);
+
+	    // Check if new step size is too large.
+	    if (dx_max != 0) {
+	      if (vecT_traits::absval(h) > dx_max) {
+		h = (h >= 0 ? dx_max : -dx_max);
+	      }
+	    }
+
+	    break;
+	  }
 	}
+#ifdef __EXCEPTIONS
+	catch(std::range_error& oor) {
+	  // We've gone outside the domain.
+	  // Try to decrease the stepsize.
+
+	  // The solver needs to think the integrator failed
+	  // the step, so make errmax larger than 1.
+	  errmax = 2;
+#ifdef RODENT_DEBUG
+	  std::cerr << oor.what();
+	  std::cerr << " Reducing stepsize." << std::endl;
+#endif
+	}
+#endif
 #ifdef RODENT_DEBUG
 	++n_bad_steps;
 #endif
