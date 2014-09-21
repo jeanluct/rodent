@@ -1,1 +1,1 @@
-jlt-clone = ssh://hg@bitbucket.org/jeanluc/jlt
+extern/jlt = ssh://hg@bitbucket.org/jeanluc/jlt
