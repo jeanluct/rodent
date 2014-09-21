@@ -8,7 +8,7 @@ AC_INIT(rodent/base.hpp)	# Check to make sure rodent is around.
 # configure.in, and not configure.  
 
 #
-# Copyright (c) 2004-2014 Jean-Luc Thiffeault <jeanluc@mailaps.org>
+# Copyright (c) 1999-2014 Jean-Luc Thiffeault <jeanluc@mailaps.org>
 #
 # See the file LICENSE for copying permission.
 #
