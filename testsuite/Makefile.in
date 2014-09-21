@@ -16,23 +16,21 @@ LIBS = -lm
 
 ############################################################################
 
-TESTSUITE = simpharmonic cexp adaptiverk4 cadaptiverk4 valadaptiverk4 arkCashKarp stiff order adamsbashforth blitz_adaptiverk4 ADrwave
+TESTSUITE = simpharmonic cexp adaptiverk4 cadaptiverk4 valadaptiverk4 arkCashKarp stiff order adamsbashforth ADrwave
 
 .SUFFIXES: .o .cpp
 
 .cpp.o:
 	$(CXX) $(CXXFLAGS) -c $(srcdir)/$*.cpp
 
+all:		$(TESTSUITE)
+tests:		$(TESTSUITE)
+testsuite:	$(TESTSUITE)
+
 $(TESTSUITE):
 	$(CXX) $(LDFLAGS) $@.o -o $@ $(LIBS)
 
 ###########################################################################
-
-all:		$(TESTSUITE)
-
-tests:		$(TESTSUITE)
-
-testsuite:	$(TESTSUITE)
 
 simpharmonic:		simpharmonic.o
 cexp:			cexp.o
@@ -52,16 +50,24 @@ inline_test:
 	@echo 'Compile without inlining:'
 	@echo
 	$(CXX) -Wall -c -I$(srcdir)/$(RODENTDIR) -I$(JLTDIR) inline_test.cpp
-	@echo 'The function is called, as seen in the disassembly:'
+	@echo
+	@echo 'Disassembly shows the right-hand side function is called:'
+	@echo
 	objdump -Cd inline_test.o | grep Harmonic\<double\>::operator\(\)
 	@echo
 	@echo 'Compile with inlining (-O):'
 	@echo
 	$(CXX) -Wall -c -O -I$(srcdir)/$(RODENTDIR) -I$(JLTDIR) inline_test.cpp
 	-objdump -Cd inline_test.o | grep Harmonic\<double\>::operator\(\)
-	@echo 'The function does not appear in the disassembly.'
+	@echo
+	@echo 'The right-hand side function does not appear in the disassembly.'
 
 ###########################################################################
 
 clean:
 	rm -f *.o $(TESTSUITE)
+
+distclean:
+	make clean
+	rm -f Makefile
+	cd ..; rm -rf autom4te.cache config.log config.status configure
