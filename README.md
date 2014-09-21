@@ -17,4 +17,4 @@ To see if inlining is working properly, type "make inline_test" from the testuit
 *rodent* is released under the [MIT License][2].
 
 [1]: http://www.math.wisc.edu/~jeanluc/
-[2]: http://bitbucket.org/jeanluc/jlt/raw/tip/LICENSE
+[2]: http://bitbucket.org/jeanluc/rodent/raw/tip/LICENSE
