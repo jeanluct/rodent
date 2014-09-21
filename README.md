@@ -6,6 +6,10 @@
 
 *rodent* was written by [Jean-Luc Thiffeault][1].
 
+### documentation
+
+The header files in the rodent folder are standalone with no associated .cpp files.  To see examples of usage, run "autoconf; ./configure" from the base folder, then "cd testsuite; make" to compile some examples.
+
 ### license
 
 *rodent* is released under the [MIT License][2].
