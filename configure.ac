@@ -7,6 +7,12 @@ AC_INIT(rodent/base.hpp)	# Check to make sure rodent is around.
 # If you want to modify this file, make sure you are editing
 # configure.in, and not configure.  
 
+#
+# Copyright (c) 2004-2014 Jean-Luc Thiffeault <jeanluc@mailaps.org>
+#
+# See the file LICENSE for copying permission.
+#
+
 dnl AC_PROG_CXX
 CXX=g++
 
