@@ -9,6 +9,7 @@ testsuite/Makefile
 testsuite/adamsbashforth
 testsuite/adaptiverk4
 testsuite/arkCashKarp
+testsuite/blitz_adaptiverk4
 testsuite/cadaptiverk4
 testsuite/cexp
 testsuite/order

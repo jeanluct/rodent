@@ -39,7 +39,7 @@ protected:
     {
       for (int i = 0; i < func.size(); i++)
 	{
-	  y1[i] = y0[i] + h*yp0[i];
+	  y1(i) = y0(i) + h*yp0(i);
 	}
     }
 }; // class Euler
@@ -68,12 +68,12 @@ protected:
       step_type h_2 = 0.5L*h, x_2 = x0 + h_2;
 
       for (int i = 0; i < func.size(); i++)
-	y_2[i] = y0[i] + h_2*yp0[i];
+	y_2(i) = y0(i) + h_2*yp0(i);
 
       func(x_2, y_2, yp_2);
 
       for (int i = 0; i < func.size(); i++)
-	y1[i] = y0[i] + h*yp_2[i];
+	y1(i) = y0(i) + h*yp_2(i);
     }
 }; // class Midpoint
 
@@ -102,26 +102,26 @@ protected:
       step_type h_2 = 0.5L*h, h_6 = h/6.L, x_2 = x0 + h_2;
 
       for (int i = 0; i < func.size(); i++)
-	y_2[i] = y0[i] + h_2*yp0[i];
+	y_2(i) = y0(i) + h_2*yp0(i);
 
       func(x_2, y_2, yp_2);
 
       for (int i = 0; i < func.size(); i++)
-	y_2[i] = y0[i] + h_2*yp_2[i];
+	y_2(i) = y0(i) + h_2*yp_2(i);
 
       func(x_2, y_2, yp1);
 
       for (int i = 0; i < func.size(); i++)
 	{
-	  y_2[i] = y0[i] + h*yp1[i];
-	  yp1[i] += yp_2[i];
+	  y_2(i) = y0(i) + h*yp1(i);
+	  yp1(i) += yp_2(i);
 	}
 
       func(x0 + h, y_2, yp_2);
 
       for (int i = 0; i < func.size(); i++)
 	{
-	  y1[i] = y0[i] + h_6*(yp0[i] + yp_2[i] + 2.*yp1[i]);
+	  y1(i) = y0(i) + h_6*(yp0(i) + yp_2(i) + 2.*yp1(i));
 	}
     }
 }; // class RK4
@@ -339,8 +339,8 @@ public:
       // Compute error and a 2nd order correction.
       for (int i = 0; i < n; i++)
 	{
-	  yerr[i] = y1[i] - yh[i];
-	  y1[i] += corr * yerr[i];
+	  yerr(i) = y1(i) - yh(i);
+	  y1(i) += corr * yerr(i);
 	}
     }
 
@@ -425,8 +425,8 @@ public:
       // Compute error and a 3rd order correction.
       for (int i = 0; i < n; i++)
 	{
-	  yerr[i] = y1[i] - yh[i];
-	  y1[i] += corr * yerr[i];
+	  yerr(i) = y1(i) - yh(i);
+	  y1(i) += corr * yerr(i);
 	}
     }
 
@@ -510,8 +510,8 @@ public:
       // Compute error and a 5th order correction.
       for (int i = 0; i < n; i++)
 	{
-	  yerr[i] = y1[i] - yh[i];
-	  y1[i] += corr * yerr[i];
+	  yerr(i) = y1(i) - yh(i);
+	  y1(i) += corr * yerr(i);
 	}
     }
 
@@ -622,37 +622,37 @@ public:
   void OneStep(const stepT h, vecT& y1)
     {
       for (int i = 0; i < n ; ++i)
-        ytemp[i] = y[i] + b10*h*yp[i];
+        ytemp(i) = y(i) + b10*h*yp(i);
 
       func(x + a1*h, ytemp, ak1);
 
       for (int i = 0; i < n ; ++i)
-        ytemp[i] = y[i] + h*(b20*yp[i] + b21*ak1[i]);
+        ytemp(i) = y(i) + h*(b20*yp(i) + b21*ak1(i));
 
       func(x + a2*h, ytemp, ak2);
 
       for (int i = 0; i < n ; ++i)
-        ytemp[i] = y[i] + h*(b30*yp[i] + b31*ak1[i] + b32*ak2[i]);
+        ytemp(i) = y(i) + h*(b30*yp(i) + b31*ak1(i) + b32*ak2(i));
 
       func(x + a3*h, ytemp, ak3);
       
       for (int i = 0; i < n ; ++i)
-        ytemp[i] = y[i] + h*(b40*yp[i] + b41*ak1[i] + b42*ak2[i] + b43*ak3[i]);
+        ytemp(i) = y(i) + h*(b40*yp(i) + b41*ak1(i) + b42*ak2(i) + b43*ak3(i));
 
       func(x + a4*h, ytemp, ak4);
 
       for (int i = 0; i < n ; ++i)
-        ytemp[i] = y[i] + h*(b50*yp[i] + b51*ak1[i] + b52*ak2[i]
-			     + b53*ak3[i] + b54*ak4[i]);
+        ytemp(i) = y(i) + h*(b50*yp(i) + b51*ak1(i) + b52*ak2(i)
+			     + b53*ak3(i) + b54*ak4(i));
 
       func(x + a5*h, ytemp, ak5);
 
       for (int i = 0; i < n ; ++i)
-        y1[i] = y[i] + h*(c0*yp[i] + c2*ak2[i] + c3*ak3[i] + c5*ak5[i]);
+        y1(i) = y(i) + h*(c0*yp(i) + c2*ak2(i) + c3*ak3(i) + c5*ak5(i));
 
       for (int i = 0; i < n ; ++i)
-        yerr[i] = h*(dc0*yp[i] + dc2*ak2[i] + dc3*ak3[i] + dc4*ak4[i]
-		     + dc5*ak5[i]);
+        yerr(i) = h*(dc0*yp(i) + dc2*ak2(i) + dc3*ak3(i) + dc4*ak4(i)
+		     + dc5*ak5(i));
     }
 
   void reset()
@@ -811,57 +811,57 @@ public:
       for (int i = 0; i < n; ++i)
 	{
 	  A(i,i) += 1.;
-	  fs1[i] = yp[i];
+	  fs1(i) = yp(i);
 	}
 
       // LU-decompose the matrix.
       jlt::LUdecomp<T,matrixT>(A, idx, &perm);
 
       // Solve the equation A.fs1 = yp.
-      jlt::LUbacksub<T,matrixT>(A, idx, &fs1[0]);
+      jlt::LUbacksub<T,matrixT>(A, idx, &fs1(0));
 
-      for (int i = 0; i < n; ++i) yy1[i] = y[i] + h*b21*fs1[i];
+      for (int i = 0; i < n; ++i) yy1(i) = y(i) + h*b21*fs1(i);
 
       func(x, yy1, yy1p);
 
-      for (int i = 0; i < n; ++i) fs2[i] = yy1p[i] + g21*fs1[i];
+      for (int i = 0; i < n; ++i) fs2(i) = yy1p(i) + g21*fs1(i);
 
       // Solve the equation A.(fs2 + g21 fs1) = b.
-      jlt::LUbacksub<T,matrixT>(A, idx, &fs2[0]);
+      jlt::LUbacksub<T,matrixT>(A, idx, &fs2(0));
 
       for (int i = 0; i < n; ++i)
 	{
-	  fs2[i] -= g21*fs1[i];
-	  yy2[i] = y[i] + h*(b31*fs1[i] + b32*fs2[i]);
+	  fs2(i) -= g21*fs1(i);
+	  yy2(i) = y(i) + h*(b31*fs1(i) + b32*fs2(i));
 	}
 
       func(x, yy2, yy2p);
 
-      for (int i = 0; i < n; ++i) fs3[i] = yy2p[i] + g31*fs1[i] + g32*fs2[i];
+      for (int i = 0; i < n; ++i) fs3(i) = yy2p(i) + g31*fs1(i) + g32*fs2(i);
 
       // Solve the equation A.(fs3 + g31 fs1 + g32 fs2) = b.
-      jlt::LUbacksub<T,matrixT>(A, idx, &fs3[0]);
+      jlt::LUbacksub<T,matrixT>(A, idx, &fs3(0));
 
-      for (int i = 0; i < n; ++i) fs3[i] -= (g31*fs1[i] + g32*fs2[i]);
+      for (int i = 0; i < n; ++i) fs3(i) -= (g31*fs1(i) + g32*fs2(i));
 
       for (int i = 0; i < n; ++i)
 	{
-	  fs4[i] = yy2p[i] + g41*fs1[i] + g42*fs2[i] + g43*fs3[i];
+	  fs4(i) = yy2p(i) + g41*fs1(i) + g42*fs2(i) + g43*fs3(i);
 	}
 
       // Solve the equation A.(fs4 + g41 fs1 + g42 fs2 + g43 fs3) = b.
-      jlt::LUbacksub<T,matrixT>(A, idx, &fs4[0]);
+      jlt::LUbacksub<T,matrixT>(A, idx, &fs4(0));
 
       for (int i = 0; i < n; ++i)
 	{
-	  fs4[i] -= (g41*fs1[i] + g42*fs2[i] + g43*fs3[i]);
+	  fs4(i) -= (g41*fs1(i) + g42*fs2(i) + g43*fs3(i));
 	}
 
       for (int i = 0; i < n; ++i)
 	{
-	  y1[i] = y[i] + h*(c1*fs1[i] + c2*fs2[i] + c3*fs3[i] + c4*fs4[i]);
-	  yy1[i] = y[i] + h*(ch1*fs1[i] + ch2*fs2[i] + ch3*fs3[i]);
-	  yerr[i] = y1[i] - yy1[i];
+	  y1(i) = y(i) + h*(c1*fs1(i) + c2*fs2(i) + c3*fs3(i) + c4*fs4(i));
+	  yy1(i) = y(i) + h*(ch1*fs1(i) + ch2*fs2(i) + ch3*fs3(i));
+	  yerr(i) = y1(i) - yy1(i);
 	}
       return;
     }

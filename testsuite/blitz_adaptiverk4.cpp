@@ -11,14 +11,17 @@
 #include <rodent/data.hpp>
 #include <rodent/blitz_traits.hpp>
 #include <jlt/matrix.hpp>
-#include <blitz/vector.h>
+#include <blitz/vector2.h>
 
 using namespace rodent;
 
 
 class BlitzSimpleHarmonic {
 public:
-  enum {q = 0, p, num};
+  // enum {q = 0, p, num};
+  static const int q = 0;
+  static const int p = 1;
+  static const int num = 2;
 
 private:
   double omega;
@@ -32,8 +35,8 @@ public:
   void operator()(double, const blitz::Vector<double>& y,
 		  blitz::Vector<double>& y_dot)
     {
-      y_dot[q] = y[p];
-      y_dot[p] = -omega2*y[q];
+      y_dot(q) = y(p);
+      y_dot(p) = -omega2*y(q);
     }
 
   blitz::Vector<double> Exact(double t,
@@ -41,8 +44,8 @@ public:
     {
       blitz::Vector<double> yexact(n);
 
-      yexact[q] = yinit[p]/omega*sin(omega*t) + yinit[q]*cos(omega*t);
-      yexact[p] = yinit[p]*cos(omega*t) - yinit[q]*omega*cos(omega*t);
+      yexact(q) = yinit(p)/omega*sin(omega*t) + yinit(q)*cos(omega*t);
+      yexact(p) = yinit(p)*cos(omega*t) - yinit(q)*omega*cos(omega*t);
 
       return yexact;
     }
@@ -88,8 +91,8 @@ int main()
   cout << "Save data points every " << dtsav << " timestep.\n\n";
 
   // Initial conditions
-  y[0] = 0.;
-  y[1] = 1.;
+  y(0) = 0.;
+  y(1) = 1.;
 
   Integrator sho_rk(sho);
   sho_rk

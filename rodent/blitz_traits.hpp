@@ -9,7 +9,7 @@
 
 #include <jlt/matrix.hpp>
 #include <jlt/math.hpp>
-#include <blitz/vector.h>
+#include <blitz/vector2.h>
 #include <rodent/traits.hpp>
 
 

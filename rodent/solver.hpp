@@ -145,8 +145,8 @@ public:
     :
       SolverBase<AdaptiveSolver<T_Method,vecT,vecT_traits>, vecT, vecT_traits>
                                 ( _n ),
-      err_rel			( _n, 1.0e-6 ),
-      err_abs			( _n, 1.0e-6 ),
+      err_rel			( _n ),
+      err_abs			( _n ),
       order			( _order ),
       expand_factor		( -1./(magT)(_order+1) ),
       shrink_factor		( -1./(magT)(_order) ),
@@ -155,6 +155,7 @@ public:
       yerr			( _n )
     {
       assert(order > 0);
+      tolerance(1.0e-6);
     }
 
 
@@ -173,7 +174,7 @@ public:
     {
       for (int i = 0; i < n; ++i)
 	{
-	  err_abs[i] = err_rel[i] = _err;
+	  err_abs(i) = err_rel(i) = _err;
 	}
       return Method();
     }
@@ -194,7 +195,7 @@ public:
     {
       for (int i = 0; i < n; ++i)
 	{
-	  err_abs[i] = _err_abs;
+	  err_abs(i) = _err_abs;
 	}
       return Method();
     }
@@ -203,7 +204,7 @@ public:
     {
       for (int i = 0; i < n; ++i)
 	{
-	  err_rel[i] = _err_rel;
+	  err_rel(i) = _err_rel;
 	}
       return Method();
     }
@@ -284,8 +285,8 @@ public:
 	// in the above discussion, since they are talking about RK4],
 	// and expand_factor to -1/(order) [1/4 above].
 	//
-	yscal[i] = err_abs[i] + err_rel[i]*(vecT_traits::mag(y[i])
-					  + vecT_traits::mag(yp[i]*dx)) + tiny;
+	yscal(i) = err_abs(i) + err_rel(i)*(vecT_traits::mag(y(i))
+					  + vecT_traits::mag(yp(i)*dx)) + tiny;
       }
 
       for (;;) {
@@ -296,7 +297,7 @@ public:
 	  // This is the L_infinity norm max_i |v_i|.  Could replace
 	  // this by an arbitrary norm, provided by traits.
 	  for (int i = 0; i < n; i++) {
-	    errmax = std::max(errmax, vecT_traits::mag(yerr[i]/yscal[i]));
+	    errmax = std::max(errmax, vecT_traits::mag(yerr(i)/yscal(i)));
 	  }
 
 	  if (errmax <= 1) {
@@ -436,7 +437,7 @@ public:
       x += dx;
 
       // Update derivative at x + dx.
-      for (int i = 0; i < n; ++i) yp[i] = y1p[i];
+      for (int i = 0; i < n; ++i) yp(i) = y1p(i);
 
       // Fixed steps always succeed.
 #ifdef RODENT_DEBUG
@@ -584,9 +585,9 @@ public:
       */
       // See also comments in AdaptiveSolver's version of Step.
       // for (int i = 0; i < n; i++)
-      // yscal[i] = vecT_traits::mag(y[i]) + vecT_traits::mag(yp[i]*dx) + err;
+      // yscal(i) = vecT_traits::mag(y(i)) + vecT_traits::mag(yp(i)*dx) + err;
       for (int i = 0; i < n; i++)
-	yscal[i] = vecT_traits::mag(y[i]) + vecT_traits::mag(yp[i]*dx) + tiny;
+	yscal(i) = vecT_traits::mag(y(i)) + vecT_traits::mag(yp(i)*dx) + tiny;
 
       for (;;) {
 	_TRY
@@ -594,7 +595,7 @@ public:
 	  Method().OneStep(h, y1, y1p);
 	  errmax = 0.;
 	  for (int i = 0; i < n; i++) {
-	    errmax = std::max(errmax, vecT_traits::mag(yerr[i]/yscal[i]));
+	    errmax = std::max(errmax, vecT_traits::mag(yerr(i)/yscal(i)));
 	  }
 
 	  errmax /= err;

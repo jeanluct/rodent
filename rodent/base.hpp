@@ -110,7 +110,7 @@ public:
   T_Control& setState(const stepT x0, const vecT& y0)
     {
       x = x0;
-      for (int i = 0; i < n; ++i) y[i] = y0[i];
+      for (int i = 0; i < n; ++i) y(i) = y0(i);
 
       // Update derivative vector yp at x.
       Control().reset();
@@ -123,7 +123,7 @@ public:
   T_Control& setState(const stepT x0, const vecT& y0, const vecT& yp0)
     {
       x = x0;
-      for (int i = 0; i < n; ++i) y[i] = y0[i];
+      for (int i = 0; i < n; ++i) y(i) = y0(i);
 
       // Derivative vector yp at x.
       yp = yp0;
@@ -187,7 +187,7 @@ public:
   // Access individual elements of the state vector.
   const T& operator[](int i) const
     {
-      return y[i];
+      return y(i);
     }
 
 
@@ -210,7 +210,7 @@ public:
  
       for (int i = 0; i < n; ++i)
 	{
-	  y1p[i] = yp[i];
+	  y1p(i) = yp(i);
 	}
 
       return x;
@@ -273,7 +273,7 @@ SolverBase<T_Control,vecT,vecT_traits>::integrateTo(const stepT x1, vecT& y1)
   if (x == x1)
     {
       // Already there, do nothing, but copy current state to y1.
-      for (int i = 0; i < n; ++i) y1[i] = y[i];
+      for (int i = 0; i < n; ++i) y1(i) = y(i);
       return x;
     }
 
@@ -307,7 +307,7 @@ SolverBase<T_Control,vecT,vecT_traits>::integrateTo(const stepT x1, vecT& y1)
       // then it isn't the last one anymore.
 
       // Next step starts at y1.
-      for (int i = 0; i < n; ++i) y[i] = y1[i];
+      for (int i = 0; i < n; ++i) y(i) = y1(i);
 
       if (lastStep)
 	{
@@ -343,8 +343,8 @@ SolverBase<T_Control,vecT,vecT_traits>::takeStep(vecT& y1, vecT& y1p)
 
   for (int i = 0; i < n; ++i)
     {
-      y[i] = y1[i];
-      y1p[i] = yp[i];
+      y(i) = y1(i);
+      y1p(i) = yp(i);
     }
 
 #ifdef RODENT_DEBUG
@@ -368,7 +368,7 @@ SolverBase<T_Control,vecT,vecT_traits>::takeStep(vecT& y1)
 
   for (int i = 0; i < n; ++i)
     {
-      y[i] = y1[i];
+      y(i) = y1(i);
     }
 
 #ifdef RODENT_DEBUG
@@ -392,7 +392,7 @@ SolverBase<T_Control,vecT,vecT_traits>::operator++()
 
   Control().Step(y1);
 
-  for (int i = 0; i < n; ++i) y[i] = y1[i];
+  for (int i = 0; i < n; ++i) y(i) = y1(i);
 
 #ifdef RODENT_DEBUG
   std::cerr << "rodent::++   Steps--  good = " << n_good_steps;
