@@ -172,10 +172,8 @@ public:
 
   T_Method& tolerance(magT _err)
     {
-      for (int i = 0; i < n; ++i)
-	{
-	  err_abs(i) = err_rel(i) = _err;
-	}
+      absoluteTolerance(_err);
+      relativeTolerance(_err);
       return Method();
     }
 
@@ -193,19 +191,13 @@ public:
 
   T_Method& absoluteTolerance(magT _err_abs)
     {
-      for (int i = 0; i < n; ++i)
-	{
-	  err_abs(i) = _err_abs;
-	}
+      std::fill(err_abs.begin(),err_abs.end(),_err_abs);
       return Method();
     }
 
   T_Method& relativeTolerance(magT _err_rel)
     {
-      for (int i = 0; i < n; ++i)
-	{
-	  err_rel(i) = _err_rel;
-	}
+      std::fill(err_rel.begin(),err_rel.end(),_err_rel);
       return Method();
     }
 
@@ -242,49 +234,51 @@ public:
       stepT h = dx;
       bool result = true;
 
-      for (int i = 0; i < n; i++) {
-	//
-	// The error weight vector
-	//
-	// This is an important part of the integration.  It contains
-	// an absolute part and a relative part.  In case the absolute
-	// part is set to 0, we add a small number "tiny" to the error
-	// scale.
-	//
-	// We also add |yp[i]*dx| to the relative error estimate.  To
-	// quote from Numerical Recipes in C, Second Edition, p. 718:
+      //
+      // The error weight vector
+      //
+      // This is an important part of the integration.  It contains
+      // an absolute part and a relative part.  In case the absolute
+      // part is set to 0, we add a small number "tiny" to the error
+      // scale.
+      //
+      // We also add |yp[i]*dx| to the relative error estimate.  To
+      // quote from Numerical Recipes in C, Second Edition, p. 718:
 
-	//   "Here is a more technical point. We have to consider one
-	//    additional possibility for yscal. The error criteria
-	//    mentioned thus far are “local,” in that they bound the
-	//    error of each step individually. In some applications
-	//    you may be unusually sensitive about a “global”
-	//    accumulation of errors, from beginning to end of the
-	//    integration and in the worst possible case where the
-	//    errors all are presumed to add with the same sign. Then,
-	//    the smaller the stepsize h, the smaller the value that
-	//    you will need to impose. Why?  Because there will be
-	//    more steps between your starting and ending values of
-	//    x. In such cases you will want to set yscal proportional
-	//    to h, typically to something like
-	//
-	//       Delta0 = eps h dydx[i]
-	//
-	//    This enforces fractional accuracy not on the values of y
-	//    but (much more stringently) the increments to those
-	//    values at each step. But now look back at (16.2.7) [new
-	//    stepsize estimate, based on exapnsion/contraction of
-	//    0.2]. If an implicit scaling with h, then the exponent :
-	//    is no longer correct: When the stepsize is reduced from
-	//    a too-large value, the new predicted value h1 will fail
-	//    to meet the desired accuracy when yscal is also altered
-	//    to this new h1 value. Instead of 0.20 = 1/5, we must
-	//    scale by the exponent 0.25=1/4 for things to work out."
-	//
-	// Hence, in rodent we set shrink_factor = -1/(order+1) [1/5
-	// in the above discussion, since they are talking about RK4],
-	// and expand_factor to -1/(order) [1/4 above].
-	//
+      //   "Here is a more technical point. We have to consider one
+      //    additional possibility for yscal. The error criteria
+      //    mentioned thus far are “local,” in that they bound the
+      //    error of each step individually. In some applications
+      //    you may be unusually sensitive about a “global”
+      //    accumulation of errors, from beginning to end of the
+      //    integration and in the worst possible case where the
+      //    errors all are presumed to add with the same sign. Then,
+      //    the smaller the stepsize h, the smaller the value that
+      //    you will need to impose. Why?  Because there will be
+      //    more steps between your starting and ending values of
+      //    x. In such cases you will want to set yscal proportional
+      //    to h, typically to something like
+      //
+      //       Delta0 = eps h dydx[i]
+      //
+      //    This enforces fractional accuracy not on the values of y
+      //    but (much more stringently) the increments to those
+      //    values at each step. But now look back at (16.2.7) [new
+      //    stepsize estimate, based on exapnsion/contraction of
+      //    0.2]. If an implicit scaling with h, then the exponent :
+      //    is no longer correct: When the stepsize is reduced from
+      //    a too-large value, the new predicted value h1 will fail
+      //    to meet the desired accuracy when yscal is also altered
+      //    to this new h1 value. Instead of 0.20 = 1/5, we must
+      //    scale by the exponent 0.25=1/4 for things to work out."
+      //
+      // Hence, in rodent we set shrink_factor = -1/(order+1) [1/5
+      // in the above discussion, since they are talking about RK4],
+      // and expand_factor to -1/(order) [1/4 above].
+      //
+
+      /* This is a bit of a pain to write in terms of iterators. */
+      for (int i = 0; i < n; i++) {
 	yscal(i) = err_abs(i) + err_rel(i)*(vecT_traits::mag(y(i))
 					  + vecT_traits::mag(yp(i)*dx)) + tiny;
       }

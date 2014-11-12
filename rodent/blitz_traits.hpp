@@ -36,6 +36,19 @@ struct vec_traits<blitz::Vector<float_type> >
     {
       return _v.copy();
     }
+
+  /* Probably don't need to do this.  Use iterators everywhere instead. */
+#if 0
+  static inline value_type at(const blitz::Vector<value_type>& _v, const int i)
+    {
+      return _v(i);
+    }
+
+  static inline value_type& at(blitz::Vector<value_type>& _v, const int i)
+    {
+      return _v(i);
+    }
+#endif
 };
 
 } // namespace rodent
