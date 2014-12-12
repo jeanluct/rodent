@@ -1,5 +1,3 @@
-syntax: glob
-
 *.o
 autom4te.cache
 config.log
