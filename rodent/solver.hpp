@@ -289,7 +289,7 @@ public:
       }
 
       for (;;) {
-	_TRY
+	JLT_TRY
 	{
 	  Method().OneStep(h, y1);
 	  errmax = 0.;
@@ -344,8 +344,8 @@ public:
 #ifdef __EXCEPTIONS
 	  std::cerr << "h = " << h << std::endl;
 	  std::cerr << "dx_min = " << dx_min << std::endl;
-	  _THROW(jlt::stepsize_too_small<magT>
-		 ("Stepsize too small in rodent::AdaptiveSolver::Step.",h));
+	  JLT_THROW(jlt::stepsize_too_small<magT>
+		    ("Stepsize too small in rodent::AdaptiveSolver::Step.",h));
 #else
 	  std::cerr << "Stepsize too small in rodent::AdaptiveSolver::Step.\n";
 	  std::exit(1);
@@ -589,7 +589,7 @@ public:
 	yscal[i] = vecT_traits::mag(y[i]) + vecT_traits::mag(yp[i]*dx) + tiny;
 
       for (;;) {
-	_TRY
+	JLT_TRY
 	{
 	  Method().OneStep(h, y1, y1p);
 	  errmax = 0.;
@@ -641,7 +641,7 @@ public:
 	// Check if new step size is too small.
 	if (vecT_traits::absval(h) < dx_min) {
 #ifdef __EXCEPTIONS
-	  _THROW(jlt::stepsize_too_small<magT>
+	  JLT_THROW(jlt::stepsize_too_small<magT>
 	    ("Stepsize too small in rodent::AdaptiveImplicitSolver::Step.",h));
 #else
 	  std::cerr <<

@@ -95,7 +95,7 @@ protected:
 	// the step.
       }
 #ifdef __EXCEPTIONS
-      _THROW(jlt::too_many_steps
+      JLT_THROW(jlt::too_many_steps
 	("Newton iteration failed to converge in ImplicitEuler ", max_iter));
 #else
       std::cerr << "rodent::ImplicitEuler::ieuler_step: ";
@@ -147,7 +147,7 @@ public:
 
   void OneStep(const stepT h, vecT& y1, vecT& y1p)
     {
-      _TRY
+      JLT_TRY
       {
 	ieuler_step(x, y, yp, h, y1, y1p);
       }
@@ -231,7 +231,7 @@ public:
     {
       stepT h_mid = 0.5*h, x_mid = x + h_mid;
 
-      _TRY
+      JLT_TRY
       {
 	// Two small steps.
 	ieuler_step(x, y, yp, h_mid, y_mid, yp_mid);

@@ -324,8 +324,8 @@ SolverBase<T_Control,vecT,vecT_traits>::integrateTo(const stepT x1, vecT& y1)
 	  return x;
 	}
     }
-  _THROW(jlt::too_many_steps
-	 ("Too many steps taken in integrateTo ", max_steps));
+  JLT_THROW(jlt::too_many_steps
+	    ("Too many steps taken in integrateTo ", max_steps));
 
   return x;
 }
