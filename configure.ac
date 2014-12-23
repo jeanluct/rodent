@@ -14,7 +14,6 @@ AC_INIT(rodent/base.hpp)	# Check to make sure rodent is around.
 #
 
 dnl AC_PROG_CXX
-CXX=g++
 
 # Declare variables which we want substituted in the Makefile.in's
 

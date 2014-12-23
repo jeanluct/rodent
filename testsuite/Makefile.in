@@ -9,7 +9,6 @@ srcdir = @srcdir@
 RODENTDIR = ..
 JLTDIR = ../extern/jlt
 
-CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@ @CXX_OPTIMIZE_FLAGS@ -I$(srcdir)/$(RODENTDIR) -I$(JLTDIR)
 
 LIBS = -lm
