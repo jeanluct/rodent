@@ -89,7 +89,7 @@ protected:
 	}
 
       // Evaluate derivative at that point.
-      func(xh, a, ap);
+      this->func(xh, a, ap);
 
       for (int i = 0; i < func.size(); ++i)
 	{
@@ -138,7 +138,7 @@ protected:
 	  a[i] = y0[i] * expc2[i] + yp0[i] * (expc2[i] - 1)/c[i];
 	}
 
-      func(x_2, a, ap);
+      this->func(x_2, a, ap);
 
       for (int i = 0; i < func.size(); ++i)
 	{
@@ -146,7 +146,7 @@ protected:
 	  b[i] = y0[i] * expc[i] + (2*ap[i] - yp0[i]) * (expc[i] - 1)/c[i];
 	}
 
-      func(xh, b, bp);
+      this->func(xh, b, bp);
 
       for (int i = 0; i < func.size(); ++i)
 	{
@@ -200,21 +200,21 @@ protected:
 	  a[i] = y0[i] * expc2[i] + yp0[i] * (expc2[i] - 1)/c[i];
 	}
 
-      func(x_2, a, ap);
+      this->func(x_2, a, ap);
 
       for (int i = 0; i < func.size(); ++i)
 	{
 	  b[i] = y0[i] * expc2[i] + ap[i] * (expc2[i] - 1)/c[i];
 	}
 
-      func(x_2, b, bp);
+      this->func(x_2, b, bp);
 
       for (int i = 0; i < func.size(); ++i)
 	{
 	  d[i] = a[i] * expc2[i] + (2*bp[i] - yp0[i]) * (expc2[i] - 1)/c[i];
 	}
 
-      func(xh, d, dp);
+      this->func(xh, d, dp);
 
       for (int i = 0; i < func.size(); ++i)
 	{
@@ -265,13 +265,13 @@ public:
 
   void OneStep(const stepT h, vecT& y1) const
     {
-      etd1_step(x, y, yp, h, y1);
+      this->etd1_step(x, y, yp, h, y1);
     }
 
   void reset()
     {
       // Evaluate derivative vector yp at x.
-      func(x, y, yp);
+      this->func(x, y, yp);
     }
 
 }; // class FixedETD1
@@ -309,13 +309,13 @@ public:
 
   void OneStep(const stepT h, vecT& y1)
     {
-      etdrk2_step(x, y, yp, h, y1);
+      this->etdrk2_step(x, y, yp, h, y1);
     }
 
   void reset()
     {
       // Evaluate derivative vector yp at x.
-      func(x, y, yp);
+      this->func(x, y, yp);
     }
 
 }; // class FixedETDRK2
@@ -353,13 +353,13 @@ public:
 
   void OneStep(const stepT h, vecT& y1)
     {
-      etdrk3_step(x, y, yp, h, y1);
+      this->etdrk3_step(x, y, yp, h, y1);
     }
 
   void reset()
     {
       // Evaluate derivative vector yp at x.
-      func(x, y, yp);
+      this->func(x, y, yp);
     }
 
 }; // class FixedETDRK3
@@ -397,13 +397,13 @@ public:
 
   void OneStep(const stepT h, vecT& y1)
     {
-      etdrk4_step(x, y, yp, h, y1);
+      this->etdrk4_step(x, y, yp, h, y1);
     }
 
   void reset()
     {
       // Evaluate derivative vector yp at x.
-      func(x, y, yp);
+      this->func(x, y, yp);
     }
 
 }; // class FixedETDRK4
@@ -462,12 +462,12 @@ public:
       const magT corr = 1./15.L;	// Correction is 1/(2^order - 1).
 
       // Two small steps.
-      etdrk3_step(x, y, yp, h_mid, y_mid);
-      func(x_mid, y_mid, yp_mid);
-      etdrk3_step(x_mid, y_mid, yp_mid, h_mid, y1);
+      this->etdrk3_step(x, y, yp, h_mid, y_mid);
+      this->func(x_mid, y_mid, yp_mid);
+      this->etdrk3_step(x_mid, y_mid, yp_mid, h_mid, y1);
 
       // One large step.
-      etdrk3_step(x, y, yp, h, yh);
+      this->etdrk3_step(x, y, yp, h, yh);
 
       // Compute error and a 5th order correction.
       for (int i = 0; i < n; i++)
@@ -480,7 +480,7 @@ public:
   void reset()
     {
       // Evaluate derivative vector yp at x.
-      func(x, y, yp);
+      this->func(x, y, yp);
     }
 
 }; // class AdaptiveETDRK3
@@ -534,12 +534,12 @@ public:
       const magT corr = 1./15.L;	// Correction is 1/(2^order - 1).
 
       // Two small steps.
-      etdrk4_step(x, y, yp, h_mid, y_mid);
-      func(x_mid, y_mid, yp_mid);
-      etdrk4_step(x_mid, y_mid, yp_mid, h_mid, y1);
+      this->etdrk4_step(x, y, yp, h_mid, y_mid);
+      this->func(x_mid, y_mid, yp_mid);
+      this->etdrk4_step(x_mid, y_mid, yp_mid, h_mid, y1);
 
       // One large step.
-      etdrk4_step(x, y, yp, h, yh);
+      this->etdrk4_step(x, y, yp, h, yh);
 
       // Compute error and a 5th order correction.
       for (int i = 0; i < n; i++)
@@ -552,7 +552,7 @@ public:
   void reset()
     {
       // Evaluate derivative vector yp at x.
-      func(x, y, yp);
+      this->func(x, y, yp);
     }
 
 }; // class AdaptiveETDRK4
