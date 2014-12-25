@@ -14,7 +14,6 @@
 #include <jlt/stlio.hpp>
 #include "ADrwave.hpp"
 
-using namespace rodent;
 
 int main(int argc, const char **argv)
 {
@@ -67,7 +66,7 @@ int main(int argc, const char **argv)
     .setState(0.0,y);
 #else
   double ss = 1.0e-3;		// Stepsize of integration.
-  FixedETDRK4<ADrwave> int_rw(rw, c);
+  rodent::FixedETDRK4<ADrwave> int_rw(rw, c);
   int_rw
     .stepSize(ss)
     .setState(0.0,y);

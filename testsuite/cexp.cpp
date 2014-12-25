@@ -12,16 +12,16 @@
 #include <jlt/stlio.hpp>
 #include "cexp.hpp"
 
-using namespace rodent;
 
 int main()
 {
   using std::cout;
   using std::endl;
+  using std::vector;
   using jlt::operator<<;
 
   CExp expi(dcomplex(0.,1.));
-  std::vector<dcomplex> y(expi.size());
+  vector<dcomplex> y(expi.size());
 
   double ark4_acc = 1.e-10;
   double euler_acc = 1.e-6;
@@ -39,22 +39,22 @@ int main()
 
   cout << "Initial condition: " << y << endl;
 
-  AdaptiveRK4<CExp,std::vector<dcomplex> > expi_ark4(expi);
+  rodent::AdaptiveRK4<CExp,vector<dcomplex> > expi_ark4(expi);
   expi_ark4
     .tolerance(ark4_acc)
     .setState(0.0,y);
 
-  FixedRK4<CExp,std::vector<dcomplex> > expi_frk4(expi);
+  rodent::FixedRK4<CExp,vector<dcomplex> > expi_frk4(expi);
   expi_frk4
     .stepSize(rk4_step)
     .setState(0.0,y);
 
-  AdaptiveEuler<CExp,std::vector<dcomplex> > expi_aeuler(expi);
+  rodent::AdaptiveEuler<CExp,vector<dcomplex> > expi_aeuler(expi);
   expi_aeuler
     .tolerance(euler_acc)
     .setState(0.0,y);
 
-  FixedEuler<CExp,std::vector<dcomplex> > expi_feuler(expi);
+  rodent::FixedEuler<CExp,vector<dcomplex> > expi_feuler(expi);
   expi_feuler
     .stepSize(euler_step)
     .setState(0.0,y);

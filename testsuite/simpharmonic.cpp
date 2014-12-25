@@ -11,7 +11,6 @@
 #include <jlt/stlio.hpp>
 #include "simpharmonic.hpp"
 
-using namespace rodent;
 
 int main()
 {
@@ -39,22 +38,22 @@ int main()
 
   cout << "Initial conditions: " << y << endl;
 
-  AdaptiveRK4<SimpleHarmonic<double> > sho_ark4(sho);
+  rodent::AdaptiveRK4<SimpleHarmonic<double> > sho_ark4(sho);
   sho_ark4
     .tolerance(ark4_acc)
     .setState(0.0,y);
 
-  FixedRK4<SimpleHarmonic<double> > sho_frk4(sho);
+  rodent::FixedRK4<SimpleHarmonic<double> > sho_frk4(sho);
   sho_frk4
     .stepSize(rk4_step)
     .setState(0.0,y);
 
-  AdaptiveEuler<SimpleHarmonic<double> > sho_aeuler(sho);
+  rodent::AdaptiveEuler<SimpleHarmonic<double> > sho_aeuler(sho);
   sho_aeuler
     .tolerance(euler_acc)
     .setState(0.0,y);
 
-  FixedEuler<SimpleHarmonic<double> > sho_feuler(sho);
+  rodent::FixedEuler<SimpleHarmonic<double> > sho_feuler(sho);
   sho_feuler
     .stepSize(euler_step)
     .setState(0.0,y);

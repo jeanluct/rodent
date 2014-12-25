@@ -11,7 +11,6 @@
 #include <rodent/data.hpp>
 #include <jlt/math.hpp>
 
-using namespace rodent;
 
 class valSimpleHarmonic {
 private:
@@ -56,6 +55,7 @@ int main()
 {
   using std::cout;
   using std::endl;
+  using rodent::AdaptiveRK4;
   using jlt::operator<<;
 
   valSimpleHarmonic sho(1.);
@@ -83,7 +83,7 @@ int main()
   cout << t+10 << "\t" << sho_rk(t+10) << endl;
   */
 
-  DataPoints<AdaptiveRK4<valSimpleHarmonic,std::valarray<double> >,
+  rodent::DataPoints<AdaptiveRK4<valSimpleHarmonic,std::valarray<double> >,
     std::valarray<double> >
     sho_data(sho_rk,0.0,t,dtsav);
 

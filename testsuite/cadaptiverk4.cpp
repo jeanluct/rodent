@@ -12,16 +12,17 @@
 #include <rodent/data.hpp>
 #include "cexp.hpp"
 
-using namespace rodent;
 
 int main()
 {
   using std::cout;
   using std::endl;
+  using std::vector;
   using jlt::operator<<;
+  using rodent::AdaptiveRK4;
 
   CExp expi(dcomplex(0.,1.));
-  std::vector<dcomplex> y(expi.size());
+  vector<dcomplex> y(expi.size());
 
   // Initial conditions
   y[0] = dcomplex(0.,1.);
@@ -38,12 +39,12 @@ int main()
   // Initial condition
   y[0] = dcomplex(0.,1.);
 
-  AdaptiveRK4<CExp,std::vector<dcomplex> > expi_rk(expi);
+  AdaptiveRK4<CExp,vector<dcomplex> > expi_rk(expi);
   expi_rk
     .tolerance(1.0e-10)
     .setState(0.0,y);
 
-  DataPoints<AdaptiveRK4<CExp,std::vector<dcomplex> >,std::vector<dcomplex> >
+  rodent::DataPoints<AdaptiveRK4<CExp,vector<dcomplex> >,vector<dcomplex> >
     expi_data(expi_rk,0.0,t,dtsav);
 
   cout.precision(10);

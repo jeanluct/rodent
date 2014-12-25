@@ -8,7 +8,6 @@
 #include <rodent/explicitrk.hpp>
 #include "simpharmonic.hpp"
 
-using namespace rodent;
 
 //
 // Test inlining of RHS function.
@@ -24,7 +23,7 @@ using namespace rodent;
 std::vector<double> sho(double t)
 {
   typedef SimpleHarmonic<double> Flow;
-  typedef AdaptiveRK4<Flow> Flow_int;
+  typedef rodent::AdaptiveRK4<Flow> Flow_int;
 
   Flow flow(1.);
   std::vector<double> y(flow.size());

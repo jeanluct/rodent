@@ -11,7 +11,6 @@
 #include <rodent/data.hpp>
 #include "simpharmonic.hpp"
 
-using namespace rodent;
 
 int main()
 {
@@ -42,14 +41,14 @@ int main()
   err_abs[0] = 1.0e-8;
   err_abs[1] = 1.0e-10;
 
-  AdaptiveRKCashKarp<SimpleHarmonic<double> > sho_rk(sho);
+  rodent::AdaptiveRKCashKarp<SimpleHarmonic<double> > sho_rk(sho);
   sho_rk
     .absoluteTolerance(err_abs)
     .relativeTolerance(err_rel)
     .setState(0.0,y)
     ;
 
-  DataPoints<AdaptiveRKCashKarp<SimpleHarmonic<double> > >
+  rodent::DataPoints<rodent::AdaptiveRKCashKarp<SimpleHarmonic<double> > >
     sho_data(sho_rk,0.0,t,dtsav);
 
   cout.precision(10);

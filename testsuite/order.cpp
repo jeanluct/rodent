@@ -17,7 +17,6 @@
 #  define ORDER_ARK
 #endif
 
-using namespace rodent;
 
 typedef long double Real;
 
@@ -67,6 +66,7 @@ int main()
 {
   using std::cout;
   using std::endl;
+  using namespace rodent;
 
   int ord = 16;
   Real h, y0ex;
