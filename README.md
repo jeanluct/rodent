@@ -8,13 +8,13 @@
 
 ### documentation
 
-The header files in the rodent folder are standalone with no associated .cpp files.  To see examples of usage, run "autoconf; ./configure" from the base folder, then "cd testsuite; make" to compile some examples.
+The header files in the rodent folder are standalone with no associated .cpp files.  To see examples of usage, run `autoconf; ./configure` from the base folder, then `cd testsuite; make` to compile some examples.
 
-To see if inlining is working properly, type "make inline_test" from the testuite folder.
+To see if inlining is working properly, type `make inline_test` from the testuite folder.
 
 ### license
 
 *rodent* is released under the [MIT License][2].
 
 [1]: http://www.math.wisc.edu/~jeanluc/
-[2]: http://bitbucket.org/jeanluc/rodent/raw/tip/LICENSE
+[2]: http://github.com/jeanluct/rodent/raw/master/LICENSE

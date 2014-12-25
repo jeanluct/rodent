@@ -61,7 +61,7 @@ protected:
       for (int i = 0; i < func.size(); ++i) y1[i] = y0[i] + h*yp0[i];
 
       // Derivative at current iterate (y1).
-      func(x1, y1, y1p);
+      this->func(x1, y1, y1p);
 
       for (int ns = 1; ns <= max_iter; ++ns)
       {
@@ -82,7 +82,7 @@ protected:
 	for (int i = 0; i < func.size(); ++i) y1[i] += dy[i];
 
 	// Yet another function call, ready for next step.
-	func(x1, y1, y1p);
+	this->func(x1, y1, y1p);
 	// Compute magnitude of F.
 	F = 0.;
 	for (int i = 0; i < func.size(); ++i)
@@ -95,7 +95,7 @@ protected:
 	// the step.
       }
 #ifdef __EXCEPTIONS
-      _THROW(jlt::too_many_steps
+      JLT_THROW(jlt::too_many_steps
 	("Newton iteration failed to converge in ImplicitEuler ", max_iter));
 #else
       std::cerr << "rodent::ImplicitEuler::ieuler_step: ";
@@ -147,9 +147,9 @@ public:
 
   void OneStep(const stepT h, vecT& y1, vecT& y1p)
     {
-      _TRY
+      JLT_TRY
       {
-	ieuler_step(x, y, yp, h, y1, y1p);
+	this->ieuler_step(x, y, yp, h, y1, y1p);
       }
 #ifdef __EXCEPTIONS
       catch(jlt::too_many_steps& ex)
@@ -163,7 +163,7 @@ public:
   void reset()
     {
       // Evaluate derivative vector yp at x.
-      func(x, y, yp);
+      this->func(x, y, yp);
     }
 
 }; // class FixedImplicitEuler
@@ -231,15 +231,15 @@ public:
     {
       stepT h_mid = 0.5*h, x_mid = x + h_mid;
 
-      _TRY
+      JLT_TRY
       {
 	// Two small steps.
-	ieuler_step(x, y, yp, h_mid, y_mid, yp_mid);
+	this->ieuler_step(x, y, yp, h_mid, y_mid, yp_mid);
 	// We already have the derivative yp_mid at the midpoint.
-	ieuler_step(x_mid, y_mid, yp_mid, h_mid, y1, y1p);	// y1p = y1p_b
+	this->ieuler_step(x_mid, y_mid, yp_mid, h_mid, y1, y1p); // y1p = y1p_b
 
 	// One large step. (Store derivative in yp_mid.)
-	ieuler_step(x, y, yp, h, yh, yp_mid);	// yp_mid = y1p_a
+	this->ieuler_step(x, y, yp, h, yh, yp_mid);	// yp_mid = y1p_a
 
 	// Compute error and a 2nd order correction.
 	for (int i = 0; i < n; i++)
@@ -265,7 +265,7 @@ public:
   void reset()
     {
       // Evaluate derivative vector yp at x.
-      func(x, y, yp);
+      this->func(x, y, yp);
     }
 
 }; // AdaptiveImplicitEuler

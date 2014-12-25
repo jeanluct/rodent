@@ -1,0 +1,13 @@
+*.o
+Makefile
+adamsbashforth
+adaptiverk4
+arkCashKarp
+blitz_adaptiverk4
+cadaptiverk4
+cexp
+order
+simpharmonic
+stiff
+valadaptiverk4
+ADrwave

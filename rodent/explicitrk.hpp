@@ -29,9 +29,9 @@ class Euler
 public:
   typedef typename vecT_traits::step_type	step_type;
 
-  Euler(T_Func& _f) : func(_f) {}
-
   T_Func& func;
+
+  Euler(T_Func& _f) : func(_f) {}
 
 protected:
   void euler_step(const step_type x0, const vecT& y0, const vecT& yp0,
@@ -70,7 +70,7 @@ protected:
       for (int i = 0; i < func.size(); i++)
 	y_2(i) = y0(i) + h_2*yp0(i);
 
-      func(x_2, y_2, yp_2);
+      this->func(x_2, y_2, yp_2);
 
       for (int i = 0; i < func.size(); i++)
 	y1(i) = y0(i) + h*yp_2(i);
@@ -104,12 +104,12 @@ protected:
       for (int i = 0; i < func.size(); i++)
 	y_2(i) = y0(i) + h_2*yp0(i);
 
-      func(x_2, y_2, yp_2);
+      this->func(x_2, y_2, yp_2);
 
       for (int i = 0; i < func.size(); i++)
 	y_2(i) = y0(i) + h_2*yp_2(i);
 
-      func(x_2, y_2, yp1);
+      this->func(x_2, y_2, yp1);
 
       for (int i = 0; i < func.size(); i++)
 	{
@@ -117,7 +117,7 @@ protected:
 	  yp1(i) += yp_2(i);
 	}
 
-      func(x0 + h, y_2, yp_2);
+      this->func(x0 + h, y_2, yp_2);
 
       for (int i = 0; i < func.size(); i++)
 	{
@@ -166,13 +166,13 @@ public:
 
   void OneStep(const stepT h, vecT& y1) const
     {
-      euler_step(x, y, yp, h, y1);
+      this->euler_step(x, y, yp, h, y1);
     }
 
   void reset()
     {
       // Evaluate derivative vector yp at x.
-      func(x, y, yp);
+      this->func(x, y, yp);
     }
 
 }; // class FixedEuler
@@ -210,13 +210,13 @@ public:
 
   void OneStep(const stepT h, vecT& y1)
     {
-      midpoint_step(x, y, yp, h, y1);
+      this->midpoint_step(x, y, yp, h, y1);
     }
 
   void reset()
     {
       // Evaluate derivative vector yp at x.
-      func(x, y, yp);
+      this->func(x, y, yp);
     }
 
 }; // class FixedMidpoint
@@ -252,13 +252,13 @@ public:
 
   void OneStep(const stepT h, vecT& y1)
     {
-      rk4_step(x, y, yp, h, y1);
+      this->rk4_step(x, y, yp, h, y1);
     }
 
   void reset()
     {
       // Evaluate derivative vector yp at x.
-      func(x, y, yp);
+      this->func(x, y, yp);
     }
 
 }; // class FixedRK4
@@ -329,12 +329,12 @@ public:
       const magT corr = 1;		// Correction is 1/(2^order - 1).
 
       // Two small steps.
-      euler_step(x, y, yp, h_mid, y_mid);
-      func(x_mid, y_mid, yp_mid);
-      euler_step(x_mid, y_mid, yp_mid, h_mid, y1);
+      this->euler_step(x, y, yp, h_mid, y_mid);
+      this->func(x_mid, y_mid, yp_mid);
+      this->euler_step(x_mid, y_mid, yp_mid, h_mid, y1);
 
       // One large step.
-      euler_step(x, y, yp, h, yh);
+      this->euler_step(x, y, yp, h, yh);
 
       // Compute error and a 2nd order correction.
       for (int i = 0; i < n; i++)
@@ -347,7 +347,7 @@ public:
   void reset()
     {
       // Evaluate derivative vector yp at x.
-      func(x, y, yp);
+      this->func(x, y, yp);
     }
 
 }; // class AdaptiveEuler
@@ -415,12 +415,12 @@ public:
       const magT corr = 1./3.L;		// Correction is 1/(2^order - 1).
 
       // Two small steps.
-      midpoint_step(x, y, yp, h_mid, y_mid);
-      func(x_mid, y_mid, yp_mid);
-      midpoint_step(x_mid, y_mid, yp_mid, h_mid, y1);
+      this->midpoint_step(x, y, yp, h_mid, y_mid);
+      this->func(x_mid, y_mid, yp_mid);
+      this->midpoint_step(x_mid, y_mid, yp_mid, h_mid, y1);
 
       // One large step.
-      midpoint_step(x, y, yp, h, yh);
+      this->midpoint_step(x, y, yp, h, yh);
 
       // Compute error and a 3rd order correction.
       for (int i = 0; i < n; i++)
@@ -433,7 +433,7 @@ public:
   void reset()
     {
       // Evaluate derivative vector yp at x.
-      func(x, y, yp);
+      this->func(x, y, yp);
     }
 
 }; // class AdaptiveMidpoint
@@ -500,12 +500,12 @@ public:
       const magT corr = 1./15.L;	// Correction is 1/(2^order - 1).
 
       // Two small steps.
-      rk4_step(x, y, yp, h_mid, y_mid);
-      func(x_mid, y_mid, yp_mid);
-      rk4_step(x_mid, y_mid, yp_mid, h_mid, y1);
+      this->rk4_step(x, y, yp, h_mid, y_mid);
+      this->func(x_mid, y_mid, yp_mid);
+      this->rk4_step(x_mid, y_mid, yp_mid, h_mid, y1);
 
       // One large step.
-      rk4_step(x, y, yp, h, yh);
+      this->rk4_step(x, y, yp, h, yh);
 
       // Compute error and a 5th order correction.
       for (int i = 0; i < n; i++)
@@ -518,7 +518,7 @@ public:
   void reset()
     {
       // Evaluate derivative vector yp at x.
-      func(x, y, yp);
+      this->func(x, y, yp);
     }
 
 }; // class AdaptiveRK4
@@ -624,28 +624,28 @@ public:
       for (int i = 0; i < n ; ++i)
         ytemp(i) = y(i) + b10*h*yp(i);
 
-      func(x + a1*h, ytemp, ak1);
+      this->func(x + a1*h, ytemp, ak1);
 
       for (int i = 0; i < n ; ++i)
         ytemp(i) = y(i) + h*(b20*yp(i) + b21*ak1(i));
 
-      func(x + a2*h, ytemp, ak2);
+      this->func(x + a2*h, ytemp, ak2);
 
       for (int i = 0; i < n ; ++i)
         ytemp(i) = y(i) + h*(b30*yp(i) + b31*ak1(i) + b32*ak2(i));
 
-      func(x + a3*h, ytemp, ak3);
+      this->func(x + a3*h, ytemp, ak3);
       
       for (int i = 0; i < n ; ++i)
         ytemp(i) = y(i) + h*(b40*yp(i) + b41*ak1(i) + b42*ak2(i) + b43*ak3(i));
 
-      func(x + a4*h, ytemp, ak4);
+      this->func(x + a4*h, ytemp, ak4);
 
       for (int i = 0; i < n ; ++i)
         ytemp(i) = y(i) + h*(b50*yp(i) + b51*ak1(i) + b52*ak2(i)
 			     + b53*ak3(i) + b54*ak4(i));
 
-      func(x + a5*h, ytemp, ak5);
+      this->func(x + a5*h, ytemp, ak5);
 
       for (int i = 0; i < n ; ++i)
         y1(i) = y(i) + h*(c0*yp(i) + c2*ak2(i) + c3*ak3(i) + c5*ak5(i));
@@ -658,7 +658,7 @@ public:
   void reset()
     {
       // Evaluate derivative vector yp at x.
-      func(x, y, yp);
+      this->func(x, y, yp);
     }
 
   T_Func& func;
@@ -822,7 +822,7 @@ public:
 
       for (int i = 0; i < n; ++i) yy1(i) = y(i) + h*b21*fs1(i);
 
-      func(x, yy1, yy1p);
+      this->func(x, yy1, yy1p);
 
       for (int i = 0; i < n; ++i) fs2(i) = yy1p(i) + g21*fs1(i);
 
@@ -835,7 +835,7 @@ public:
 	  yy2(i) = y(i) + h*(b31*fs1(i) + b32*fs2(i));
 	}
 
-      func(x, yy2, yy2p);
+      this->func(x, yy2, yy2p);
 
       for (int i = 0; i < n; ++i) fs3(i) = yy2p(i) + g31*fs1(i) + g32*fs2(i);
 
@@ -869,7 +869,7 @@ public:
   void reset()
     {
       // Evaluate derivative vector yp at x.
-      func(x, y, yp);
+      this->func(x, y, yp);
     }
 
   T_Func& func;
