@@ -40,7 +40,6 @@ arkCashKarp:		arkCashKarp.o
 stiff:			stiff.o
 order:			order.o
 adamsbashforth:		adamsbashforth.o
-blitz_adaptiverk4:	blitz_adaptiverk4.o
 ADrwave:		ADrwave.o
 
 inline_test:
