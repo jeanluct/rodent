@@ -14,7 +14,7 @@ To see if inlining is working properly, type `make inline_test` from the testuit
 
 ### license
 
-*rodent* is released under the [MIT License][2].
+*rodent* is released under the [MIT License][3].
 
 [1]: http://www.math.wisc.edu/~jeanluc/
 [2]: https://github.com/jeanluct/rodent/raw/master/testsuite
