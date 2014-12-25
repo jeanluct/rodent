@@ -26,7 +26,6 @@ int main(int argc, const char **argv)
   double D = .001;		// Diffusivity
   double U = 1;			// Magnitude of velocity field.
   double S = 1;			// Source strength.
-  double acc = 1.0e-5;		// Accuracy (tolerance) of integration.
   int Niter = 200;		// Number of iterations.
 
   const double L = 1, T = 1;
@@ -59,10 +58,20 @@ int main(int argc, const char **argv)
   // Initial condition.
   y[rw.pk(1,0,0)] = M_SQRT1_2;
 
+#if 0
+  /* Broken? */
+  double acc = 1.0e-5;		// Accuracy (tolerance) of integration.
   AdaptiveETDRK4<ADrwave> int_rw(rw, c);
   int_rw
     .tolerance(acc)
     .setState(0.0,y);
+#else
+  double ss = 1.0e-3;		// Stepsize of integration.
+  FixedETDRK4<ADrwave> int_rw(rw, c);
+  int_rw
+    .stepSize(ss)
+    .setState(0.0,y);
+#endif
 
   cout.precision(5);
   cout.setf(std::ios::scientific);
