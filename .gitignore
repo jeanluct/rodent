@@ -1,16 +1,4 @@
-*.o
 autom4te.cache
 config.log
 config.status
 configure
-testsuite/Makefile
-testsuite/adamsbashforth
-testsuite/adaptiverk4
-testsuite/arkCashKarp
-testsuite/cadaptiverk4
-testsuite/cexp
-testsuite/order
-testsuite/simpharmonic
-testsuite/stiff
-testsuite/valadaptiverk4
-testsuite/ADrwave
