@@ -8,9 +8,9 @@
 
 ### documentation
 
-The header files in the rodent folder are standalone with no associated .cpp files, so no special linking is required.  Examples of usage are in the [testsuite][2] folder.  To compile the examples, run `autoconf; ./configure` from the base folder, then `cd testsuite; make` to compile some examples.
+The header files in the rodent folder are standalone with no associated .cpp files, so no special linking is required.  Examples of usage are in the [testsuite][2] folder.  To compile the examples, run `autoconf; ./configure` from the root folder, then `cd testsuite; make`.
 
-To see if inlining is working properly, type `make inline_test` from the testuite folder.
+To see if inlining is working properly, type `make inline_test` from the testsuite folder.
 
 ### license
 
