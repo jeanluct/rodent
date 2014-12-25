@@ -312,13 +312,14 @@ SolverBase<T_Control,vecT,vecT_traits>::integrateTo(const stepT x1, vecT& y1)
       if (lastStep)
 	{
 #ifdef RODENT_DEBUG
+	  using jlt::operator<<;
 	  std::cerr << "rodent::integrateTo   Steps--  good = "
 		    << n_good_steps;
 	  std::cerr << "   bad = " << n_bad_steps;
-	  std::cerr << "   x = " << x << endl;
-	  std::cerr << "   y = " << y << endl;
-	  std::cerr << "  yp = " << yp << endl;
-	  std::cerr << "  dx = " << dx << endl;
+	  std::cerr << "   x = " << x << std::endl;
+	  std::cerr << "   y = " << y << std::endl;
+	  std::cerr << "  yp = " << yp << std::endl;
+	  std::cerr << "  dx = " << dx << std::endl;
 #endif
 	  dx = dxold;	// There might be a bit of an error here...
 	  return x;
@@ -349,7 +350,7 @@ SolverBase<T_Control,vecT,vecT_traits>::takeStep(vecT& y1, vecT& y1p)
 
 #ifdef RODENT_DEBUG
   std::cerr << "rodent::takeStep   Steps--  good = " << n_good_steps;
-  std::cerr << "   bad = " << n_bad_steps << endl;
+  std::cerr << "   bad = " << n_bad_steps << std::endl;
 #endif
 
   return x;
@@ -373,7 +374,7 @@ SolverBase<T_Control,vecT,vecT_traits>::takeStep(vecT& y1)
 
 #ifdef RODENT_DEBUG
   std::cerr << "rodent::takeStep   Steps--  good = " << n_good_steps;
-  std::cerr << "   bad = " << n_bad_steps << endl;
+  std::cerr << "   bad = " << n_bad_steps << std::endl;
 #endif
 
   return x;
@@ -396,7 +397,7 @@ SolverBase<T_Control,vecT,vecT_traits>::operator++()
 
 #ifdef RODENT_DEBUG
   std::cerr << "rodent::++   Steps--  good = " << n_good_steps;
-  std::cerr << "   bad = " << n_bad_steps << endl;
+  std::cerr << "   bad = " << n_bad_steps << std::endl;
 #endif
 
   return x;

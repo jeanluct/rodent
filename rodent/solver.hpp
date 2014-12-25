@@ -47,6 +47,10 @@ protected:
   using SBase::y;
   using SBase::yp;
   using SBase::n;
+#ifdef RODENT_DEBUG
+  using SBase::n_good_steps;
+  using SBase::n_bad_steps;
+#endif
 
 public:
   FixedSolver(const int _n)
@@ -104,6 +108,10 @@ protected:
   using SBase::y;
   using SBase::yp;
   using SBase::n;
+#ifdef RODENT_DEBUG
+  using SBase::n_good_steps;
+  using SBase::n_bad_steps;
+#endif
 
 public:
   typedef typename vecT_traits::mag_type	magT;
@@ -412,6 +420,10 @@ protected:
   using SBase::y;
   using SBase::yp;
   using SBase::n;
+#ifdef RODENT_DEBUG
+  using SBase::n_good_steps;
+  using SBase::n_bad_steps;
+#endif
 
 public:
   typedef typename vecT_traits::step_type	stepT;
@@ -478,6 +490,10 @@ protected:
   using SBase::y;
   using SBase::yp;
   using SBase::n;
+#ifdef RODENT_DEBUG
+  using SBase::n_good_steps;
+  using SBase::n_bad_steps;
+#endif
 
 public:
   typedef typename vecT_traits::mag_type	magT;
