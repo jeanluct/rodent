@@ -60,7 +60,7 @@ int main(int argc, const char **argv)
 #if 0
   /* Broken? */
   double acc = 1.0e-5;		// Accuracy (tolerance) of integration.
-  AdaptiveETDRK4<ADrwave> int_rw(rw, c);
+  rodent::AdaptiveETDRK4<ADrwave> int_rw(rw, c);
   int_rw
     .tolerance(acc)
     .setState(0.0,y);
