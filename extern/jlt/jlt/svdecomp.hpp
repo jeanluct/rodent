@@ -9,12 +9,7 @@
 
 #include <jlt/matrix.hpp>
 #include <jlt/lapack.hpp>
-
-#if defined(__PGI)
-#  include <assert.h>
-#else
-#  include <cassert>
-#endif
+#include <cassert>
 
 // No data() method in std::vector prior to GCC 4.1.
 #if (__GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 1))
@@ -35,10 +30,10 @@ namespace jlt {
 //
 
 template<class T>
-int singular_value_decomp(matrix<T>& A,
-			  matrix<T>& U,
-			  matrix<T>& Vt,
-			  std::vector<T>& w)
+int SVdecomp(matrix<T>& A,
+	     matrix<T>& U,
+	     matrix<T>& Vt,
+	     std::vector<T>& w)
 {
   using std::min;
   using std::max;
@@ -94,7 +89,7 @@ int singular_value_decomp(matrix<T>& A,
 
 
 template<class T>
-int singular_value_decomp(matrix<T>& A, std::vector<T>& w)
+int SVdecomp(matrix<T>& A, std::vector<T>& w)
 {
   using std::min;
   using std::max;
