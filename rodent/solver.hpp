@@ -8,9 +8,9 @@
 #define RODENT_SOLVER_HPP
 
 #include <cassert>
+#include <cmath>
 #include <rodent/base.hpp>
 #include <rodent/traits.hpp>
-#include <jlt/math.hpp>
 
 
 namespace rodent {
@@ -123,13 +123,13 @@ private:
   magT expand(magT err)
     {
       return (err > 0 ?
-	      safety_factor*jlt::Exp(expand_factor*jlt::Log(err)) :
+	      safety_factor*std::exp(expand_factor*std::log(err)) :
 	      expand0);
     }
 
   magT shrink(magT err)
     {
-      return safety_factor*jlt::Exp(shrink_factor*jlt::Log(err));
+      return safety_factor*std::exp(shrink_factor*std::log(err));
     }
 
   const int order;			// The order of the method used.
@@ -504,13 +504,13 @@ private:
   magT expand(magT err)
     {
       return (err > 0 ?
-	      safety_factor*jlt::Exp(expand_factor*jlt::Log(err)) :
+	      safety_factor*std::exp(expand_factor*std::log(err)) :
 	      expand0);
     }
 
   magT shrink(magT err)
     {
-      return safety_factor*jlt::Exp(shrink_factor*jlt::Log(err));
+      return safety_factor*std::exp(shrink_factor*std::log(err));
     }
 
   const int order;			// The order of the method used.

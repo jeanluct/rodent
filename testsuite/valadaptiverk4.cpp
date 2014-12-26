@@ -7,9 +7,9 @@
 #include <iostream>
 #include <iomanip>
 #include <valarray>
+#include <cmath>
 #include <rodent/explicitrk.hpp>
 #include <rodent/data.hpp>
-#include <jlt/math.hpp>
 
 
 class valSimpleHarmonic {
@@ -36,13 +36,12 @@ public:
   std::valarray<double> Exact(double t, const std::valarray<double>& yinit)
     const
     {
-      using jlt::Sin;
-      using jlt::Cos;
-
+      using std::sin;
+      using std::cos;
       std::valarray<double> yexact(n);
 
-      yexact[q] = yinit[p]/omega*Sin(omega*t) + yinit[q]*Cos(omega*t);
-      yexact[p] = yinit[p]*Cos(omega*t) - yinit[q]*omega*Sin(omega*t);
+      yexact[q] = yinit[p]/omega*sin(omega*t) + yinit[q]*cos(omega*t);
+      yexact[p] = yinit[p]*cos(omega*t) - yinit[q]*omega*sin(omega*t);
 
       return yexact;
     }

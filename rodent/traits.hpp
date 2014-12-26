@@ -10,9 +10,8 @@
 #include <vector>
 #include <complex>
 #include <list>
-
+#include <cmath>
 #include <jlt/matrix.hpp>
-#include <jlt/math.hpp>
 
 
 namespace rodent {
@@ -40,8 +39,8 @@ namespace rodent {
     typedef std::vector<mag_type>		vec_mag_type;
     typedef jlt::matrix<value_type>		matrix_type;
 
-    static inline mag_type	absval(step_type _x) { return jlt::Abs(_x); }
-    static inline mag_type	mag(value_type _x) { return jlt::Abs(_x); }
+    static inline mag_type	absval(step_type _x) { return std::abs(_x); }
+    static inline mag_type	mag(value_type _x) { return std::abs(_x); }
     static inline vec_type	copy(const vec_type& _v) { return _v; }
   };
 
@@ -59,8 +58,8 @@ namespace rodent {
     typedef std::vector<mag_type>			vec_mag_type;
     typedef jlt::matrix<value_type>			matrix_type;
 
-    static inline mag_type 	absval(step_type _x) { return jlt::Abs(_x); }
-    static inline mag_type	mag(value_type _x) { return abs(_x); }
+    static inline mag_type 	absval(step_type _x) { return std::abs(_x); }
+    static inline mag_type	mag(value_type _x) { return std::abs(_x); }
     static inline vec_type	copy(const vec_type& _v) { return _v; }
   };
 

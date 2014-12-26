@@ -7,7 +7,7 @@
 #ifndef RODENT_JLT_TRAITS_HPP
 #define RODENT_JLT_TRAITS_HPP
 
-#include <jlt/math.hpp>
+#include <cmath>
 #include <jlt/mathvector.hpp>
 #include <jlt/mathmatrix.hpp>
 #include <rodent/traits.hpp>
@@ -24,8 +24,8 @@ struct vec_traits<jlt::mathvector<float_type> >
   typedef value_type						mag_type;
   typedef jlt::mathvector<mag_type>				vec_mag_type;
   typedef jlt::mathmatrix<value_type>				matrix_type;
-  static inline mag_type	absval(step_type _x) { return jlt::Abs(_x); }
-  static inline mag_type	mag(value_type _x) { return jlt::Abs(_x); }
+  static inline mag_type	absval(step_type _x) { return std::abs(_x); }
+  static inline mag_type	mag(value_type _x) { return std::abs(_x); }
   static inline vec_type	copy(const vec_type& _v) { return _v; }
 };
 

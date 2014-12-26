@@ -7,11 +7,12 @@
 #include <iostream>
 #include <iomanip>
 #include <vector>
+#include <cmath>
 #include <rodent/explicitrk.hpp>
 #include <rodent/adamsbashforth.hpp>
 #include <rodent/implicit.hpp>
 #include <jlt/stlio.hpp>
-#include <jlt/math.hpp>
+
 
 #if (!defined(ORDER_AB) || !defined(ORDER_FRK)) && !defined(ORDER_ARK)
 #  define ORDER_ARK
@@ -47,7 +48,8 @@ public:
 
       // Use Expm1 to get a very accurate value for small t.
       // (especially for yinit[u] = 0.)
-      yexact[u] = yinit[u]*jlt::Exp(lambda*t) + y0*jlt::Expm1(lambda*t);
+      /* expm1 is not in std:: before C++11? */
+      yexact[u] = yinit[u]*std::exp(lambda*t) + y0*::expm1(lambda*t);
 
       return yexact;
     }
@@ -108,11 +110,11 @@ int main()
   // the exact solution (*(order+1)!).
 
   for (int i = 1; i <= ord; ++i) {
-    h = jlt::Pow(10.,-i/4.);
+    h = std::pow(10.,-i/4.);
 
     y0ex = expm.Exact(h,y)[0];
 
-    cout << jlt::Log10(h);
+    cout << std::log10(h);
 
 #ifdef ORDER_AB
     expm_ab2.stepSize(h).setState(0.,y);
@@ -170,12 +172,12 @@ std::ostream& printErrorOn(std::ostream& strm, Real err, Real h, int order)
   if (err != 0) {
     // Multiply by (order+1)! to compensate for the terms in the
     // expansion of expm getting smaller.
-    strm << jlt::Log10(factorial(order+1)*jlt::Abs(err));
+    strm << std::log10(factorial(order+1)*std::abs(err));
   } else {
     // If the error is zero to machine precision, just print the exact
     // value of the error, for comparison purposes.
     // Mark this with a "*".
-    strm << jlt::Log10(jlt::Pow(h,order+1)) << "*";
+    strm << std::log10(std::pow(h,order+1)) << "*";
   }
 
   return strm;

@@ -7,7 +7,6 @@
 #ifndef CEXP_HPP
 #define CEXP_HPP
 
-#include <jlt/math.hpp>
 
 typedef std::complex<double> dcomplex;
 

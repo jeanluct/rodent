@@ -8,9 +8,9 @@
 #include <vector>
 #include <complex>
 #include <cassert>
+#include <cmath>
 #include <rodent/exptimediff.hpp>
 #include <jlt/matrix.hpp>
-#include <jlt/math.hpp>
 #include <jlt/stlio.hpp>
 #include "ADrwave.hpp"
 
@@ -87,7 +87,7 @@ int main(int argc, const char **argv)
     mean_var += rw.variance(y);
 
     // Effective diffusivity.
-    double Deff = Deff0 / jlt::Sqrt(mean_var/iter);
+    double Deff = Deff0 / std::sqrt(mean_var/iter);
     cout << t << "\t" << rw.variance(y) << "\t";
     cout << Deff << endl;
   }

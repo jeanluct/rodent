@@ -196,7 +196,7 @@ protected:
       for (int i = 0; i < func.size(); ++i)
 	{
 	  // Should ensure h_2*c is not too small.
-	  expc2[i] = jlt::Exp(h_2*c[i]);
+	  expc2[i] = std::exp(h_2*c[i]);
 	  a[i] = y0[i] * expc2[i] + yp0[i] * (expc2[i] - 1)/c[i];
 	}
 

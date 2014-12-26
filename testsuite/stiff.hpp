@@ -9,7 +9,6 @@
 
 #include <vector>
 #include <jlt/matrix.hpp>
-#include <jlt/math.hpp>
 
 
 class Stiff {
@@ -41,11 +40,11 @@ public:
   // and initial conditions u = 1, v = 0.
   std::vector<double> Exact(double t, const std::vector<double>& yinit) const
     {
-      using jlt::Exp;
+      using std::exp;
       std::vector<double> yexact(n);
 
-      yexact[u] = 2.*Exp(-t) - Exp(-1000.*t);
-      yexact[v] = -Exp(-t) + Exp(-1000.*t);
+      yexact[u] = 2.*exp(-t) - exp(-1000.*t);
+      yexact[v] = -exp(-t) + exp(-1000.*t);
 
       return yexact;
     }

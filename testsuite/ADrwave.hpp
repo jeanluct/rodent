@@ -9,9 +9,9 @@
 #include <complex>
 #include <cassert>
 #include <cmath>
-#include <jlt/math.hpp>
 #include <jlt/matrix.hpp>
 #include <jlt/stlio.hpp>
+#include <jlt/math.hpp>
 
 
 class ADrwave
@@ -55,9 +55,9 @@ public:
     }
     for (int row = 0; row < size(); ++row) y_dot[row] = 0;
 
-    if (jlt::Abs(dt) < T2) {
+    if (std::abs(dt) < T2) {
       // y-dependent wave in x direction.
-      double cX1 = jlt::Cos(X1), sX1 = jlt::Sin(X1);
+      double cX1 = std::cos(X1), sX1 = std::sin(X1);
       for (int m = 1; m <= N; ++m) {
 	for (int n = -N; n <= N; ++n) {
 	  // Real coefficients.
@@ -83,7 +83,7 @@ public:
       }
     } else {
       // x-dependent wave in y direction.
-      double cX2 = jlt::Cos(X2), sX2 = jlt::Sin(X2);
+      double cX2 = std::cos(X2), sX2 = std::sin(X2);
       for (int m = 1; m <= N; ++m) {
 	for (int n = -N; n <= N; ++n) {
 	  if (n != 0) {

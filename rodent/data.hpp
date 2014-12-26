@@ -63,11 +63,11 @@ public:
       // sets the sign of dxsav.
       if (x_max >= x_min)
 	{
-	  dxsav = jlt::Abs(dxsav);
+	  dxsav = std::abs(dxsav);
 	}
       else
 	{
-	  dxsav = -jlt::Abs(dxsav);
+	  dxsav = -std::abs(dxsav);
 	}
 
       // Save first point.
@@ -128,7 +128,7 @@ public:
     {
       // Sample to x2, using a sampling interval close to current dxsav.
 
-      int n_sample = (int)(jlt::Floor(jlt::Abs((x2 - x_lastsav)/dxsav) + 0.5));
+      int n_sample = (int)(std::floor(std::abs((x2 - x_lastsav)/dxsav) + 0.5));
 
       // Adjust the magnitude and sign of dxsav.
       dxsav = (x2 - x_lastsav)/n_sample;
@@ -179,7 +179,7 @@ public:
       // Sample to x2, using a sampling interval close to current dxsav.
       // Output to strm as we go.
 
-      int n_sample = (int)(jlt::Floor(jlt::Abs((x2 - x_lastsav)/dxsav) + 0.5));
+      int n_sample = (int)(std::floor(std::abs((x2 - x_lastsav)/dxsav) + 0.5));
 
       // Adjust the magnitude and sign of dxsav.
       dxsav = (x2 - x_lastsav)/n_sample;
