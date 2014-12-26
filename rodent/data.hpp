@@ -10,11 +10,7 @@
 #include <iostream>
 #include <algorithm>
 #include <map>
-#ifndef __PGI
-#  include <cassert>
-#else
-#  include <assert.h>
-#endif
+#include <cassert>
 #include <rodent/base.hpp>
 #include <rodent/traits.hpp>
 #include <jlt/stlio.hpp>

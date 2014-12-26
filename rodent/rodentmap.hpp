@@ -7,11 +7,7 @@
 #ifndef RODENT_RODENTMAP_HPP
 #define RODENT_RODENTMAP_HPP
 
-#ifndef __PGI
-#  include <cassert>
-#else
-#  include <assert.h>
-#endif
+#include <cassert>
 #include <rodent/traits.hpp>
 #include <rodent/base.hpp>
 

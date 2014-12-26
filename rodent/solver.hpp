@@ -7,12 +7,7 @@
 #ifndef RODENT_SOLVER_HPP
 #define RODENT_SOLVER_HPP
 
-#include <algorithm>
-#ifndef __PGI
-#  include <cassert>
-#else
-#  include <assert.h>
-#endif
+#include <cassert>
 #include <rodent/base.hpp>
 #include <rodent/traits.hpp>
 #include <jlt/math.hpp>
