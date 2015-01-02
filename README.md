@@ -19,3 +19,5 @@ To see if inlining is working properly, type `make inline_test` from the testsui
 [1]: http://www.math.wisc.edu/~jeanluc/
 [2]: https://github.com/jeanluct/rodent/raw/master/testsuite
 [3]: https://github.com/jeanluct/rodent/raw/master/LICENSE
+
+[![Analytics](https://ga-beacon.appspot.com/UA-58116885-1/rodent/readme)](https://github.com/igrigorik/ga-beacon)
