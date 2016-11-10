@@ -20,6 +20,7 @@ int main()
   using jlt::mathvector;
   using jlt::mathmatrix;
 
+  mathvector<int> aint(3);
   mathvector<double> a(3);
   mathvector<double> b(3);
   mathvector<double> ma(3);
@@ -31,6 +32,11 @@ int main()
   a[0] = 1.;
   a[1] = -1.;
   a[2] = 1.;
+
+  aint[0] = 1;
+  aint[1] = -1;
+  aint[2] = 1;
+  cout << aint << endl;
 
   b[0] = 1.;
   b[1] = 0.;
@@ -67,6 +73,17 @@ int main()
   cout << dot(aa,aa) << endl;
 
   cout << aa+aa << endl;
+
+#if __cplusplus > 199711L
+  // C++11: Create from initializer list.
+  jlt::mathvector<double> vv{1,2,3,4,5};
+  jlt::mathvector<double> vv2 = {1,2,3,4,5};
+  cout << "\nmathvector from initializer list:" << vv << endl;
+
+  jlt::mathmatrix<double> mm(2,3,{1,2,3,4,5,6});
+  cout << "\nmathmatrix from initializer list:\n";
+  mm.printMatrixForm(cout) << endl << endl;
+#endif
 
   mathmatrix<double> AA(3,3,1);
   cout << AA;
