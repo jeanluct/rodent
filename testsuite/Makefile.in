@@ -15,7 +15,17 @@ LIBS = -lm
 
 ############################################################################
 
-TESTSUITE = simpharmonic cexp adaptiverk4 cadaptiverk4 valadaptiverk4 arkCashKarp stiff order adamsbashforth ADrwave
+TESTSUITE = \
+	simpharmonic \
+	cexp \
+	adaptiverk4 \
+	cadaptiverk4 \
+	valadaptiverk4 \
+	arkCashKarp \
+	stiff \
+	order \
+	adamsbashforth \
+	ADrwave
 
 .SUFFIXES: .o .cpp
 
@@ -51,12 +61,15 @@ inline_test:
 	@echo
 	@echo 'Disassembly shows the right-hand side function is called:'
 	@echo
-	objdump -Cd inline_test.o | grep Harmonic\<double\>::operator\(\)
+	objdump -Cd inline_test.o | grep --color Harmonic\<double\>::operator\(\)
 	@echo
 	@echo 'Compile with inlining (-O):'
 	@echo
 	$(CXX) -Wall -c -O -I$(srcdir)/$(RODENTDIR) -I$(JLTDIR) inline_test.cpp
-	-objdump -Cd inline_test.o | grep Harmonic\<double\>::operator\(\)
+	@-objdump -Cd inline_test.o \
+		| grep Harmonic\<double\>::operator\(\) \
+		&& ([ $$? -eq 0 ] && echo "Oops... function found.") \
+		|| echo "Function not found in objdump (good)!"
 	@echo
 	@echo 'The right-hand side function does not appear in the disassembly.'
 
