@@ -4,12 +4,12 @@
 # See the file LICENSE for copying permission.
 #
 
-srcdir = @srcdir@
+srcdir = .
 
 RODENTDIR = ..
 JLTDIR = ../extern/jlt
 
-CXXFLAGS = @CXXFLAGS@ @CXX_OPTIMIZE_FLAGS@ -I$(srcdir)/$(RODENTDIR) -I$(JLTDIR)
+CXXFLAGS = -Wall -O -I$(srcdir)/$(RODENTDIR) -I$(JLTDIR)
 
 LIBS = -lm
 
@@ -77,8 +77,3 @@ inline_test:
 
 clean:
 	rm -f *.o $(TESTSUITE)
-
-distclean:
-	make clean
-	rm -f Makefile
-	cd ..; rm -rf autom4te.cache config.log config.status configure

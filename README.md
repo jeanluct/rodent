@@ -8,7 +8,11 @@
 
 ### documentation
 
-The header files in the rodent folder are standalone with no associated .cpp files, so no special linking is required.  Examples of usage are in the [testsuite][2] folder.  To compile the examples, run `autoconf; ./configure` from the root folder, then `cd testsuite; make`.
+The header files in the rodent folder are standalone with no associated .cpp files, so no special linking is required.  Examples of usage are in the [testsuite][2] folder.  When compiling, the root folder of the *rodent* project must be in the include path.  For example, you can compile the program `simpharmonic.cpp` in the [testsuite][2] folder with
+```
+g++ -O -I.. -o simpharmonic ./simpharmonic.cpp
+```
+To compile all the examples, run `make` from the [testsuite][2] folder.
 
 To see if inlining is working properly, type `make inline_test` from the testsuite folder.
 
