@@ -4,12 +4,10 @@
 # See the file LICENSE for copying permission.
 #
 
-srcdir = .
-
 RODENTDIR = ..
 JLTDIR = ../extern/jlt
 
-CXXFLAGS = -Wall -O -I$(srcdir)/$(RODENTDIR) -I$(JLTDIR)
+CXXFLAGS = -Wall -O -I$(RODENTDIR) -I$(JLTDIR)
 
 LIBS = -lm
 
@@ -30,7 +28,7 @@ TESTSUITE = \
 .SUFFIXES: .o .cpp
 
 .cpp.o:
-	$(CXX) $(CXXFLAGS) -c $(srcdir)/$*.cpp
+	$(CXX) $(CXXFLAGS) -c $*.cpp
 
 all:		$(TESTSUITE)
 tests:		$(TESTSUITE)
@@ -57,17 +55,18 @@ inline_test:
 	@echo
 	@echo 'Compile without inlining:'
 	@echo
-	$(CXX) -Wall -c -I$(srcdir)/$(RODENTDIR) -I$(JLTDIR) inline_test.cpp
+	$(CXX) -Wall -c -I$(RODENTDIR) -I$(JLTDIR) inline_test.cpp
 	@echo
 	@echo 'Disassembly shows the right-hand side function is called:'
 	@echo
-	objdump -Cd inline_test.o | grep --color Harmonic\<double\>::operator\(\)
+	objdump -Cd inline_test.o \
+		| grep --color SimpleHarmonic\<double\>::operator\(\)
 	@echo
 	@echo 'Compile with inlining (-O):'
 	@echo
-	$(CXX) -Wall -c -O -I$(srcdir)/$(RODENTDIR) -I$(JLTDIR) inline_test.cpp
+	$(CXX) -Wall -c -O -I$(RODENTDIR) -I$(JLTDIR) inline_test.cpp
 	@-objdump -Cd inline_test.o \
-		| grep Harmonic\<double\>::operator\(\) \
+		| grep SimpleHarmonic\<double\>::operator\(\) \
 		&& ([ $$? -eq 0 ] && echo "Oops... function found.") \
 		|| echo "Function not found in objdump (good)!"
 	@echo
