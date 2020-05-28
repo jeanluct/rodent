@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2004-2014 Jean-Luc Thiffeault <jeanluc@mailaps.org>
+# Copyright (c) 2004-2020 Jean-Luc Thiffeault <jeanluc@mailaps.org>
 #
 # See the file LICENSE for copying permission.
 #
@@ -8,7 +8,7 @@ SConscript('SConscript')
 Import(['env','matlabenv','lapackenv','csparseenv'])
 
 progs = ['finitediff_test','math_test','mathvector_test',
-         'qrdecomp_test','tictoc_test','polynomial_test','vcs_test']
+         'qrdecomp_test','polynomial_test','vcs_test']
 
 # These require linking against LAPACK.
 lapackprogs = ['eigensystem_test','svdecomp_test']

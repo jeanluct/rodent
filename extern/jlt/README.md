@@ -31,8 +31,6 @@ Here is a list of some of the more useful C++ functions and classes, in the fold
 
 * `jlt/prompt.hpp` is helpful for quick-and-dirty terminal prompts.
 
-* `jlt::tictoc` works a bit like Matlab's `tic` and `toc` to time programs.  It uses `boost/timer.hpp`.  See the testsuite program `tictoc_test.cpp`.
-
 * `jlt/exceptions.hpp` provides some exceptions tailored to numerical problems, such as `stepsize_too_small`, `failed_to_converge`, `too_many_steps`.  It also defines macros such as `JLT_THROW`, etc, which can be selectively redefined to compile out exception testing.  (In the old days exceptions were a much bigger performance hit than they are now, I suspect, so it made sense to test a code and then remove exceptions completely.)
 
 * `jlt/vcs.hpp` provides functions for extracting commit info from Version Control Systems, using Subversion [keyword strings][7] or dynamically in the case of Mercurial and Git.  See `vcs_test.cpp` for an example.  Note that this is a bit fragile: if you run a command from outside the repo then the version information won't be detected.  In that case `printVCSBanner` simply does nothing.
@@ -43,7 +41,8 @@ The folder [matlab][8] contains Matlab functions.
 
 ### license
 
-*jlt lib* is released under the [MIT License][9].
+*jlt lib* is released under the [MIT License][9].  The Fourier differentiation matrix function [fourdif.m][10] was written by S. C. Reddy
+and J. A. C. Weideman.
 
 [1]: http://www.math.wisc.edu/~jeanluc/
 [2]: https://github.com/jeanluct/jlt/tree/master/testsuite
@@ -54,5 +53,6 @@ The folder [matlab][8] contains Matlab functions.
 [7]: http://svnbook.red-bean.com/en/1.4/svn.advanced.props.special.keywords.html
 [8]: https://github.com/jeanluct/jlt/tree/master/matlab
 [9]: https://github.com/jeanluct/jlt/raw/master/LICENSE
+[10]: http://appliedmaths.sun.ac.za/~weideman/research/differ.html
 
 [![Analytics](https://ga-beacon.appspot.com/UA-58116885-1/jlt/readme)](https://github.com/igrigorik/ga-beacon)

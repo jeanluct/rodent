@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2004-2014 Jean-Luc Thiffeault <jeanluc@mailaps.org>
+// Copyright (c) 2004-2020 Jean-Luc Thiffeault <jeanluc@mailaps.org>
 //
 // See the file LICENSE for copying permission.
 //
@@ -105,7 +105,7 @@ int main()
   cout << "Trying bounds-checked access...\n";
   try {
     a.at(3) = 1;
-  } catch(std::out_of_range) {
+  } catch(std::out_of_range&) {
     cout << "Out of range exception! ...Good\n";
   }
 

@@ -7,10 +7,10 @@ function fr = refine(f,N,dim)
 %
 %   REFINE(F,N,DIM) applies the refine operation across the dimension DIM.
 %
-%   See also REFINE2, REFINEK, REFINEK2.
+%   See also REFINE2, REFINEK.
 
 %
-% Copyright (c) 2004-2014 Jean-Luc Thiffeault <jeanluc@mailaps.org>
+% Copyright (c) 2004-2020 Jean-Luc Thiffeault <jeanluc@mailaps.org>
 %
 % See the file LICENSE for copying permission.
 %
