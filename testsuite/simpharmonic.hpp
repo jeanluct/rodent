@@ -31,7 +31,7 @@ public:
       y_dot[p] = -omega2*y[q];
     }
 
-  std::vector<Real> Exact(Real t, const std::vector<Real>& yinit) const
+  [[nodiscard]] std::vector<Real> Exact(Real t, const std::vector<Real>& yinit) const
     {
       using std::sin;
       using std::cos;
@@ -53,7 +53,7 @@ public:
       Jac(p,p) = 0.;
     }
 
-  int size() const { return n; }
+  [[nodiscard]] int size() const { return n; }
 };
 
 #endif // SIMPHARMONIC_HPP

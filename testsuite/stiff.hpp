@@ -16,8 +16,8 @@ public:
   enum {u = 0, v, num};
 
 private:
-  double uu, uv;
-  double vv, vu;
+  double uu{998.}, uv{1998.};
+  double vv{-1999.}, vu{-999.};
   std::vector<double> y1peps;		// For finite differencing
 
   static const int n = num;
@@ -27,7 +27,7 @@ public:
     : uu(uu_), uv(uv_), vv(vv_), vu(vu_), y1peps(num) {}
 
   // Good stiff values (NRC 2nd ed., p. 734).
-  Stiff() : uu(998.), uv(1998.), vv(-1999.), vu(-999.), y1peps(num) {}
+  Stiff() :  y1peps(num) {}
 
   void operator()(double, const std::vector<double>& y,
 		  std::vector<double>& y_dot)
@@ -38,7 +38,7 @@ public:
 
   // Solution corresponding to the default values
   // and initial conditions u = 1, v = 0.
-  std::vector<double> Exact(double t, const std::vector<double>& yinit) const
+  [[nodiscard]] std::vector<double> Exact(double t, const std::vector<double>& yinit) const
     {
       using std::exp;
       std::vector<double> yexact(n);
@@ -84,7 +84,7 @@ public:
     }
 #endif
 
-  int size() const { return n; }
+  [[nodiscard]] int size() const { return n; }
 };
 
 #endif // STIFF_HPP

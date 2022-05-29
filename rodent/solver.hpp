@@ -32,7 +32,7 @@ private:
   SBase;
 
 public:
-  typedef typename vecT_traits::step_type	stepT;
+  using stepT = typename vecT_traits::step_type;
 
 protected:
   using SBase::x;
@@ -91,9 +91,7 @@ class AdaptiveSolver
 private:
   T_Method& Method() { return static_cast<T_Method&>(*this); }
 
-  typedef
-  SolverBase<AdaptiveSolver<T_Method,vecT,vecT_traits>, vecT, vecT_traits>
-  SBase;
+  using SBase = SolverBase<AdaptiveSolver<T_Method, vecT, vecT_traits>, vecT, vecT_traits>;
 
 protected:
   using SBase::x;
@@ -109,9 +107,9 @@ protected:
 #endif
 
 public:
-  typedef typename vecT_traits::mag_type	magT;
-  typedef typename vecT_traits::step_type	stepT;
-  typedef typename vecT_traits::vec_mag_type	vecmagT;
+  using magT = typename vecT_traits::mag_type;
+  using stepT = typename vecT_traits::step_type;
+  using vecmagT = typename vecT_traits::vec_mag_type;
 
 private:
   vecmagT err_rel;			// Desired relative accuracy.
@@ -403,9 +401,7 @@ class FixedImplicitSolver
 private:
   T_Method& Method() { return static_cast<T_Method&>(*this); }
 
-  typedef
-  SolverBase<FixedImplicitSolver<T_Method,vecT,vecT_traits>, vecT, vecT_traits>
-  SBase;
+  using SBase = SolverBase<FixedImplicitSolver<T_Method, vecT, vecT_traits>, vecT, vecT_traits>;
 
 protected:
   using SBase::x;
@@ -421,7 +417,7 @@ protected:
 #endif
 
 public:
-  typedef typename vecT_traits::step_type	stepT;
+  using stepT = typename vecT_traits::step_type;
 
 private:
   vecT y1p;				// Derivative at y1.
@@ -472,10 +468,7 @@ class AdaptiveImplicitSolver
 private:
   T_Method& Method() { return static_cast<T_Method&>(*this); }
 
-  typedef
-  SolverBase<AdaptiveImplicitSolver<T_Method,vecT,vecT_traits>,
-	     vecT, vecT_traits>
-  SBase;
+  using SBase = SolverBase<AdaptiveImplicitSolver<T_Method, vecT, vecT_traits>, vecT, vecT_traits>;
 
 protected:
   using SBase::x;
@@ -491,9 +484,9 @@ protected:
 #endif
 
 public:
-  typedef typename vecT_traits::mag_type	magT;
-  typedef typename vecT_traits::step_type	stepT;
-  typedef typename vecT_traits::vec_mag_type	vecmagT;
+  using magT = typename vecT_traits::mag_type;
+  using stepT = typename vecT_traits::step_type;
+  using vecmagT = typename vecT_traits::vec_mag_type;
 
 private:
   magT err;				// Desired accuracy.

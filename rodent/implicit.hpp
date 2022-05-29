@@ -26,10 +26,10 @@ template<class T_Func, class vecT, class vecT_traits>
 class ImplicitEuler
 {
 public:
-  typedef typename vecT_traits::value_type	value_type;
-  typedef typename vecT_traits::step_type	step_type;
-  typedef typename vecT_traits::mag_type	mag_type;
-  typedef typename vecT_traits::matrix_type	matrix_type;
+  using value_type = typename vecT_traits::value_type;
+  using step_type = typename vecT_traits::step_type;
+  using mag_type = typename vecT_traits::mag_type;
+  using matrix_type = typename vecT_traits::matrix_type;
 
   ImplicitEuler(T_Func& _f)
     : func(_f), tol(1.e-10), Jac(_f.size(),_f.size()), dy(_f.size())
@@ -118,10 +118,7 @@ class FixedImplicitEuler
                        vecT, vecT_traits>,
     public ImplicitEuler<T_Func,vecT,vecT_traits>
 {
-  typedef
-  FixedImplicitSolver<FixedImplicitEuler<T_Func,vecT,vecT_traits>,
-			    vecT, vecT_traits>
-  FISolver;
+  using FISolver = FixedImplicitSolver<FixedImplicitEuler<T_Func, vecT, vecT_traits>, vecT, vecT_traits>;
 
 protected:
   using FISolver::x;
@@ -131,7 +128,7 @@ protected:
   using FISolver::n;
 
 public:
-  typedef typename vecT_traits::step_type	stepT;
+  using stepT = typename vecT_traits::step_type;
 
   FixedImplicitEuler(T_Func& _f)
     :
@@ -189,10 +186,7 @@ class AdaptiveImplicitEuler
                           vecT, vecT_traits>,
     public ImplicitEuler<T_Func,vecT,vecT_traits>
 {
-  typedef
-  AdaptiveImplicitSolver<AdaptiveImplicitEuler<T_Func,vecT,vecT_traits>,
-			 vecT, vecT_traits>
-  AISolver;
+  using AISolver = AdaptiveImplicitSolver<AdaptiveImplicitEuler<T_Func, vecT, vecT_traits>, vecT, vecT_traits>;
 
 protected:
   using AISolver::x;
@@ -203,8 +197,8 @@ protected:
   using AISolver::n;
 
 public:
-  typedef typename vecT_traits::mag_type	magT;
-  typedef typename vecT_traits::step_type	stepT;
+  using magT = typename vecT_traits::mag_type;
+  using stepT = typename vecT_traits::step_type;
 
 private:
   vecT y_mid, yp_mid, yh;		// Working variables for OneStep.

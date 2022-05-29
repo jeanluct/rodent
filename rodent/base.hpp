@@ -33,11 +33,11 @@ public:
   //   magT		The magnitude type.
   //   matrixT		A matrix container (for the Jacobian).
   //
-  typedef typename vecT_traits::value_type	T;
-  typedef typename vecT_traits::mag_type	magT;
-  typedef typename vecT_traits::step_type	stepT;
-  typedef typename vecT_traits::vec_mag_type	vecmagT;
-  typedef typename vecT_traits::matrix_type	matrixT;
+  using T = typename vecT_traits::value_type;
+  using magT = typename vecT_traits::mag_type;
+  using stepT = typename vecT_traits::step_type;
+  using vecmagT = typename vecT_traits::vec_mag_type;
+  using matrixT = typename vecT_traits::matrix_type;
 
 protected:
   const int n;				// Number of integration variables.
@@ -136,7 +136,7 @@ public:
   // Query Parameters
   //
 
-  stepT stepSize() const
+  [[nodiscard]] stepT stepSize() const
     {
       return dx;
     }
@@ -144,12 +144,12 @@ public:
 
   // These are all aliases to obtain the dependent (state) variable y.
 
-  const vecT& dependent() const
+  [[nodiscard]] const vecT& dependent() const
     {
       return y;
     }
 
-  const vecT& getState() const
+  [[nodiscard]] const vecT& getState() const
     {
       return dependent();
     }
@@ -169,17 +169,17 @@ public:
 
   // These are all aliases to obtain the independent variable x.
 
-  const stepT independent() const
+  [[nodiscard]] const stepT independent() const
     {
       return x;
     }
 
-  const stepT time() const
+  [[nodiscard]] const stepT time() const
     {
       return independent();
     }
 
-  const stepT position() const
+  [[nodiscard]] const stepT position() const
     {
       return independent();
     }

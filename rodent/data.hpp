@@ -34,13 +34,13 @@ public:
   //   T		The type contained in vecT.
   //   stepT		The independent variable type.
   //
-  typedef typename vecT_traits::value_type	T;
-  typedef typename vecT_traits::step_type	stepT;
+  using T = typename vecT_traits::value_type;
+  using stepT = typename vecT_traits::step_type;
 
 private:
   // Iterator types
-  typedef typename std::map<stepT, vecT>::iterator		mapIter;
-  typedef typename std::map<stepT, vecT>::const_iterator	mapCIter;
+  using mapIter = typename std::map<stepT, vecT>::iterator;
+  using mapCIter = typename std::map<stepT, vecT>::const_iterator;
 
   std::map<stepT, vecT> y_data;		// Data points.
 
@@ -191,7 +191,7 @@ public:
     {
       using jlt::operator<<;
 
-      for (mapCIter it = y_data.lower_bound(x0);
+      for (auto it = y_data.lower_bound(x0);
 	   it != y_data.upper_bound(x1); ++it)
 	{
 	  strm << (*it).first << "\t" << (*it).second  << std::endl;
@@ -219,10 +219,10 @@ public:
   //
 
   // Only the constant iterator is publicly available.
-  typedef mapCIter const_iterator;
+  using const_iterator = mapCIter;
 
-  const_iterator begin() const { return y_data.begin(); }
-  const_iterator end() const { return y_data.end(); }
+  [[nodiscard]] const_iterator begin() const { return y_data.begin(); }
+  [[nodiscard]] const_iterator end() const { return y_data.end(); }
 
 }; // class DataPoints
 

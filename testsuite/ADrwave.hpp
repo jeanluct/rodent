@@ -22,7 +22,7 @@ private:
   static const int r = 0, i = 1;
 
 public:
-  int pk(const int m, const int n, const int ri) const;
+  [[nodiscard]] int pk(const int m, const int n, const int ri) const;
   void ipk(const int row, int& m, int& n, int& ri) const;
 
   ADrwave(int N_, double D_, double U_ = 1, double L_ = 1, double T_ = 1) :
@@ -201,10 +201,10 @@ public:
   }
 
   // Largest mode number.
-  int msize() const { return N; }
+  [[nodiscard]] int msize() const { return N; }
 
   // Total size of system.
-  int size() const { return NT; }
+  [[nodiscard]] int size() const { return NT; }
 };
 
 

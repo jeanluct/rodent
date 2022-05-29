@@ -42,7 +42,7 @@ public:
       y_dot[u] = lambda*(y[u] + y0);
     }
 
-  std::vector<T> Exact(T t, const std::vector<T>& yinit) const
+  [[nodiscard]] std::vector<T> Exact(T t, const std::vector<T>& yinit) const
     {
       std::vector<T> yexact(n);
 
@@ -61,7 +61,7 @@ public:
       Jac(u,u) = scale*lambda;
     }
 
-  int size() const { return n; }
+  [[nodiscard]] int size() const { return n; }
 };
 
 int main()

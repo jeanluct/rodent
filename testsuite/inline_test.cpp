@@ -23,7 +23,7 @@
 std::vector<double> sho(double t)
 {
   typedef SimpleHarmonic<double> Flow;
-  typedef rodent::AdaptiveRK4<Flow> Flow_int;
+  using Flow_int = rodent::AdaptiveRK4<Flow>;
 
   Flow flow(1.);
   std::vector<double> y(flow.size());

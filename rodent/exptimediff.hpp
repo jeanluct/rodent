@@ -26,7 +26,7 @@ class ETD1
 {
 public:
   typedef typename vecT_traits::step_type	step_type;
-  typedef typename vecT_traits::value_type	T;
+  using T = typename vecT_traits::value_type;
 
 private:
   vecT c;			// Diagonal linear part of equations.
@@ -58,8 +58,8 @@ template<class T_Func, class vecT, class vecT_traits>
 class ETDRK2
 {
 public:
-  typedef typename vecT_traits::step_type	step_type;
-  typedef typename vecT_traits::value_type	T;
+  using step_type = typename vecT_traits::step_type;
+  using T = typename vecT_traits::value_type;
 
 private:
   vecT c, expc;			// Diagonal linear part of equations.
@@ -107,8 +107,8 @@ template<class T_Func, class vecT, class vecT_traits>
 class ETDRK3
 {
 public:
-  typedef typename vecT_traits::step_type	step_type;
-  typedef typename vecT_traits::value_type	T;
+  using step_type = typename vecT_traits::step_type;
+  using T = typename vecT_traits::value_type;
 
 private:
   vecT c, expc, expc2;		// Diagonal linear part of equations.
@@ -168,8 +168,8 @@ template<class T_Func, class vecT, class vecT_traits>
 class ETDRK4
 {
 public:
-  typedef typename vecT_traits::step_type	step_type;
-  typedef typename vecT_traits::value_type	T;
+  using step_type = typename vecT_traits::step_type;
+  using T = typename vecT_traits::value_type;
 
 private:
   vecT c, expc, expc2;		// Diagonal linear part of equations.
@@ -241,9 +241,7 @@ class FixedETD1
   : public FixedSolver<FixedETD1<T_Func,vecT,vecT_traits>, vecT, vecT_traits>,
     public ETD1<T_Func, vecT, vecT_traits>
 {
-  typedef
-  FixedSolver<FixedETD1<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
-  FSolver;
+  using FSolver = FixedSolver<FixedETD1<T_Func, vecT, vecT_traits>, vecT, vecT_traits>;
 
 protected:
   using FSolver::x;
@@ -253,7 +251,7 @@ protected:
   using FSolver::n;
 
 public:
-  typedef typename vecT_traits::step_type	stepT;
+  using stepT = typename vecT_traits::step_type;
 
   FixedETD1(T_Func& _f, vecT& _c)
     :
@@ -285,9 +283,7 @@ class FixedETDRK2
 		       vecT, vecT_traits>,
     public ETDRK2<T_Func, vecT, vecT_traits>
 {
-  typedef
-  FixedSolver<FixedETDRK2<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
-  FSolver;
+  using FSolver = FixedSolver<FixedETDRK2<T_Func, vecT, vecT_traits>, vecT, vecT_traits>;
 
 protected:
   using FSolver::x;
@@ -297,7 +293,7 @@ protected:
   using FSolver::n;
 
 public:
-  typedef typename vecT_traits::step_type	stepT;
+  using stepT = typename vecT_traits::step_type;
 
   FixedETDRK2(T_Func& _f, vecT& _c)
     :
@@ -329,9 +325,7 @@ class FixedETDRK3
 		       vecT, vecT_traits>,
     public ETDRK3<T_Func, vecT, vecT_traits>
 {
-  typedef
-  FixedSolver<FixedETDRK3<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
-  FSolver;
+  using FSolver = FixedSolver<FixedETDRK3<T_Func, vecT, vecT_traits>, vecT, vecT_traits>;
 
 protected:
   using FSolver::x;
@@ -341,7 +335,7 @@ protected:
   using FSolver::n;
 
 public:
-  typedef typename vecT_traits::step_type	stepT;
+  using stepT = typename vecT_traits::step_type;
 
   FixedETDRK3(T_Func& _f, vecT& _c)
     :
@@ -373,9 +367,7 @@ class FixedETDRK4
 		       vecT, vecT_traits>,
     public ETDRK4<T_Func, vecT, vecT_traits>
 {
-  typedef
-  FixedSolver<FixedETDRK4<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
-  FSolver;
+  using FSolver = FixedSolver<FixedETDRK4<T_Func, vecT, vecT_traits>, vecT, vecT_traits>;
 
 protected:
   using FSolver::x;
@@ -385,7 +377,7 @@ protected:
   using FSolver::n;
 
 public:
-  typedef typename vecT_traits::step_type	stepT;
+  using stepT = typename vecT_traits::step_type;
 
   FixedETDRK4(T_Func& _f, vecT& _c)
     :
@@ -420,9 +412,7 @@ class AdaptiveETDRK3
                           vecT_traits>,
     public ETDRK3<T_Func, vecT, vecT_traits>
 {
-  typedef
-  AdaptiveSolver<AdaptiveETDRK3<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
-  ASolver;
+  using ASolver = AdaptiveSolver<AdaptiveETDRK3<T_Func, vecT, vecT_traits>, vecT, vecT_traits>;
 
 protected:
   using ASolver::x;
@@ -433,8 +423,8 @@ protected:
   using ASolver::n;
 
 public:
-  typedef typename vecT_traits::mag_type	magT;
-  typedef typename vecT_traits::step_type	stepT;
+  using magT = typename vecT_traits::mag_type;
+  using stepT = typename vecT_traits::step_type;
 
 private:
   // Working variables for OneStep.
@@ -493,9 +483,7 @@ class AdaptiveETDRK4
                           vecT_traits>,
     public ETDRK4<T_Func, vecT, vecT_traits>
 {
-  typedef
-  AdaptiveSolver<AdaptiveETDRK4<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
-  ASolver;
+  using ASolver = AdaptiveSolver<AdaptiveETDRK4<T_Func, vecT, vecT_traits>, vecT, vecT_traits>;
 
 protected:
   using ASolver::x;
@@ -506,8 +494,8 @@ protected:
   using ASolver::n;
 
 public:
-  typedef typename vecT_traits::mag_type	magT;
-  typedef typename vecT_traits::step_type	stepT;
+  using magT = typename vecT_traits::mag_type;
+  using stepT = typename vecT_traits::step_type;
 
 private:
   // Working variables for OneStep.

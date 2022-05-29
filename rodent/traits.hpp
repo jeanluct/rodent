@@ -33,11 +33,11 @@ namespace rodent {
     // mag		A function that returns the positive magnitude of x.
     //
     typedef vecT				vec_type;
-    typedef typename vecT::value_type		value_type;
-    typedef value_type				step_type;
-    typedef value_type				mag_type;
-    typedef std::vector<mag_type>		vec_mag_type;
-    typedef jlt::matrix<value_type>		matrix_type;
+    using value_type = typename vecT::value_type;
+    using step_type = value_type;
+    using mag_type = value_type;
+    using vec_mag_type = std::vector<mag_type>;
+    using matrix_type = jlt::matrix<value_type>;
 
     static inline mag_type	absval(step_type _x) { return std::abs(_x); }
     static inline mag_type	mag(value_type _x) { return std::abs(_x); }
@@ -51,12 +51,12 @@ namespace rodent {
   template<class float_type>
   struct vec_traits<std::vector<std::complex<float_type> > >
   {
-    typedef std::vector<std::complex<float_type> >	vec_type;
-    typedef std::complex<float_type>			value_type;
-    typedef float_type					step_type;
-    typedef float_type					mag_type;
-    typedef std::vector<mag_type>			vec_mag_type;
-    typedef jlt::matrix<value_type>			matrix_type;
+    using vec_type = std::vector<std::complex<float_type> >;
+    using value_type = std::complex<float_type>;
+    using step_type = float_type;
+    using mag_type = float_type;
+    using vec_mag_type = std::vector<mag_type>;
+    using matrix_type = jlt::matrix<value_type>;
 
     static inline mag_type 	absval(step_type _x) { return std::abs(_x); }
     static inline mag_type	mag(value_type _x) { return std::abs(_x); }

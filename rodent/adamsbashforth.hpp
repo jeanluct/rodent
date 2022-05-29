@@ -30,9 +30,7 @@ class AdamsBashforth2
   : public FixedSolver<AdamsBashforth2<T_Func,vecT,vecT_traits>,
                        vecT, vecT_traits>
 {
-  typedef
-  FixedSolver<AdamsBashforth2<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
-  FSolver;
+  using FSolver = FixedSolver<AdamsBashforth2<T_Func, vecT, vecT_traits>, vecT, vecT_traits>;
 
 protected:
   using FSolver::x;
@@ -42,7 +40,7 @@ protected:
   using FSolver::n;
 
 public:
-  typedef typename vecT_traits::step_type	stepT;
+  using stepT = typename vecT_traits::step_type;
 
 private:
   vecT ypm1;				// Derivative at step n-1.
@@ -108,9 +106,7 @@ class AdamsBashforth3
   : public FixedSolver<AdamsBashforth3<T_Func,vecT,vecT_traits>,
                        vecT, vecT_traits>
 {
-  typedef
-  FixedSolver<AdamsBashforth3<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
-  FSolver;
+  using FSolver = FixedSolver<AdamsBashforth3<T_Func, vecT, vecT_traits>, vecT, vecT_traits>;
 
 protected:
   using FSolver::x;
@@ -120,7 +116,7 @@ protected:
   using FSolver::n;
 
 public:
-  typedef typename vecT_traits::step_type	stepT;
+  using stepT = typename vecT_traits::step_type;
 
 private:
   vecT ypm1, ypm2;			// Derivative at steps n-1 and n-2.
@@ -192,9 +188,7 @@ class AdamsBashforth4
   : public FixedSolver<AdamsBashforth4<T_Func,vecT,vecT_traits>,
                        vecT, vecT_traits>
 {
-  typedef
-  FixedSolver<AdamsBashforth4<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
-  FSolver;
+  using FSolver = FixedSolver<AdamsBashforth4<T_Func, vecT, vecT_traits>, vecT, vecT_traits>;
 
 protected:
   using FSolver::x;
@@ -204,7 +198,7 @@ protected:
   using FSolver::n;
 
 public:
-  typedef typename vecT_traits::step_type	stepT;
+  using stepT = typename vecT_traits::step_type;
 
 private:
   vecT ypm1, ypm2, ypm3;	// Derivative at steps n-1, n-2, and n-3.
@@ -283,9 +277,7 @@ class AdamsBashforth5
   : public FixedSolver<AdamsBashforth5<T_Func,vecT,vecT_traits>,
                        vecT, vecT_traits>
 {
-  typedef
-  FixedSolver<AdamsBashforth5<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
-  FSolver;
+  using FSolver = FixedSolver<AdamsBashforth5<T_Func, vecT, vecT_traits>, vecT, vecT_traits>;
 
 protected:
   using FSolver::x;
@@ -295,7 +287,7 @@ protected:
   using FSolver::n;
 
 public:
-  typedef typename vecT_traits::step_type	stepT;
+  using stepT = typename vecT_traits::step_type;
 
 private:
   vecT ypm1, ypm2, ypm3, ypm4;	// Derivative at steps n-1 to n-4.

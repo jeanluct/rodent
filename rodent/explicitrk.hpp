@@ -27,7 +27,7 @@ template<class T_Func, class vecT, class vecT_traits>
 class Euler
 {
 public:
-  typedef typename vecT_traits::step_type	step_type;
+  using step_type = typename vecT_traits::step_type;
 
   T_Func& func;
 
@@ -52,7 +52,7 @@ template<class T_Func, class vecT, class vecT_traits>
 class Midpoint
 {
 public:
-  typedef typename vecT_traits::step_type	step_type;
+  using step_type = typename vecT_traits::step_type;
 
   Midpoint(T_Func& _f) : func(_f), y_2(_f.size()), yp_2(_f.size()) {}
 
@@ -85,7 +85,7 @@ template<class T_Func, class vecT, class vecT_traits>
 class RK4
 {
 public:
-  typedef typename vecT_traits::step_type	step_type;
+  using step_type = typename vecT_traits::step_type;
 
   RK4(T_Func& _f) :
     func(_f), y_2(_f.size()), yp_2(_f.size()), yp1(_f.size()) {}
@@ -138,9 +138,7 @@ class FixedEuler
   : public FixedSolver<FixedEuler<T_Func,vecT,vecT_traits>, vecT, vecT_traits>,
     public Euler<T_Func, vecT, vecT_traits>
 {
-  typedef
-  FixedSolver<FixedEuler<T_Func,vecT,vecT_traits>,vecT,vecT_traits>
-  FSolver;
+  using FSolver = FixedSolver<FixedEuler<T_Func, vecT, vecT_traits>, vecT, vecT_traits>;
 
 protected:
   using FSolver::x;
@@ -150,7 +148,7 @@ protected:
   using FSolver::n;
 
 public:
-  typedef typename vecT_traits::step_type	stepT;
+  using stepT = typename vecT_traits::step_type;
 
   FixedEuler(T_Func& _f)
     :
@@ -186,9 +184,7 @@ class FixedMidpoint
                        vecT, vecT_traits>,
     public Midpoint<T_Func, vecT, vecT_traits>
 {
-  typedef
-  FixedSolver<FixedMidpoint<T_Func,vecT,vecT_traits>,vecT, vecT_traits>
-  FSolver;
+  using FSolver = FixedSolver<FixedMidpoint<T_Func, vecT, vecT_traits>, vecT, vecT_traits>;
 
 protected:
   using FSolver::x;
@@ -198,7 +194,7 @@ protected:
   using FSolver::n;
 
 public:
-  typedef typename vecT_traits::step_type	stepT;
+  using stepT = typename vecT_traits::step_type;
 
   FixedMidpoint(T_Func& _f)
     :
@@ -228,9 +224,7 @@ class FixedRK4
   : public FixedSolver<FixedRK4<T_Func,vecT,vecT_traits>, vecT, vecT_traits>,
     public RK4<T_Func, vecT, vecT_traits>
 {
-  typedef
-  FixedSolver<FixedRK4<T_Func,vecT,vecT_traits>,vecT, vecT_traits>
-  FSolver;
+  using FSolver = FixedSolver<FixedRK4<T_Func, vecT, vecT_traits>, vecT, vecT_traits>;
 
 protected:
   using FSolver::x;
@@ -240,7 +234,7 @@ protected:
   using FSolver::n;
 
 public:
-  typedef typename vecT_traits::step_type	stepT;
+  using stepT = typename vecT_traits::step_type;
 
   FixedRK4(T_Func& _f)
     :
@@ -283,9 +277,7 @@ class AdaptiveEuler
                           vecT_traits>,
     public Euler<T_Func, vecT, vecT_traits>
 {
-  typedef
-  AdaptiveSolver<AdaptiveEuler<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
-  ASolver;
+  using ASolver = AdaptiveSolver<AdaptiveEuler<T_Func, vecT, vecT_traits>, vecT, vecT_traits>;
 
 protected:
   using ASolver::x;
@@ -296,8 +288,8 @@ protected:
   using ASolver::n;
 
 public:
-  typedef typename vecT_traits::mag_type	magT;
-  typedef typename vecT_traits::step_type	stepT;
+  using magT = typename vecT_traits::mag_type;
+  using stepT = typename vecT_traits::step_type;
 
 private:
   // Working variables for OneStep.
@@ -368,9 +360,7 @@ class AdaptiveMidpoint
                           vecT_traits>,
     public Midpoint<T_Func, vecT, vecT_traits>
 {
-  typedef
-  AdaptiveSolver<AdaptiveMidpoint<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
-  ASolver;
+  using ASolver = AdaptiveSolver<AdaptiveMidpoint<T_Func, vecT, vecT_traits>, vecT, vecT_traits>;
 
 protected:
   using ASolver::x;
@@ -381,8 +371,8 @@ protected:
   using ASolver::n;
 
 public:
-  typedef typename vecT_traits::mag_type	magT;
-  typedef typename vecT_traits::step_type	stepT;
+  using magT = typename vecT_traits::mag_type;
+  using stepT = typename vecT_traits::step_type;
 
 private:
   // Working variables for OneStep.
@@ -454,9 +444,7 @@ class AdaptiveRK4
                           vecT_traits>,
     public RK4<T_Func, vecT, vecT_traits>
 {
-  typedef
-  AdaptiveSolver<AdaptiveRK4<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
-  ASolver;
+  using ASolver = AdaptiveSolver<AdaptiveRK4<T_Func, vecT, vecT_traits>, vecT, vecT_traits>;
 
 protected:
   using ASolver::x;
@@ -467,8 +455,8 @@ protected:
   using ASolver::n;
 
 public:
-  typedef typename vecT_traits::mag_type	magT;
-  typedef typename vecT_traits::step_type	stepT;
+  using magT = typename vecT_traits::mag_type;
+  using stepT = typename vecT_traits::step_type;
 
 private:
   // Working variables for OneStep.
@@ -539,10 +527,7 @@ class AdaptiveRKCashKarp
   : public AdaptiveSolver<AdaptiveRKCashKarp<T_Func,vecT,vecT_traits>, vecT,
                           vecT_traits>
 {
-  typedef
-  AdaptiveSolver<AdaptiveRKCashKarp<T_Func,vecT,vecT_traits>,
-		 vecT, vecT_traits>
-  ASolver;
+  using ASolver = AdaptiveSolver<AdaptiveRKCashKarp<T_Func, vecT, vecT_traits>, vecT, vecT_traits>;
 
 protected:
   using ASolver::x;
@@ -553,9 +538,9 @@ protected:
   using ASolver::n;
 
 public:
-  typedef typename vecT_traits::mag_type	magT;
-  typedef typename vecT_traits::step_type	stepT;
-  typedef typename vecT_traits::vec_mag_type	vecmagT;
+  using magT = typename vecT_traits::mag_type;
+  using stepT = typename vecT_traits::step_type;
+  using vecmagT = typename vecT_traits::vec_mag_type;
 
 private:
   // Working variables for OneStep
@@ -694,9 +679,7 @@ class AdaptiveGRK
   : public AdaptiveSolver<AdaptiveGRK<T_Func,vecT,vecT_traits>, vecT,
                           vecT_traits>
 {
-  typedef
-  AdaptiveSolver<AdaptiveGRK<T_Func,vecT,vecT_traits>, vecT, vecT_traits>
-  ASolver;
+  using ASolver = AdaptiveSolver<AdaptiveGRK<T_Func, vecT, vecT_traits>, vecT, vecT_traits>;
 
 protected:
   using ASolver::x;
@@ -707,10 +690,10 @@ protected:
   using ASolver::n;
 
 public:
-  typedef typename vecT_traits::value_type	T;
-  typedef typename vecT_traits::mag_type	magT;
-  typedef typename vecT_traits::step_type	stepT;
-  typedef typename vecT_traits::matrix_type	matrixT;
+  using T = typename vecT_traits::value_type;
+  using magT = typename vecT_traits::mag_type;
+  using stepT = typename vecT_traits::step_type;
+  using matrixT = typename vecT_traits::matrix_type;
 
 private:
   matrixT	Jac, A;			// Jacobian of equations

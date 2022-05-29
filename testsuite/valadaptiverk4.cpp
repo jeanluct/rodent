@@ -33,7 +33,7 @@ public:
       y_dot[p] = -omega2*y[q];
     }
 
-  std::valarray<double> Exact(double t, const std::valarray<double>& yinit)
+  [[nodiscard]] std::valarray<double> Exact(double t, const std::valarray<double>& yinit)
     const
     {
       using std::sin;
@@ -46,7 +46,7 @@ public:
       return yexact;
     }
 
-  int size() const { return n; }
+  [[nodiscard]] int size() const { return n; }
 };
 
 

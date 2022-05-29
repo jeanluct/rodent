@@ -8,7 +8,7 @@
 #define CEXP_HPP
 
 
-typedef std::complex<double> dcomplex;
+using dcomplex = std::complex<double>;
 
 // Complex exponential function.
 // Exactly like the simple Harmonic oscillator.
@@ -28,7 +28,7 @@ public:
       y_dot[0] = sigma*y[0];
     }
 
-  std::vector<dcomplex> Exact(double t,
+  [[nodiscard]] std::vector<dcomplex> Exact(double t,
 			      const std::vector<dcomplex>& yinit) const
     {
       std::vector<dcomplex> yexact(n);
@@ -38,7 +38,7 @@ public:
       return yexact;
     }
 
-  int size() const { return n; }
+  [[nodiscard]] int size() const { return n; }
 };
 
 #endif // CEXP_HPP
